@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Helixra&trade; &mdash; Sri Lankan Games. Eternal Legacy.</title>
+<meta name="description" content="Helixra revives Sri Lanka's ancient board games as premium digital experiences. Chapter I: Olinda Keliya is live now."/>
+<meta property="og:title" content="Helixra™ — Sri Lankan Games. Eternal Legacy."/>
+<meta property="og:description" content="Where the Kandy period meets the digital age. Play Olinda Keliya free now."/>
+<meta property="og:image" content="./assets/img/helixra-logo.png"/>
+<link rel="icon" href="./assets/img/helixra-logo.png" type="image/png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --black:#080810; --green:#6d9030; --green-d:#3d5818;
+  --terra:#c04820; --terra-d:#882e10; --terra-l:#e06040;
+  --teal:#1a9e8a; --teal-d:#0d6a5c; --teal-l:#28c8b0;
+  --navy:#0a1e28; --navy-d:#061420;
+  --stone:#d4c5a0; --gold:#c9a84c; --cream:#f5ecd8;
+  --brand:'Cinzel Decorative',serif;
+  --head:'Cinzel',serif;
+  --body:'Cormorant Garamond',Georgia,serif;
+  --ui:'Inter',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--stone);font-family:var(--body);overflow-x:hidden;}
+.pat-geo{background-image:linear-gradient(45deg,rgba(201,168,76,.04) 25%,transparent 25%),linear-gradient(-45deg,rgba(201,168,76,.04) 25%,transparent 25%),linear-gradient(45deg,transparent 75%,rgba(201,168,76,.04) 75%),linear-gradient(-45deg,transparent 75%,rgba(201,168,76,.04) 75%);background-size:24px 24px;background-position:0 0,0 12px,12px -12px,-12px 0;}
+.pat-cross{background-image:radial-gradient(circle,rgba(201,168,76,.05) 1px,transparent 1px);background-size:28px 28px;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5%;transition:all .4s;display:flex;align-items:center;justify-content:space-between;height:72px;}
+nav.scrolled{background:rgba(8,8,16,.94);backdrop-filter:blur(18px);border-bottom:1px solid rgba(201,168,76,.1);}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-brand img{height:36px;width:auto;mix-blend-mode:screen;}
+.nav-brand-text{font-family:var(--brand);font-size:16px;color:var(--gold);letter-spacing:.1em;}
+.nav-links{display:flex;gap:30px;align-items:center;list-style:none;}
+.nav-links a{font-family:var(--head);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(212,197,160,.55);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-cta{background:var(--terra) !important;color:#fff !important;padding:8px 18px;border-radius:2px;}
+.nav-cta:hover{background:var(--terra-l) !important;}
+.nav-toggle{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:4px;}
+.nav-toggle span{width:24px;height:2px;background:var(--stone);display:block;transition:all .3s;}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:100px 5% 60px;}
+.hero-scene{position:absolute;inset:0;z-index:0;}
+.hero-scene svg{width:100%;height:100%;object-fit:cover;}
+.hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(100deg,rgba(8,8,16,.9) 0%,rgba(8,8,16,.75) 55%,rgba(8,8,16,.85) 100%);}
+.hero-content{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1.2fr;gap:50px;align-items:center;width:100%;max-width:1280px;margin:0 auto;}
+.hero-logo{display:flex;justify-content:center;align-items:center;}
+.hero-logo img{width:min(380px,82vw);height:auto;mix-blend-mode:screen;filter:drop-shadow(0 0 50px rgba(109,144,48,.22)) drop-shadow(0 0 110px rgba(26,158,138,.1));}
+.hero-text{}
+.hero-chapter{font-family:var(--head);font-size:10.5px;letter-spacing:.35em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.hero-chapter::before{content:'';width:28px;height:1px;background:var(--teal);}
+.hero-h1{font-family:var(--brand);font-size:clamp(34px,4.8vw,62px);font-weight:900;line-height:1.06;color:var(--cream);margin-bottom:10px;}
+.hero-h1 em{color:var(--terra);font-style:normal;}
+.hero-tag{font-family:var(--head);font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:rgba(212,197,160,.4);margin-bottom:18px;}
+.hero-tag span{color:var(--teal);}
+.hero-desc{font-size:17px;line-height:1.78;color:rgba(212,197,160,.62);max-width:500px;margin-bottom:28px;}
+.hero-btns{display:flex;gap:13px;flex-wrap:wrap;}
+.btn{display:inline-block;font-family:var(--head);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:14px 26px;border-radius:2px;cursor:pointer;transition:all .24s;text-decoration:none;border:none;outline:none;}
+.btn-primary{background:var(--terra);color:#fff;box-shadow:0 4px 22px rgba(192,72,32,.32);}
+.btn-primary:hover{background:var(--terra-l);transform:translateY(-2px);box-shadow:0 8px 34px rgba(192,72,32,.5);}
+.btn-secondary{background:transparent;color:var(--teal);border:1px solid rgba(26,158,138,.48);}
+.btn-secondary:hover{background:rgba(26,158,138,.1);border-color:var(--teal);}
+.btn-ghost{background:transparent;color:rgba(212,197,160,.5);border:1px solid rgba(212,197,160,.18);}
+.btn-ghost:hover{border-color:rgba(212,197,160,.42);color:rgba(212,197,160,.82);}
+.hero-scroll{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;font-family:var(--head);font-size:9px;letter-spacing:.25em;color:rgba(212,197,160,.28);text-transform:uppercase;z-index:2;}
+.hero-scroll::after{content:'';width:1px;height:42px;background:linear-gradient(to bottom,rgba(212,197,160,.28),transparent);animation:scrollP 2s ease-in-out infinite;}
+@keyframes scrollP{0%,100%{opacity:.3;}50%{opacity:.8;}}
+
+/* ── DIVIDER ── */
+.lotus-div{width:100%;height:48px;display:flex;align-items:center;justify-content:center;}
+.lotus-div::before,.lotus-div::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,.2));}
+.lotus-div::after{background:linear-gradient(to left,transparent,rgba(201,168,76,.2));}
+.lotus-icon{margin:0 20px;color:var(--gold);font-size:17px;opacity:.5;}
+
+/* ── SECTIONS ── */
+section{padding:80px 5%;}
+.section-inner{max-width:1280px;margin:0 auto;}
+.section-label{font-family:var(--head);font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.section-label::before{content:'◆';font-size:8px;}
+.section-h2{font-family:var(--brand);font-size:clamp(28px,4vw,50px);font-weight:700;line-height:1.1;color:var(--cream);margin-bottom:16px;}
+.section-sub{font-size:18px;line-height:1.72;color:rgba(212,197,160,.58);max-width:680px;}
+
+/* ── GAME FEATURE ── */
+.game-feature{background:linear-gradient(135deg,rgba(14,10,4,.97),rgba(8,8,16,.99));border-top:1px solid rgba(201,168,76,.1);border-bottom:1px solid rgba(201,168,76,.1);}
+.game-feature-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.game-badge{display:inline-flex;align-items:center;gap:8px;background:var(--terra);color:#fff;font-family:var(--head);font-size:9px;letter-spacing:.25em;padding:5px 12px;border-radius:2px;text-transform:uppercase;margin-bottom:16px;}
+.game-title{font-family:var(--brand);font-size:clamp(28px,4.5vw,54px);font-weight:900;line-height:1.06;color:var(--cream);margin-bottom:8px;}
+.game-sinhala{font-style:italic;font-size:clamp(15px,2vw,22px);color:rgba(212,197,160,.38);margin-bottom:18px;font-family:var(--body);}
+.game-desc{font-size:16.5px;line-height:1.78;color:rgba(212,197,160,.6);margin-bottom:26px;}
+.game-stats{display:flex;gap:26px;margin-bottom:28px;flex-wrap:wrap;}
+.game-stat-n{font-family:var(--head);font-size:22px;font-weight:700;color:var(--gold);}
+.game-stat-l{font-family:var(--head);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,197,160,.38);margin-top:2px;}
+.feature-tag{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:2px;font-family:var(--head);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;border:1px solid;margin:0 7px 7px 0;}
+.game-mockup-bg{background:linear-gradient(145deg,#1e0f06,#150b04);border:1px solid rgba(201,168,76,.2);border-radius:14px;padding:22px;box-shadow:0 30px 78px rgba(0,0,0,.82),inset 0 1px 0 rgba(212,197,160,.065);position:relative;}
+.game-board-outer{display:flex;gap:8px;align-items:stretch;}
+.game-pits-grid{flex:1;display:flex;flex-direction:column;gap:8px;}
+.game-board-row{display:flex;gap:6px;justify-content:center;}
+.game-pit{width:clamp(34px,6.5vw,50px);height:clamp(34px,6.5vw,50px);border-radius:50%;background:radial-gradient(ellipse at 48% 28%,#1c0a04,#0f0603);box-shadow:inset 0 4px 12px rgba(0,0,0,.82);border:1px solid rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:2px;padding:4px;}
+.game-seed{width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 33% 28%,#ff9080,#cc2d1e 38%,#8b1812 72%,#550d09);flex-shrink:0;}
+.game-store{width:clamp(42px,7.5vw,58px);border-radius:28px;background:radial-gradient(ellipse at 50% 50%,#201005,#0e0604);box-shadow:inset 0 6px 18px rgba(0,0,0,.88);border:1px solid rgba(201,168,76,.13);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;padding:10px 4px;min-height:96px;}
+.game-board-mid{display:flex;align-items:center;gap:8px;}
+.game-board-mid .ml{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.14),transparent);}
+.ms{width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 40% 34%,#ece0c8,#c4b898 52%,#968670);border:1px solid rgba(201,168,76,.4);box-shadow:0 0 12px rgba(26,158,138,.5);position:relative;flex-shrink:0;}
+.ms::before{content:'';position:absolute;width:58%;height:1.5px;background:rgba(80,62,42,.48);top:50%;left:21%;transform:translateY(-50%);}
+.ms::after{content:'';position:absolute;height:58%;width:1.5px;background:rgba(80,62,42,.48);left:50%;top:21%;transform:translateX(-50%);}
+
+/* ── CHAPTERS ── */
+.chapters-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:38px;}
+.chapter-card{border-radius:8px;padding:22px 18px;border:1px solid;position:relative;overflow:hidden;transition:all .26s;}
+.chapter-card.active{border-color:rgba(192,72,32,.48);background:rgba(192,72,32,.08);cursor:pointer;}
+.chapter-card.locked{border-color:rgba(212,197,160,.07);background:rgba(8,8,16,.5);cursor:default;}
+.chapter-card.active:hover{border-color:var(--terra);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.5),0 0 26px rgba(192,72,32,.14);}
+.chapter-num{font-family:var(--brand);font-size:10.5px;letter-spacing:.2em;margin-bottom:11px;opacity:.55;}
+.chapter-title{font-family:var(--head);font-size:clamp(15px,1.8vw,19px);font-weight:700;color:var(--cream);margin-bottom:3px;}
+.chapter-sinhala{font-size:12.5px;color:rgba(212,197,160,.32);font-style:italic;margin-bottom:11px;}
+.chapter-status{font-family:var(--head);font-size:9px;letter-spacing:.2em;text-transform:uppercase;}
+.chapter-lock{position:absolute;top:18px;right:18px;opacity:.2;font-size:16px;}
+
+/* ── MISSION (teal-navy background) ── */
+.mission{background:linear-gradient(135deg,var(--navy-d),var(--navy));position:relative;overflow:hidden;}
+.mission::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(26,158,138,.12) 0%,transparent 65%);pointer-events:none;}
+.mission-inner{position:relative;z-index:2;}
+.mission-quote{font-family:var(--body);font-size:clamp(18px,2.6vw,32px);font-style:italic;line-height:1.62;color:rgba(240,232,208,.88);margin:26px 0;max-width:840px;border-left:3px solid rgba(26,158,138,.5);padding-left:26px;}
+.mission-attrs{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px;}
+.mission-attr{padding:22px;background:rgba(6,13,24,.5);border-radius:3px;border:1px solid rgba(26,158,138,.15);}
+.mission-attr-icon{font-size:26px;margin-bottom:11px;}
+.mission-attr-title{font-family:var(--head);font-size:13.5px;font-weight:700;color:rgba(240,232,208,.88);letter-spacing:.05em;margin-bottom:7px;}
+.mission-attr-text{font-size:14.5px;line-height:1.65;color:rgba(240,232,208,.5);}
+
+/* ── YHP ── */
+.yhp-inner{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;}
+.yhp-logo-block{background:linear-gradient(135deg,rgba(26,158,138,.1),rgba(8,8,16,.8));border:1px solid rgba(26,158,138,.2);border-radius:10px;padding:32px;}
+.yhp-logo-img-wrap{display:flex;justify-content:center;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid rgba(26,158,138,.12);}
+.yhp-logo-img-wrap img{max-width:220px;max-height:90px;object-fit:contain;mix-blend-mode:screen;}
+.yhp-logo-text{font-family:var(--head);font-size:10.5px;letter-spacing:.25em;text-transform:uppercase;color:var(--teal);margin-bottom:7px;text-align:center;}
+.yhp-logo-name{font-family:var(--brand);font-size:clamp(14px,1.8vw,20px);color:var(--cream);margin-bottom:14px;text-align:center;line-height:1.3;}
+.yhp-desc{font-size:13.5px;color:rgba(212,197,160,.42);line-height:1.65;margin-bottom:18px;text-align:center;}
+.yhp-ventures{display:flex;flex-direction:column;gap:9px;margin-top:18px;}
+.yhp-venture{display:flex;align-items:flex-start;gap:11px;padding:10px 13px;background:rgba(8,8,16,.5);border-radius:3px;border:1px solid rgba(26,158,138,.1);}
+.yhp-venture-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.yhp-venture-name{font-family:var(--head);font-size:11px;letter-spacing:.08em;color:rgba(212,197,160,.68);}
+.yhp-venture-desc{font-size:12px;color:rgba(212,197,160,.38);margin-top:2px;}
+.yhp-tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px;}
+.yhp-tag{font-family:var(--head);font-size:8.5px;letter-spacing:.16em;padding:3px 11px;border-radius:2px;text-transform:uppercase;background:rgba(26,158,138,.1);color:var(--teal);border:1px solid rgba(26,158,138,.22);}
+.yhp-founders{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:16px;}
+.founder{padding:13px 15px;background:rgba(212,197,160,.04);border-radius:3px;border:1px solid rgba(212,197,160,.07);}
+.founder-name{font-family:var(--head);font-size:11.5px;font-weight:700;color:var(--cream);margin-bottom:3px;}
+.founder-role{font-size:12.5px;color:rgba(212,197,160,.42);font-style:italic;}
+
+/* ── SUBSCRIBE ── */
+.subscribe{position:relative;overflow:hidden;background:var(--terra-d);}
+.subscribe::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(8,8,16,.58),rgba(8,8,16,.22));pointer-events:none;}
+.subscribe-inner{max-width:740px;margin:0 auto;text-align:center;position:relative;z-index:2;}
+.subscribe-h{font-family:var(--brand);font-size:clamp(24px,4vw,46px);color:var(--cream);margin-bottom:11px;}
+.subscribe-sub{font-size:17.5px;line-height:1.72;color:rgba(240,232,208,.62);margin-bottom:34px;}
+.subscribe-form{display:flex;flex-direction:column;gap:13px;max-width:490px;margin:0 auto;}
+.sub-row{display:flex;gap:9px;}
+.sub-input{flex:1;background:rgba(8,8,16,.62);border:1px solid rgba(240,232,208,.2);border-radius:2px;padding:12px 15px;color:var(--cream);font-family:var(--body);font-size:16px;outline:none;transition:border-color .2s;}
+.sub-input:focus{border-color:rgba(240,232,208,.52);}
+.sub-input::placeholder{color:rgba(240,232,208,.26);}
+.sub-btn{background:var(--cream);color:var(--terra-d);font-family:var(--head);font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:12px 22px;border-radius:2px;border:none;cursor:pointer;transition:all .22s;white-space:nowrap;}
+.sub-btn:hover{background:#fff;transform:translateY(-1px);}
+.path-opt{font-family:var(--head);font-size:8.5px;letter-spacing:.16em;padding:5px 13px;border-radius:2px;cursor:pointer;border:1px solid rgba(240,232,208,.18);color:rgba(240,232,208,.5);text-transform:uppercase;transition:all .2s;background:transparent;}
+.path-opt:hover,.path-opt.sel{border-color:rgba(240,232,208,.55);color:rgba(240,232,208,.88);background:rgba(240,232,208,.08);}
+.sub-success{display:none;padding:20px;background:rgba(109,144,48,.2);border:1px solid rgba(109,144,48,.38);border-radius:3px;}
+.sub-success.show{display:block;}
+.sub-success-title{font-family:var(--head);font-size:13px;color:#a0c848;letter-spacing:.12em;margin-bottom:6px;}
+.sub-success-body{font-size:15px;color:rgba(212,197,160,.68);}
+
+/* ── FOOTER ── */
+footer{background:#04040c;border-top:1px solid rgba(212,197,160,.05);padding:58px 5% 30px;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:38px;margin-bottom:44px;}
+.footer-brand{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.footer-brand img{height:42px;width:auto;mix-blend-mode:screen;}
+.footer-brand-text{font-family:var(--brand);font-size:18px;color:var(--gold);letter-spacing:.1em;}
+.footer-tagline{font-family:var(--head);font-size:9.5px;letter-spacing:.26em;color:rgba(212,197,160,.32);text-transform:uppercase;margin-bottom:14px;}
+.footer-desc{font-size:13.5px;line-height:1.7;color:rgba(212,197,160,.38);max-width:290px;}
+.footer-col-title{font-family:var(--head);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:rgba(212,197,160,.48);margin-bottom:15px;}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.footer-links a{font-size:13.5px;color:rgba(212,197,160,.4);text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:var(--gold);}
+.footer-bottom{border-top:1px solid rgba(212,197,160,.055);padding-top:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.footer-legal{font-family:var(--ui);font-size:11.5px;color:rgba(212,197,160,.22);line-height:1.65;}
+.footer-badge{font-family:var(--head);font-size:8px;letter-spacing:.16em;padding:3px 9px;border-radius:1px;text-transform:uppercase;color:rgba(212,197,160,.38);border:1px solid rgba(212,197,160,.1);margin:0 4px 4px 0;display:inline-block;}
+
+/* ── REVEAL ANIMATIONS ── */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.up{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-30px);transition:opacity .7s ease,transform .7s ease;}
+.reveal-left.up{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(30px);transition:opacity .7s ease,transform .7s ease;}
+.reveal-right.up{opacity:1;transform:translateX(0);}
+.delay-1{transition-delay:.12s;}.delay-2{transition-delay:.22s;}.delay-3{transition-delay:.32s;}.delay-4{transition-delay:.42s;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .hero-content,.game-feature-inner,.yhp-inner{grid-template-columns:1fr;}
+  .hero-logo{order:-1;text-align:center;justify-content:center;}
+  .hero-logo img{width:min(240px,65vw);}
+  .hero-text{text-align:center;}
+  .hero-chapter{justify-content:center;}
+  .hero-btns{justify-content:center;}
+  .mission-attrs{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  .nav-links{display:none;}
+  .nav-toggle{display:flex;}
+}
+@media(max-width:600px){
+  .footer-top{grid-template-columns:1fr;}
+  .sub-row{flex-direction:column;}
+  .chapters-grid{grid-template-columns:1fr 1fr;}
+  .yhp-founders{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="nav">
+  <a href="/" class="nav-brand">
+    <img src="./assets/img/helixra-logo.png" alt="Helixra"/>
+    <span class="nav-brand-text">Helixra&#8482;</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#game">Chapter I</a></li>
+    <li><a href="#chapters">Chapters</a></li>
+    <li><a href="#yhp">Studio</a></li>
+    <li><a href="#subscribe">Subscribe</a></li>
+    <li><a href="./play/" class="nav-cta">Play Now</a></li>
+  </ul>
+  <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <!-- Kandyan Heritage Background -->
+  <div class="hero-scene">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#060414"/>
+          <stop offset="30%" stop-color="#180a30"/>
+          <stop offset="58%" stop-color="#3a1a50"/>
+          <stop offset="78%" stop-color="#6a3220"/>
+          <stop offset="92%" stop-color="#a85a18"/>
+          <stop offset="100%" stop-color="#d07820"/>
+        </linearGradient>
+        <linearGradient id="grd2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#b89050"/>
+          <stop offset="100%" stop-color="#7a5a28"/>
+        </linearGradient>
+        <radialGradient id="glow2" cx="50%" cy="68%" r="38%">
+          <stop offset="0%" stop-color="#d07820" stop-opacity="0.28"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <filter id="bl3"><feGaussianBlur stdDeviation="3"/></filter>
+        <filter id="bl6"><feGaussianBlur stdDeviation="6"/></filter>
+      </defs>
+      <rect width="1600" height="900" fill="url(#sky)"/>
+      <rect width="1600" height="900" fill="url(#glow2)"/>
+      <circle cx="1155" cy="160" r="38" fill="#f0d888" opacity="0.55"/>
+      <circle cx="1155" cy="160" r="50" fill="#e8c060" opacity="0.1" filter="url(#bl6)"/>
+      <circle cx="120" cy="80" r="1.5" fill="#fff" opacity="0.7"/>
+      <circle cx="280" cy="55" r="1" fill="#fff" opacity="0.55"/>
+      <circle cx="450" cy="40" r="1.5" fill="#fff" opacity="0.6"/>
+      <circle cx="620" cy="70" r="1" fill="#fff" opacity="0.5"/>
+      <circle cx="800" cy="35" r="1.5" fill="#fff" opacity="0.65"/>
+      <circle cx="960" cy="90" r="1" fill="#fff" opacity="0.5"/>
+      <circle cx="1050" cy="50" r="1.5" fill="#fff" opacity="0.6"/>
+      <circle cx="1300" cy="75" r="1" fill="#fff" opacity="0.5"/>
+      <circle cx="1480" cy="45" r="1.5" fill="#fff" opacity="0.55"/>
+      <path d="M0 580 Q200 480 400 520 Q600 560 750 490 Q900 420 1100 480 Q1300 540 1600 500 L1600 620 L0 620Z" fill="#0a0818" opacity="0.8"/>
+      <rect x="0" y="615" width="1600" height="285" fill="url(#grd2)"/>
+      <rect x="0" y="615" width="1600" height="40" fill="#0a0818" opacity="0.45"/>
+      <!-- Walauwa building -->
+      <rect x="480" y="310" width="640" height="310" fill="#c8a060" opacity="0.82"/>
+      <rect x="1100" y="310" width="20" height="310" fill="#6a4010" opacity="0.4"/>
+      <rect x="480" y="440" width="640" height="180" fill="#b89050" opacity="0.88"/>
+      <rect x="488" y="452" width="20" height="168" fill="#7a5020" opacity="0.8"/>
+      <rect x="618" y="452" width="20" height="168" fill="#7a5020" opacity="0.8"/>
+      <rect x="748" y="452" width="20" height="168" fill="#7a5020" opacity="0.8"/>
+      <rect x="878" y="452" width="20" height="168" fill="#7a5020" opacity="0.8"/>
+      <rect x="1092" y="452" width="20" height="168" fill="#7a5020" opacity="0.8"/>
+      <path d="M508 452 Q563 412 618 452" fill="#a87840" opacity="0.7"/>
+      <path d="M638 452 Q693 412 748 452" fill="#a87840" opacity="0.7"/>
+      <path d="M768 452 Q823 412 878 452" fill="#a87840" opacity="0.7"/>
+      <path d="M898 452 Q958 412 1015 452" fill="#a87840" opacity="0.7"/>
+      <path d="M740 620 L740 492 Q800 432 860 492 L860 620Z" fill="#5a3010" opacity="0.7"/>
+      <rect x="540" y="340" width="54" height="74" rx="3" fill="#3a2010" opacity="0.65"/>
+      <rect x="640" y="340" width="54" height="74" rx="3" fill="#3a2010" opacity="0.65"/>
+      <rect x="760" y="325" width="80" height="90" rx="3" fill="#3a2010" opacity="0.7"/>
+      <rect x="906" y="340" width="54" height="74" rx="3" fill="#3a2010" opacity="0.65"/>
+      <rect x="1006" y="340" width="54" height="74" rx="3" fill="#3a2010" opacity="0.65"/>
+      <rect x="762" y="327" width="76" height="88" rx="2" fill="#e09040" opacity="0.16"/>
+      <!-- Roof tiers -->
+      <path d="M440 452 L1160 452 L1140 420 L460 420Z" fill="#c04820"/>
+      <path d="M460 420 L1140 420 L1110 386 L490 386Z" fill="#b03a18"/>
+      <path d="M490 386 L1110 386 L1070 352 L530 352Z" fill="#a03010"/>
+      <path d="M530 352 L1070 352 L1020 316 L580 316Z" fill="#902808"/>
+      <path d="M580 316 L1020 316 L1000 306 L600 306Z" fill="#802010"/>
+      <polygon points="800,286 820,306 780,306" fill="#c9a84c" opacity="0.7"/>
+      <polygon points="700,299 712,311 688,311" fill="#c9a84c" opacity="0.5"/>
+      <polygon points="900,299 912,311 888,311" fill="#c9a84c" opacity="0.5"/>
+      <!-- Left palms -->
+      <path d="M200 900 Q210 800 215 700 Q222 620 235 540 Q240 480 250 410" stroke="#2a1808" stroke-width="14" fill="none" stroke-linecap="round" filter="url(#bl3)"/>
+      <path d="M250 410 Q180 360 140 320" stroke="#1a3008" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <path d="M250 410 Q200 340 185 290" stroke="#1a3008" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M250 410 Q310 365 340 330" stroke="#1a3008" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <path d="M100 900 Q108 820 115 740 Q120 670 132 590 Q138 540 148 480" stroke="#2a1808" stroke-width="11" fill="none" stroke-linecap="round" filter="url(#bl3)"/>
+      <path d="M148 480 Q88 432 55 398" stroke="#1a3008" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M148 480 Q170 430 182 392" stroke="#1a3008" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M148 480 M198 450 Q218 438 232 428" stroke="#1a3008" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <!-- Right trees -->
+      <rect x="1340" y="445" width="20" height="172" rx="5" fill="#2a1808" opacity="0.85"/>
+      <ellipse cx="1358" cy="382" rx="88" ry="68" fill="#1a3808" opacity="0.85"/>
+      <ellipse cx="1318" cy="400" rx="72" ry="58" fill="#1a3008" opacity="0.8"/>
+      <ellipse cx="1398" cy="392" rx="78" ry="62" fill="#1a3808" opacity="0.78"/>
+      <ellipse cx="1358" cy="342" rx="68" ry="52" fill="#2a4808" opacity="0.85"/>
+      <path d="M1500 900 Q1492 800 1488 720 Q1484 640 1478 560 Q1474 500 1468 440" stroke="#2a1808" stroke-width="13" fill="none" stroke-linecap="round" filter="url(#bl3)"/>
+      <path d="M1468 440 Q1530 388 1568 350" stroke="#1a3008" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M1468 440 Q1460 365 1455 320" stroke="#1a3008" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M1468 440 Q1405 392 1375 365" stroke="#1a3008" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <!-- Children silhouettes -->
+      <ellipse cx="730" cy="660" rx="22" ry="14" fill="#1a0c06" opacity="0.9"/>
+      <circle cx="730" cy="640" r="13" fill="#1a0c06" opacity="0.9"/>
+      <path d="M710 658 Q703 653 698 663 Q709 667 720 663" fill="#1a0c06" opacity="0.85"/>
+      <path d="M750 658 Q757 653 762 661 Q751 667 740 663" fill="#1a0c06" opacity="0.85"/>
+      <ellipse cx="870" cy="660" rx="22" ry="14" fill="#1a0c06" opacity="0.9"/>
+      <circle cx="870" cy="640" r="13" fill="#1a0c06" opacity="0.9"/>
+      <path d="M850 658 Q843 653 838 661 Q849 667 860 663" fill="#1a0c06" opacity="0.85"/>
+      <path d="M890 658 Q897 653 902 661 Q891 667 880 663" fill="#1a0c06" opacity="0.85"/>
+      <ellipse cx="800" cy="666" rx="14" ry="10" fill="#1a0c06" opacity="0.7"/>
+      <circle cx="800" cy="655" r="9" fill="#1a0c06" opacity="0.7"/>
+      <rect x="778" y="658" width="44" height="22" rx="3" fill="#5a3810" opacity="0.8"/>
+      <circle cx="787" cy="667" r="3" fill="#c02818" opacity="0.9"/>
+      <circle cx="800" cy="667" r="3" fill="#c02818" opacity="0.9"/>
+      <circle cx="813" cy="667" r="3" fill="#c02818" opacity="0.9"/>
+      <ellipse cx="800" cy="678" rx="118" ry="11" fill="#0a0808" opacity="0.22" filter="url(#bl6)"/>
+      <circle cx="370" cy="580" r="2" fill="#d0e840" opacity="0.35"/>
+      <circle cx="1230" cy="565" r="2" fill="#d0e840" opacity="0.32"/>
+    </svg>
+  </div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <div class="hero-logo reveal-left">
+      <img src="./assets/img/helixra-logo.png" alt="Helixra - Sri Lankan Games. Eternal Legacy."/>
+    </div>
+    <div class="hero-text reveal-right">
+      <div class="hero-chapter">Now Live - Chapter I</div>
+      <h1 class="hero-h1">Sri Lanka's Ancient Games,<br/><em>Finally</em> Alive.</h1>
+      <p class="hero-tag">Helixra&#8482; &nbsp;-&nbsp; <span>Sri Lankan Games. Eternal Legacy.</span></p>
+      <p class="hero-desc">Where the Kandy period meets the digital age. Helixra&#8482; is Sri Lanka's first premium digital game franchise rooted in verified cultural heritage - built for the world.</p>
+      <div class="hero-btns">
+        <a href="./play/" class="btn btn-primary">Play Chapter I - Free</a>
+        <a href="#subscribe" class="btn btn-secondary">Join the Legacy</a>
+        <a href="#about" class="btn btn-ghost">Our Story</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<div class="lotus-div"><span class="lotus-icon">&#10031;</span></div>
+
+<!-- ── GAME FEATURE ── -->
+<section class="game-feature" id="game">
+  <div class="game-feature-inner section-inner">
+    <div class="reveal-left">
+      <span class="game-badge">&#9655; Chapter I - Now Live</span>
+      <h2 class="game-title">Olinda Keliya</h2>
+      <p class="game-sinhala">ඔලිඳ කෙළිය &nbsp;-&nbsp; The Ancient Seed Game</p>
+      <p class="game-desc">Sri Lanka's oldest board game - played for centuries with olinda berries across village squares and royal courts. Now rebuilt as a premium digital experience with a strong AI opponent, live multiplayer, four play paths, and a lore system rooted in Kandyan period historical records.</p>
+      <div class="game-stats">
+        <div><div class="game-stat-n">2000+</div><div class="game-stat-l">Years of history</div></div>
+        <div><div class="game-stat-n">4</div><div class="game-stat-l">Play paths</div></div>
+        <div><div class="game-stat-n">AI</div><div class="game-stat-l">Opponent included</div></div>
+        <div><div class="game-stat-n">Free</div><div class="game-stat-l">To play now</div></div>
+      </div>
+      <div style="margin-bottom:18px;">
+        <span class="feature-tag" style="color:#6d9030;border-color:rgba(109,144,48,.3);">Nature</span>
+        <span class="feature-tag" style="color:#c9a84c;border-color:rgba(201,168,76,.3);">Ritual</span>
+        <span class="feature-tag" style="color:#1a9e8a;border-color:rgba(26,158,138,.3);">Movement</span>
+        <span class="feature-tag" style="color:#c04820;border-color:rgba(192,72,32,.3);">Strategy</span>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="./play/" class="btn btn-primary">Play Now - Free</a>
+        <a href="#subscribe" class="btn btn-secondary">Download - Coming Soon</a>
+      </div>
+    </div>
+    <!-- Board Mockup -->
+    <div class="reveal-right">
+      <div class="game-mockup-bg">
+        <div style="text-align:center;margin-bottom:14px;font-family:'Cinzel Decorative',serif;font-size:10.5px;color:rgba(201,168,76,.5);letter-spacing:.18em;">OLINDA KELIYA</div>
+        <div class="game-board-outer">
+          <div class="game-store">
+            <div style="display:flex;flex-wrap:wrap;gap:2px;justify-content:center;max-width:44px;"><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div></div>
+            <div style="font-family:'Cinzel',serif;font-size:6.5px;letter-spacing:.18em;color:rgba(201,168,76,.3);text-transform:uppercase;margin-top:4px;">Wisdom</div>
+          </div>
+          <div class="game-pits-grid">
+            <div class="game-board-row">
+              <div class="game-pit"><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div></div>
+              <div class="game-pit"><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div></div>
+              <div class="game-pit"><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div></div>
+              <div class="game-pit"><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div></div>
+              <div class="game-pit"><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div></div>
+              <div class="game-pit"><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div></div>
+            </div>
+            <div class="game-board-mid"><div class="ml"></div><div class="ms"></div><div class="ml"></div></div>
+            <div class="game-board-row">
+              <div class="game-pit" style="box-shadow:inset 0 4px 12px rgba(0,0,0,.82),0 0 14px rgba(26,158,138,.35);border-color:rgba(26,158,138,.5)"><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div></div>
+              <div class="game-pit"><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div></div>
+              <div class="game-pit"><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div></div>
+              <div class="game-pit"><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div></div>
+              <div class="game-pit"><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div></div>
+              <div class="game-pit"><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div><div class="game-seed"></div></div>
+            </div>
+          </div>
+          <div class="game-store">
+            <div style="display:flex;flex-wrap:wrap;gap:2px;justify-content:center;max-width:44px;"><div class="game-seed"></div><div class="game-seed"></div></div>
+            <div style="font-family:'Cinzel',serif;font-size:6.5px;letter-spacing:.18em;color:rgba(201,168,76,.3);text-transform:uppercase;margin-top:4px;">Wisdom</div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:12px;padding:0 2px;">
+          <span style="font-family:'Cinzel',serif;font-size:8px;color:rgba(212,197,160,.3);letter-spacing:.1em;">ROYAL ADVISOR</span>
+          <span style="font-family:'Cinzel',serif;font-size:8px;color:rgba(26,158,138,.65);letter-spacing:.1em;">YOUR TURN &#9670;</span>
+        </div>
+        <div style="position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,rgba(6,13,24,.97),rgba(10,22,36,.97));border:1px solid rgba(201,168,76,.38);border-radius:0 0 10px 10px;padding:6px 18px;white-space:nowrap;">
+          <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:.2em;color:#c9a84c;text-transform:uppercase;">CAPTURE THE NAGA STRIKE</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CHAPTERS ── -->
+<section class="pat-cross" id="chapters" style="background:var(--black);">
+  <div class="section-inner">
+    <div class="section-label reveal">The Chapters</div>
+    <h2 class="section-h2 reveal delay-1">Every game. A story.</h2>
+    <p class="section-sub reveal delay-2">Each Helixra&#8482; chapter is a verified piece of Sri Lankan cultural heritage - rebuilt as a premium digital experience. New chapters release through 2025-2026.</p>
+    <div class="chapters-grid">
+      <div class="chapter-card active reveal delay-1" onclick="window.location='./play/'">
+        <div class="chapter-num" style="color:#c04820">Chapter I</div>
+        <div class="chapter-title">Olinda Keliya</div>
+        <div class="chapter-sinhala">ඔලිඳ කෙළිය</div>
+        <div style="font-size:12.5px;color:rgba(212,197,160,.5);margin-bottom:13px;line-height:1.5;">The ancient seed game. 2,000 years of strategy, now alive.</div>
+        <div class="chapter-status" style="color:#c04820">Live Now &#8594;</div>
+      </div>
+      <div class="chapter-card locked reveal delay-2">
+        <div class="chapter-lock">&#128274;</div>
+        <div class="chapter-num" style="color:rgba(26,158,138,.4)">Chapter II</div>
+        <div style="font-size:12.5px;color:rgba(212,197,160,.22);margin:12px 0;line-height:1.5;">A new chapter from the Kandyan heritage tradition. Details revealed on launch.</div>
+        <div class="chapter-status" style="color:rgba(26,158,138,.4)">Coming - Q3 2025</div>
+      </div>
+      <div class="chapter-card locked reveal delay-3">
+        <div class="chapter-lock">&#128274;</div>
+        <div class="chapter-num" style="color:rgba(201,168,76,.38)">Chapter III</div>
+        <div style="font-size:12.5px;color:rgba(212,197,160,.22);margin:12px 0;line-height:1.5;">Another ancient game reimagined. Subscribe for early access.</div>
+        <div class="chapter-status" style="color:rgba(201,168,76,.38)">Coming - Q4 2025</div>
+      </div>
+      <div class="chapter-card locked reveal delay-4">
+        <div class="chapter-lock">&#128274;</div>
+        <div class="chapter-num" style="color:rgba(109,144,48,.36)">Chapter IV</div>
+        <div style="font-size:12.5px;color:rgba(212,197,160,.22);margin:12px 0;line-height:1.5;">Deeper into the Hela archives. Details to be announced.</div>
+        <div class="chapter-status" style="color:rgba(109,144,48,.36)">Coming - 2026</div>
+      </div>
+      <div class="chapter-card locked reveal delay-4">
+        <div class="chapter-lock">&#128274;</div>
+        <div class="chapter-num" style="color:rgba(212,197,160,.22)">Chapter V</div>
+        <div style="font-size:12.5px;color:rgba(212,197,160,.22);margin:12px 0;line-height:1.5;">The fifth game in the Helixra universe. The legacy continues.</div>
+        <div class="chapter-status" style="color:rgba(212,197,160,.22)">Coming - 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MISSION (dark navy/teal bg) ── -->
+<section class="mission pat-geo" id="about">
+  <div class="mission-inner section-inner">
+    <div class="section-label reveal" style="color:rgba(26,158,138,.75);">What We Believe</div>
+    <h2 class="section-h2 reveal delay-1" style="color:#f5ecd8;">Heritage isn't a relic.<br/>It's a game waiting to be played.</h2>
+    <blockquote class="mission-quote reveal delay-2">
+      "We don't just archive Sri Lankan culture - we make it playable. Helixra&#8482; exists because every ancient game is a window into who we were, and a blueprint for who we can be."
+    </blockquote>
+    <div class="mission-attrs reveal delay-3">
+      <div class="mission-attr">
+        <div class="mission-attr-icon">&#127807;</div>
+        <div class="mission-attr-title">Culturally Verified</div>
+        <div class="mission-attr-text">Every chapter is researched against National Museum records, Mahavamsa texts, and oral traditions - not inspired by history, built from it.</div>
+      </div>
+      <div class="mission-attr">
+        <div class="mission-attr-icon">&#127760;</div>
+        <div class="mission-attr-title">Built for the World</div>
+        <div class="mission-attr-text">Sinhala, Tamil, English. Available globally. Selected by WIPO IPMC and endorsed by Sri Lanka's National Innovation Agency.</div>
+      </div>
+      <div class="mission-attr">
+        <div class="mission-attr-icon">&#127918;</div>
+        <div class="mission-attr-title">Genuinely Fun</div>
+        <div class="mission-attr-text">Strong AI opponents. Real-time multiplayer. Path-based archetypes. Lore you can unlock. These aren't educational tools - they're real games.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── YHP ── -->
+<section style="background:var(--black);padding:80px 5%;" id="yhp">
+  <div class="section-inner">
+    <div class="section-label reveal">The Studio</div>
+    <div class="yhp-inner">
+      <div class="reveal-left delay-1">
+        <h2 style="font-family:'Cinzel Decorative',serif;font-size:clamp(24px,3vw,42px);color:var(--cream);line-height:1.12;margin-bottom:20px;">Yellow House<br/>Productions</h2>
+        <p style="font-size:16.5px;line-height:1.82;color:rgba(212,197,160,.6);margin-bottom:16px;">Sri Lanka's first culture-tech XR studio, founded in 2021. We sit at the intersection of verified cultural heritage and immersive experience design - building IP that represents Sri Lanka to the world, on the world's terms.</p>
+        <p style="font-size:16.5px;line-height:1.82;color:rgba(212,197,160,.6);margin-bottom:18px;">Helixra&#8482; is our consumer gaming franchise. Our broader work includes <strong style="color:var(--stone)">Project Archivist</strong> - an XR platform selected by WIPO IPMC and endorsed by Sri Lanka's National Innovation Agency - and <strong style="color:var(--stone)">Linseed</strong>, our licensing infrastructure for the Global South.</p>
+        <div class="yhp-tags">
+          <span class="yhp-tag">Culture-Tech</span>
+          <span class="yhp-tag">XR Studio</span>
+          <span class="yhp-tag">WIPO IPMC</span>
+          <span class="yhp-tag">NIA Endorsed</span>
+          <span class="yhp-tag">Colombo, Sri Lanka</span>
+        </div>
+        <div class="yhp-founders">
+          <div class="founder">
+            <div class="founder-name">Hasitha Jayathilaka</div>
+            <div class="founder-role">CEO &amp; Founder - CEO, The ROI Firm</div>
+          </div>
+          <div class="founder">
+            <div class="founder-name">Prabha Hewage</div>
+            <div class="founder-role">Co-Founder - Multidisciplinary Artist</div>
+          </div>
+        </div>
+      </div>
+      <div class="yhp-logo-block reveal-right delay-2">
+        <!-- YHP Logo - replace assets/img/yhp-logo.png with your actual logo -->
+        <div class="yhp-logo-img-wrap">
+          <img src="./assets/img/yhp-logo.png" alt="Yellow House Productions"
+            onerror="this.outerHTML='<div style=&quot;padding:18px 24px;border:1.5px dashed rgba(26,158,138,0.3);border-radius:6px;text-align:center;&quot;><div style=&quot;font-family:Cinzel,serif;font-size:10px;letter-spacing:.22em;color:rgba(26,158,138,.55);margin-bottom:6px;&quot;>ADD YHP LOGO</div><div style=&quot;font-size:12px;color:rgba(212,197,160,.28);&quot;>assets/img/yhp-logo.png</div></div>'"/>
+        </div>
+        <div class="yhp-logo-text">Powered by</div>
+        <div class="yhp-logo-name">Yellow House Productions Pvt Ltd</div>
+        <p class="yhp-desc">Sri Lanka's first culture-tech XR studio. Archiving, verifying, and reimagining Sri Lankan cultural IP for the world.</p>
+        <div class="yhp-ventures">
+          <div class="yhp-venture">
+            <div class="yhp-venture-dot" style="background:#1a9e8a;"></div>
+            <div><div class="yhp-venture-name">Project Archivist</div><div class="yhp-venture-desc">XR Cultural Heritage Platform - WIPO IPMC Selected</div></div>
+          </div>
+          <div class="yhp-venture">
+            <div class="yhp-venture-dot" style="background:#c9a84c;"></div>
+            <div><div class="yhp-venture-name">Linseed Pvt Ltd</div><div class="yhp-venture-desc">Attribution &amp; Licensing Infrastructure</div></div>
+          </div>
+          <div class="yhp-venture">
+            <div class="yhp-venture-dot" style="background:#c04820;"></div>
+            <div><div class="yhp-venture-name">The ROI Firm Pvt Ltd</div><div class="yhp-venture-desc">Fractional CMO/CGO Consultancy - Est. 2016</div></div>
+          </div>
+        </div>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(26,158,138,.12);">
+          <a href="https://thearchivistgame.art" target="_blank" rel="noopener" style="font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.16em;color:rgba(26,158,138,.55);text-decoration:none;display:block;margin-bottom:7px;transition:color .2s;" onmouseover="this.style.color='#1a9e8a'" onmouseout="this.style.color='rgba(26,158,138,.55)'">thearchivistgame.art &#8599;</a>
+          <a href="https://arraframework.org" target="_blank" rel="noopener" style="font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.16em;color:rgba(201,168,76,.45);text-decoration:none;display:block;transition:color .2s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(201,168,76,.45)'">arraframework.org &#8599;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SUBSCRIBE ── -->
+<section class="subscribe pat-geo" id="subscribe">
+  <div class="subscribe-inner">
+    <div class="section-label reveal" style="color:rgba(240,232,208,.45);justify-content:center;">Join the Legacy</div>
+    <h2 class="subscribe-h reveal delay-1">Be first to play<br/>the next chapter.</h2>
+    <p class="subscribe-sub reveal delay-2">Subscribe for early access, launch announcements, and exclusive lore fragments as new chapters drop.</p>
+    <div class="subscribe-form reveal delay-3" id="sub-form">
+      <div class="sub-row">
+        <input class="sub-input" type="text" id="sub-name" placeholder="Your lineage name..." autocomplete="name"/>
+        <input class="sub-input" type="email" id="sub-email" placeholder="your@email.com" autocomplete="email" style="flex:1.6;"/>
+      </div>
+      <div>
+        <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,232,208,.35);margin-bottom:8px;">Choose your path (optional)</div>
+        <div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap;">
+          <button class="path-opt" onclick="selectPath(this,'Nature')">&#127807; Nature</button>
+          <button class="path-opt" onclick="selectPath(this,'Ritual')">&#9873; Ritual</button>
+          <button class="path-opt" onclick="selectPath(this,'Movement')">&#12316; Movement</button>
+          <button class="path-opt" onclick="selectPath(this,'Strategy')">&#9670; Strategy</button>
+        </div>
+      </div>
+      <button class="sub-btn" onclick="handleSubscribe()">Sow Your Seed &#8594;</button>
+      <p style="font-size:12.5px;color:rgba(240,232,208,.3);margin-top:8px;">No spam. Unsubscribe any time. We only write when a chapter drops.</p>
+    </div>
+    <div class="sub-success" id="sub-success">
+      <div class="sub-success-title">&#127807; The seeds have been sown.</div>
+      <div class="sub-success-body">You're on the list. We'll reach out when the next chapter is ready.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner" style="max-width:1280px;margin:0 auto;">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">
+          <img src="./assets/img/helixra-logo.png" alt="Helixra"/>
+          <span class="footer-brand-text">Helixra&#8482;</span>
+        </div>
+        <div class="footer-tagline">Sri Lankan Games - Eternal Legacy</div>
+        <p class="footer-desc">Sri Lanka's ancient board games, rebuilt as premium digital experiences. Chapter I - Olinda Keliya is live now.</p>
+        <div style="display:flex;gap:14px;margin-top:18px;">
+          <a href="#" style="font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.16em;color:rgba(212,197,160,.35);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(212,197,160,.35)'">Instagram</a>
+          <a href="#" style="font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.16em;color:rgba(212,197,160,.35);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(212,197,160,.35)'">LinkedIn</a>
+          <a href="#" style="font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.16em;color:rgba(212,197,160,.35);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(212,197,160,.35)'">X</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Play</div>
+        <ul class="footer-links">
+          <li><a href="./play/">Chapter I - Olinda Keliya</a></li>
+          <li><a href="#chapters">Coming Chapters</a></li>
+          <li><a href="#subscribe">Download (PWA)</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Studio</div>
+        <ul class="footer-links">
+          <li><a href="https://thearchivistgame.art" target="_blank" rel="noopener">Project Archivist</a></li>
+          <li><a href="https://theroifirm.com" target="_blank" rel="noopener">The ROI Firm</a></li>
+          <li><a href="https://arraframework.org" target="_blank" rel="noopener">ARRA Framework</a></li>
+          <li><a href="#yhp">Yellow House Productions</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <ul class="footer-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Use</a></li>
+          <li><a href="#">IP &amp; Licensing</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-legal">
+        &copy; 2025 Yellow House Productions Pvt Ltd. All rights reserved.<br/>
+        Helixra&#8482; is a trademark of Yellow House Productions Pvt Ltd. Colombo, Sri Lanka.<br/>
+        <span class="footer-badge">WIPO IPMC</span>
+        <span class="footer-badge">NIA Endorsed</span>
+        <span class="footer-badge">Made in Sri Lanka &#127473;&#127472;</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40);
+});
+// Mobile nav
+function toggleNav(){
+  const l=document.querySelector('.nav-links');
+  const open=l.dataset.open==='1';
+  l.dataset.open=open?'0':'1';
+  if(open){l.style.display='';}
+  else{l.style.cssText='display:flex;flex-direction:column;position:fixed;top:72px;right:5%;background:rgba(8,8,16,.97);border:1px solid rgba(201,168,76,.12);padding:20px;border-radius:6px;gap:16px;z-index:99;';}
+}
+// Scroll reveals
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('up');});},{threshold:0.12});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>obs.observe(el));
+// Path select
+let selPath='';
+function selectPath(el,p){document.querySelectorAll('.path-opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');selPath=p;}
+// Subscribe
+function handleSubscribe(){
+  const email=document.getElementById('sub-email').value.trim();
+  if(!email||!email.includes('@')){
+    document.getElementById('sub-email').style.borderColor='rgba(192,72,32,.7)';
+    setTimeout(()=>document.getElementById('sub-email').style.borderColor='',2000);
+    return;
+  }
+  // Wire to: POST /.netlify/functions/subscribe with { email, name, path: selPath }
+  document.getElementById('sub-form').style.display='none';
+  document.getElementById('sub-success').classList.add('show');
+}
+document.getElementById('sub-email')?.addEventListener('keydown',e=>{if(e.key==='Enter')handleSubscribe();});
+</script>
+</body>
+</html>
