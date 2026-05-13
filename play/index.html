@@ -4,186 +4,61 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Olinda Keliya - Helixra&#8482; Chapter I</title>
-<meta name="description" content="Play Olinda Keliya - Sri Lanka's ancient seed game, reimagined. Helixra Chapter I, free to play."/>
 <link rel="icon" href="../assets/img/helixra-logo.png" type="image/png"/>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet"/>
 <style>
+/* ── RESET ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body,html{background:#080810;min-height:100vh;font-family:'Cormorant Garamond',serif;overflow-x:hidden;}
-/* Game top bar */
-.game-topbar{position:fixed;top:0;left:0;right:0;z-index:200;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(8,8,16,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,.1);}
-.topbar-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
-.topbar-logo img{height:28px;width:auto;mix-blend-mode:screen;}
-.topbar-logo-text{font-family:'Cinzel Decorative',serif;font-size:13px;color:#c9a84c;letter-spacing:.1em;}
-.topbar-chapter{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:rgba(212,197,160,.4);}
-.topbar-back{font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(212,197,160,.45);text-decoration:none;border:1px solid rgba(212,197,160,.18);padding:5px 13px;border-radius:2px;transition:all .2s;}
-.topbar-back:hover{color:rgba(212,197,160,.8);border-color:rgba(212,197,160,.38);}
-/* Root game container */
-#root{padding-top:52px;min-height:100vh;}
-/* Loading state */
-.loading{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 52px);flex-direction:column;gap:16px;}
-.loading-logo{width:80px;height:80px;animation:spin 8s linear infinite;opacity:.7;}
+html,body{background:#080810;min-height:100vh;overflow-x:hidden;}
+
+/* ── TOP BAR ── */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:300;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(8,8,16,.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(201,168,76,.1);}
+.tb-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.tb-logo img{height:28px;mix-blend-mode:screen;}
+.tb-brand{font-family:'Cinzel Decorative',serif;font-size:13px;color:#c9a84c;letter-spacing:.1em;}
+.tb-chapter{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(212,197,160,.38);}
+.tb-back{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(212,197,160,.4);text-decoration:none;border:1px solid rgba(212,197,160,.16);padding:5px 13px;border-radius:2px;transition:all .2s;}
+.tb-back:hover{color:rgba(212,197,160,.8);border-color:rgba(212,197,160,.36);}
+
+/* ── LOADING ── */
+#loading{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:16px;background:radial-gradient(ellipse at 50% 78%,#0c1e30,#060d18 50%,#030810);}
+#loading img{width:72px;animation:spin 6s linear infinite;opacity:.65;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.loading-text{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.3em;color:rgba(212,197,160,.4);text-transform:uppercase;animation:pulse 2s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:.4;}50%{opacity:.8;}}
-</style>
-</head>
-<body>
+.ld-text{font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.3em;color:rgba(212,197,160,.35);text-transform:uppercase;animation:ldPulse 2s ease-in-out infinite;}
+@keyframes ldPulse{0%,100%{opacity:.35;}50%{opacity:.75;}}
+#root{padding-top:52px;min-height:100vh;}
 
-<!-- Top bar -->
-<div class="game-topbar">
-  <a href="../" class="topbar-logo">
-    <img src="../assets/img/helixra-logo.png" alt="Helixra"/>
-    <span class="topbar-logo-text">Helixra&#8482;</span>
-  </a>
-  <span class="topbar-chapter">Chapter I &nbsp;&#8212;&nbsp; Olinda Keliya</span>
-  <a href="../" class="topbar-back">&#8592; Back to Site</a>
-</div>
-
-<!-- Loading state (shown until React mounts) -->
-<div id="loading" class="loading">
-  <img src="../assets/img/helixra-logo.png" class="loading-logo" alt="Loading..."/>
-  <div class="loading-text">Loading the ancient board...</div>
-</div>
-
-<!-- React mounts here -->
-<div id="root"></div>
-
-<!-- React + ReactDOM via CDN -->
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-<!-- Babel for JSX transpilation -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
-
-<script type="text/babel">
-const { useState, useMemo } = React;
-
-// ══════════════════════════════════════════════════
-//  GAME ENGINE
-// ══════════════════════════════════════════════════
-const P1S = 6, P2S = 13;
-const TOP_ROW = [12,11,10,9,8,7];
-const BOT_ROW = [0,1,2,3,4,5];
-
-const PATHS = {
-  Nature:   { color:"#5a9e2a", glow:"rgba(90,158,42,0.4)",   dark:"#3d7a1a", desc:"Grow with patience" },
-  Ritual:   { color:"#c9a84c", glow:"rgba(201,168,76,0.4)",  dark:"#9a7528", desc:"Follow the sacred cycle" },
-  Movement: { color:"#1a9e8a", glow:"rgba(26,158,138,0.4)",  dark:"#0d7a6c", desc:"Flow like river waters" },
-  Strategy: { color:"#9a7050", glow:"rgba(154,112,80,0.4)",  dark:"#705030", desc:"Command with wisdom" },
-};
-const getRank = w => w<22?"Apprentice":w<35?"Keeper":w<43?"Chronicler":"Sage";
-const getArch = (w,cap) => cap>=4?"The Strategist":w>=43?"The Sage":w>=35?"The Chronicler":"The Keeper";
-
-const freshBoard = () => { const b=Array(14).fill(4); b[P1S]=0; b[P2S]=0; return b; };
-const isOver = b => b.slice(0,6).every(x=>!x)||b.slice(7,13).every(x=>!x);
-
-function sowSeeds(board,idx){
-  const b=[...board];
-  const pl=idx<=5?1:2, my=pl===1?P1S:P2S, op=pl===1?P2S:P1S;
-  let s=b[idx]; b[idx]=0; let c=idx; let captured=0;
-  while(s>0){c=(c+1)%14; if(c===op)continue; b[c]++; s--;}
-  const ex=c===my;
-  if(!ex){const own=pl===1?c<=5:(c>=7&&c<=12); if(own&&b[c]===1&&b[12-c]>0){captured=1+b[12-c];b[my]+=captured;b[c]=0;b[12-c]=0;}}
-  if(isOver(b)){for(let j=0;j<6;j++){b[P1S]+=b[j];b[j]=0;}for(let j=7;j<13;j++){b[P2S]+=b[j];b[j]=0;}}
-  return {b,ex,captured};
+/* ── SEED ANIMATIONS ── */
+@keyframes seedDrop{
+  0%{transform:scale(0) translateY(-14px);opacity:0;}
+  65%{transform:scale(1.15) translateY(2px);opacity:1;}
+  100%{transform:scale(1) translateY(0);opacity:1;}
 }
-function minimax(board,d,al,be,max){
-  if(!d||isOver(board)) return board[P2S]-board[P1S];
-  const ps=max?[7,8,9,10,11,12]:[0,1,2,3,4,5];
-  const mv=ps.filter(i=>board[i]>0); if(!mv.length) return board[P2S]-board[P1S];
-  if(max){let v=-999;for(const m of mv){const{b:n,ex}=sowSeeds(board,m);v=Math.max(v,minimax(n,d-1,al,be,ex));al=Math.max(al,v);if(be<=al)break;}return v;}
-  else{let v=999;for(const m of mv){const{b:n,ex}=sowSeeds(board,m);v=Math.min(v,minimax(n,d-1,al,be,!ex));be=Math.min(be,v);if(be<=al)break;}return v;}
-}
-function getAIMove(board){
-  const mv=[7,8,9,10,11,12].filter(i=>board[i]>0); if(!mv.length) return null;
-  let best=-999,pick=mv[0];
-  for(const m of mv){const{b:n,ex}=sowSeeds(board,m);const s=minimax(n,5,-999,999,ex);if(s>best){best=s;pick=m;}}
-  return pick;
-}
-
-// ══════════════════════════════════════════════════
-//  VISUAL COMPONENTS
-// ══════════════════════════════════════════════════
-function BerryDefs(){
-  return (
-    <svg width="0" height="0" style={{position:'absolute',overflow:'hidden'}}>
-      <defs>
-        <radialGradient id="bg-grad" cx="34%" cy="28%" r="70%">
-          <stop offset="0%" stopColor="#ff8c78"/>
-          <stop offset="25%" stopColor="#d42e1d"/>
-          <stop offset="60%" stopColor="#8c1812"/>
-          <stop offset="100%" stopColor="#4c0d09"/>
-        </radialGradient>
-        <radialGradient id="sp-grad" cx="42%" cy="38%" r="50%">
-          <stop offset="0%" stopColor="#1c0608"/>
-          <stop offset="100%" stopColor="#060202"/>
-        </radialGradient>
-      </defs>
-    </svg>
-  );
-}
-function Berry({size=12}){
-  return(
-    <svg width={size} height={size} viewBox="0 0 100 100" style={{flexShrink:0,display:"block"}}>
-      <circle cx="50" cy="50" r="46" fill="url(#bg-grad)"/>
-      <ellipse cx="32" cy="28" rx="17" ry="15" fill="url(#sp-grad)" opacity="0.92"/>
-      <ellipse cx="71" cy="22" rx="13" ry="8" fill="rgba(255,238,218,0.4)" transform="rotate(-22 71 22)"/>
-      <circle cx="76" cy="36" r="5" fill="rgba(255,215,195,0.2)"/>
-    </svg>
-  );
-}
-function PitSeeds({count}){
-  if(!count) return <div style={{color:"rgba(200,180,130,.1)",fontSize:16,lineHeight:1}}>·</div>;
-  if(count>16) return <div style={{textAlign:"center"}}><Berry size={10}/><div style={{color:"#c9a84c",fontSize:10,fontFamily:"'Cinzel',serif",fontWeight:700,marginTop:2}}>{count}</div></div>;
-  const sz=count<=4?13:count<=7?11:count<=11?9:8;
-  return <div style={{display:"flex",flexWrap:"wrap",gap:2,justifyContent:"center",alignItems:"center",maxWidth:68}}>{Array.from({length:count},(_,i)=><Berry key={i} size={sz}/>)}</div>;
-}
-function StoreSeeds({count}){
-  if(!count) return <div style={{color:"rgba(200,180,130,.08)",fontSize:22}}>·</div>;
-  if(count>22) return <div style={{textAlign:"center"}}><Berry size={12}/><div style={{color:"#c9a84c",fontSize:20,fontFamily:"'Cinzel Decorative',serif",fontWeight:700,marginTop:5}}>{count}</div></div>;
-  return <div style={{display:"flex",flexWrap:"wrap",gap:2.5,justifyContent:"center",alignItems:"center",maxWidth:62,padding:"2px"}}>{Array.from({length:count},(_,i)=><Berry key={i} size={9}/>)}</div>;
-}
-function Moonstone(){
-  return(
-    <div style={{width:38,height:38,borderRadius:"50%",flexShrink:0,position:"relative",
-      background:"radial-gradient(circle at 40% 34%, #ece0c8, #c4b898 52%, #968670 100%)",
-      border:"1.5px solid rgba(201,168,76,.4)",
-      boxShadow:"0 0 18px rgba(26,158,138,.6),0 0 40px rgba(26,158,138,.2),0 2px 8px rgba(0,0,0,.6)",
-      animation:"moonGlow 2.4s ease-in-out infinite"}}>
-      <div style={{position:"absolute",width:"62%",height:"1.5px",background:"rgba(80,62,42,.5)",top:"50%",left:"19%",transform:"translateY(-50%)"}}/>
-      <div style={{position:"absolute",height:"62%",width:"1.5px",background:"rgba(80,62,42,.5)",left:"50%",top:"19%",transform:"translateX(-50%)"}}/>
-      {[[28,28],[28,62],[62,28],[62,62]].map(([x,y],i)=>(
-        <div key={i} style={{position:"absolute",width:5,height:5,borderRadius:"50%",background:"rgba(72,56,38,.6)",top:`${y}%`,left:`${x}%`,transform:"translate(-50%,-50%)"}}/>
-      ))}
-    </div>
-  );
-}
-function PathIcon({path,size=34}){
-  const p=PATHS[path]||PATHS.Ritual;
-  return(
-    <div style={{width:size,height:size,borderRadius:"50%",border:`1.5px solid ${p.color}`,background:`${p.glow.replace('.4','.16')}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-      <div style={{width:size*.52,height:size*.52,borderRadius:"50%",background:`radial-gradient(circle at 40% 35%,${p.color},${p.dark})`,opacity:.86}}/>
-    </div>
-  );
-}
-
-// ══════════════════════════════════════════════════
-//  CSS STRING
-// ══════════════════════════════════════════════════
-const G=`
-@keyframes moonGlow{0%,100%{box-shadow:0 0 10px rgba(26,158,138,.3),0 2px 8px rgba(0,0,0,.6);}50%{box-shadow:0 0 28px rgba(26,158,138,.75),0 0 65px rgba(26,158,138,.28),0 2px 8px rgba(0,0,0,.6);}}
-@keyframes adotP{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.2;transform:scale(.48);}}
-@keyframes slideD{from{transform:translateX(-50%) translateY(-120%);}to{transform:translateX(-50%) translateY(0);}}
+@keyframes breath{0%,100%{opacity:.28;}50%{opacity:.82;}}
+@keyframes pitPulse{0%{box-shadow:inset 0 5px 16px rgba(0,0,0,.82);}60%{box-shadow:inset 0 4px 10px rgba(0,0,0,.5),0 0 26px rgba(26,158,138,.65),0 0 52px rgba(26,158,138,.2);}100%{box-shadow:inset 0 5px 16px rgba(0,0,0,.82),0 0 16px rgba(26,158,138,.4);}}
+@keyframes captFlash{0%,100%{box-shadow:inset 0 5px 16px rgba(0,0,0,.82);}45%{box-shadow:inset 0 3px 8px rgba(0,0,0,.4),0 0 34px rgba(192,72,32,.85),0 0 68px rgba(192,72,32,.35);}}
+@keyframes goldFlash{0%,100%{box-shadow:inset 0 5px 16px rgba(0,0,0,.82);}45%{box-shadow:inset 0 3px 8px rgba(0,0,0,.4),0 0 34px rgba(201,168,76,.85),0 0 68px rgba(201,168,76,.35);}}
+@keyframes storePulse{0%,100%{box-shadow:inset 0 7px 24px rgba(0,0,0,.88);}50%{box-shadow:inset 0 5px 14px rgba(0,0,0,.5),0 0 32px rgba(201,168,76,.7),0 0 64px rgba(201,168,76,.25);}}
+@keyframes achSlide{from{transform:translateX(-50%) translateY(-110%);}to{transform:translateX(-50%) translateY(0);}}
+@keyframes bonusRowGlow{0%{box-shadow:none;}35%{box-shadow:0 0 0 3px rgba(201,168,76,.5),0 0 40px rgba(201,168,76,.5),0 0 80px rgba(201,168,76,.2);}100%{box-shadow:none;}}
+@keyframes bonusBreath{0%,100%{opacity:.28;}50%{opacity:1;}}
 @keyframes twink{0%,100%{opacity:.06;}50%{opacity:.38;}}
-@keyframes fseedUp{0%{transform:translateY(105vh) scale(0);opacity:0;}8%{opacity:.36;}90%{opacity:.1;}100%{transform:translateY(-55px) scale(1.2);opacity:0;}}
-.ok{min-height:calc(100vh - 52px);background:radial-gradient(ellipse at 50% 78%,#0c1e30 0%,#060d18 50%,#030810 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;color:#d4c5a0;position:relative;overflow:hidden;font-family:'Cormorant Garamond',Georgia,serif;}
+@keyframes fseedUp{0%{transform:translateY(108vh) scale(0);opacity:0;}8%{opacity:.36;}90%{opacity:.1;}100%{transform:translateY(-55px) scale(1.2);opacity:0;}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── GAME LAYOUT ── */
+.ok{min-height:calc(100vh - 52px);background:radial-gradient(ellipse at 50% 78%,#0c1e30,#060d18 50%,#030810);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;color:#d4c5a0;position:relative;overflow:hidden;font-family:'Cormorant Garamond',Georgia,serif;}
 .ok::after{content:'';position:absolute;bottom:-80px;left:50%;transform:translateX(-50%);width:700px;height:280px;background:radial-gradient(ellipse,rgba(26,158,138,.065) 0%,transparent 68%);pointer-events:none;z-index:0;}
 .star{position:absolute;border-radius:50%;background:#fff;animation:twink ease-in-out infinite;pointer-events:none;}
 .fseed{position:absolute;border-radius:50%;background:radial-gradient(circle at 33% 28%,#ff9080,#8b1812);animation:fseedUp linear infinite;pointer-events:none;}
+
+/* ── TYPOGRAPHY ── */
 .brand{font-family:'Cinzel Decorative',serif;color:#c9a84c;letter-spacing:.12em;}
 .brand-glow{text-shadow:0 0 28px rgba(201,168,76,.38),0 0 70px rgba(201,168,76,.1);}
 .stone{font-family:'Cinzel',serif;letter-spacing:.24em;text-transform:uppercase;}
 .sep{height:1px;background:linear-gradient(90deg,transparent,#c9a84c 30%,#c9a84c 70%,transparent);margin:16px auto;}
+
+/* ── BUTTONS ── */
 .btn{display:block;width:248px;margin:9px auto;padding:12px 20px;font-family:'Cinzel',serif;font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;border-radius:3px;cursor:pointer;transition:all .22s;outline:none;}
 .btn-gold{background:linear-gradient(135deg,#c9a84c,#9a7528);color:#060d18;border:none;box-shadow:0 4px 20px rgba(201,168,76,.28);}
 .btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(201,168,76,.48);}
@@ -193,191 +68,539 @@ const G=`
 .btn-dim:hover{border-color:rgba(212,197,160,.38);color:rgba(212,197,160,.78);}
 .ghost{background:none;border:none;color:rgba(212,197,160,.28);font-family:'Cinzel',serif;font-size:10px;letter-spacing:.14em;cursor:pointer;padding:6px 4px;text-transform:uppercase;transition:color .2s;}
 .ghost:hover{color:rgba(212,197,160,.7);}
-.game-wrap{width:100%;max-width:760px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:1;}
-.pbar{display:flex;align-items:center;justify-content:space-between;width:100%;padding:9px 16px;border-radius:8px;background:rgba(6,13,24,.76);border:1px solid rgba(26,158,138,.15);}
+
+/* ── GAME WRAP ── */
+.game-wrap{width:100%;max-width:780px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:1;}
+
+/* ── PLAYER BAR ── */
+.pbar{display:flex;align-items:center;justify-content:space-between;width:100%;padding:9px 16px;border-radius:8px;background:rgba(6,13,24,.76);border:1px solid rgba(26,158,138,.15);transition:border-color .3s;}
 .pname{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(212,197,160,.5);display:flex;align-items:center;gap:8px;}
-.wisdom-val{font-family:'Cinzel Decorative',serif;font-size:22px;color:#c9a84c;}
+.wisdom-val{font-family:'Cinzel Decorative',serif;font-size:22px;color:#c9a84c;transition:color .3s;}
 .wlbl{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.18em;color:rgba(212,197,160,.32);text-align:right;margin-bottom:2px;}
-.adot{width:7px;height:7px;border-radius:50%;animation:adotP 1.6s ease-in-out infinite;flex-shrink:0;}
+.adot{width:7px;height:7px;border-radius:50%;flex-shrink:0;animation:breath 1.6s ease-in-out infinite;}
 .pbadge{font-size:8px;font-family:'Cinzel',serif;letter-spacing:.1em;padding:2px 7px;border-radius:2px;text-transform:uppercase;border:1px solid;}
-.board-outer{display:flex;align-items:stretch;gap:clamp(6px,1.8vw,12px);width:100%;position:relative;background:linear-gradient(148deg,#1e0f06,#150b04,#1e0f06);border-radius:16px;padding:clamp(10px,2.4vw,16px);border:1px solid rgba(26,158,138,.2);box-shadow:0 24px 72px rgba(0,0,0,.88),0 0 50px rgba(26,158,138,.048),inset 0 1px 0 rgba(212,197,160,.062),inset 0 -1px 0 rgba(0,0,0,.55);}
+
+/* ── BOARD ── */
+.board-outer{display:flex;align-items:stretch;gap:clamp(6px,1.8vw,12px);width:100%;position:relative;background:linear-gradient(148deg,#1e0f06,#150b04,#1e0f06);border-radius:16px;padding:clamp(10px,2.4vw,16px);border:1px solid rgba(26,158,138,.2);box-shadow:0 24px 72px rgba(0,0,0,.88),inset 0 1px 0 rgba(212,197,160,.062),inset 0 -1px 0 rgba(0,0,0,.55);}
 .board-outer::before{content:'';position:absolute;inset:0;border-radius:15px;pointer-events:none;background:repeating-linear-gradient(92deg,transparent,transparent 8px,rgba(0,0,0,.015) 8px,rgba(0,0,0,.015) 16px);}
-.board-outer::after{content:'';position:absolute;inset:5px;border-radius:11px;pointer-events:none;border:1px solid rgba(26,158,138,.06);}
 .pits-grid{flex:1;display:flex;flex-direction:column;gap:clamp(8px,2vw,14px);}
 .pits-row{display:flex;gap:clamp(4px,1.4vw,8px);justify-content:center;}
-.pit{width:clamp(44px,9vw,70px);height:clamp(44px,9vw,70px);border-radius:50%;flex-shrink:0;position:relative;background:radial-gradient(ellipse at 50% 28%,#1c0a04,#0f0603);box-shadow:inset 0 5px 16px rgba(0,0,0,.82),0 1px 0 rgba(212,197,160,.042);display:flex;align-items:center;justify-content:center;cursor:default;border:1px solid rgba(0,0,0,.5);transition:all .18s;}
-.pit.can{cursor:pointer;border-color:rgba(26,158,138,.26);}
-.pit.can:hover{background:radial-gradient(ellipse at 50% 28%,#2e1408,#1c0a04);box-shadow:inset 0 4px 10px rgba(0,0,0,.5),0 0 18px rgba(26,158,138,.38),0 0 44px rgba(26,158,138,.12);border-color:rgba(26,158,138,.72);transform:translateY(-2px);}
-.pit.hl{border-color:#1a9e8a;box-shadow:inset 0 3px 8px rgba(0,0,0,.4),0 0 28px rgba(26,158,138,.62),0 0 58px rgba(26,158,138,.22);}
-.pit.fl{animation:pitF .52s ease;}
-.pit.four{animation:fourF .65s ease;}
-@keyframes pitF{0%{background:radial-gradient(ellipse at 50% 28%,#4a1c08,#2c0e04);}100%{background:radial-gradient(ellipse at 50% 28%,#1c0a04,#0f0603);}}
-@keyframes fourF{0%,100%{box-shadow:inset 0 5px 16px rgba(0,0,0,.82);}50%{box-shadow:inset 0 3px 8px rgba(0,0,0,.38),0 0 32px rgba(201,168,76,.75),0 0 65px rgba(201,168,76,.3);border-color:#c9a84c;}}
-.pit-cnt{position:absolute;bottom:3px;right:5px;font-family:'Cinzel',serif;font-size:8.5px;color:rgba(201,168,76,.38);font-weight:700;}
-.store{width:clamp(52px,10vw,78px);border-radius:40px;flex-shrink:0;background:radial-gradient(ellipse at 50% 50%,#201005,#0e0604);box-shadow:inset 0 7px 24px rgba(0,0,0,.88);border:1px solid rgba(26,158,138,.15);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:12px 6px;}
-.store-lbl{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.24em;color:rgba(201,168,76,.3);text-transform:uppercase;}
 .mid-div{height:1px;background:linear-gradient(90deg,transparent,rgba(26,158,138,.16),transparent);}
-.ach{position:fixed;top:52px;left:50%;transform:translateX(-50%);padding:10px 32px;border-radius:0 0 12px 12px;z-index:200;text-align:center;background:linear-gradient(135deg,rgba(6,13,24,.97),rgba(10,22,36,.97));border:1px solid rgba(201,168,76,.36);border-top:none;animation:slideD .34s ease forwards;box-shadow:0 10px 36px rgba(0,0,0,.55);}
+
+/* ── PIT ── */
+.pit{width:clamp(44px,9vw,70px);height:clamp(44px,9vw,70px);border-radius:50%;flex-shrink:0;position:relative;background:radial-gradient(ellipse at 50% 28%,#1c0a04,#0f0603);box-shadow:inset 0 5px 16px rgba(0,0,0,.82),0 1px 0 rgba(212,197,160,.04);display:flex;align-items:center;justify-content:center;cursor:default;border:1px solid rgba(0,0,0,.5);transition:background .15s,box-shadow .15s,border-color .15s,transform .15s;}
+.pit-can{cursor:pointer;border-color:rgba(26,158,138,.28);}
+.pit-can:hover{transform:translateY(-3px) scale(1.07);background:radial-gradient(ellipse at 50% 28%,#2e1408,#1c0a04);box-shadow:inset 0 4px 10px rgba(0,0,0,.5),0 0 20px rgba(26,158,138,.38),0 0 45px rgba(26,158,138,.12);border-color:rgba(26,158,138,.72);}
+.pit-can:active{transform:translateY(-1px) scale(.97);}
+/* Valid move breathing ring — color/speed controlled by CSS vars set per-pit */
+.pit-can::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:1.5px solid var(--ring-color,rgba(26,158,138,.4));animation:var(--ring-anim,breath) var(--ring-speed,2s) ease-in-out infinite;pointer-events:none;}
+/* Bonus-turn state: gold, faster */
+.pit-bonus-ring::after{--ring-color:rgba(201,168,76,.75);--ring-anim:bonusBreath;--ring-speed:.85s;}
+/* Row-level bonus flash */
+.row-bonus{animation:bonusRowGlow .7s ease;}
+/* Bonus toast styling */
+.ach-bonus{border-color:rgba(201,168,76,.65) !important;box-shadow:0 10px 36px rgba(0,0,0,.55),0 0 40px rgba(201,168,76,.18) !important;}
+.ach-bonus .ach-t{font-size:13px;letter-spacing:.3em;color:#e8c060 !important;}
+/* State modifiers - applied via inline style overrides */
+.pit-path{background:radial-gradient(ellipse at 50% 28%,#261206,#180a03) !important;box-shadow:inset 0 5px 14px rgba(0,0,0,.7),0 0 12px rgba(26,158,138,.25) !important;}
+.pit-land{background:radial-gradient(ellipse at 50% 28%,#301a08,#200e04) !important;border-color:#c9a84c !important;box-shadow:inset 0 4px 10px rgba(0,0,0,.5),0 0 28px rgba(201,168,76,.7),0 0 58px rgba(201,168,76,.28) !important;}
+.pit-sow{animation:pitPulse .22s ease forwards;border-color:#1a9e8a !important;}
+.pit-capt{animation:captFlash .38s ease;border-color:#c04820 !important;}
+.pit-goldflash{animation:goldFlash .38s ease;border-color:#c9a84c !important;}
+.pit-cnt{position:absolute;bottom:3px;right:5px;font-family:'Cinzel',serif;font-size:8px;color:rgba(201,168,76,.4);font-weight:700;pointer-events:none;}
+.seeds-wrap{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;align-items:center;max-width:66px;padding:2px;}
+.seed-in{animation:seedDrop .2s cubic-bezier(.34,1.56,.64,1) both;}
+
+/* ── STORE ── */
+.store{width:clamp(52px,10vw,78px);border-radius:40px;flex-shrink:0;background:radial-gradient(ellipse at 50% 50%,#201005,#0e0604);box-shadow:inset 0 7px 24px rgba(0,0,0,.88);border:1px solid rgba(26,158,138,.15);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px;padding:12px 6px;transition:box-shadow .3s;}
+.store-bonus{animation:storePulse .65s ease;}
+.store-lbl{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.24em;color:rgba(201,168,76,.3);text-transform:uppercase;}
+.store-count{font-family:'Cinzel Decorative',serif;font-size:20px;color:#c9a84c;font-weight:700;margin-top:4px;line-height:1;transition:color .3s;}
+
+/* ── MOONSTONE ── */
+.moonstone{width:38px;height:38px;border-radius:50%;flex-shrink:0;position:relative;background:radial-gradient(circle at 40% 34%,#ece0c8,#c4b898 52%,#968670 100%);border:1.5px solid rgba(201,168,76,.42);animation:goldFlash 2.4s ease-in-out infinite;}
+
+/* ── MESSAGE + PREVIEW ── */
+.msg-area{position:relative;width:100%;text-align:center;min-height:40px;}
+.msg-bar{font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(212,197,160,.45);font-size:15px;letter-spacing:.02em;min-height:22px;}
+.preview-hint{position:absolute;top:22px;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.15em;text-transform:uppercase;background:rgba(6,13,24,.88);border:1px solid rgba(201,168,76,.22);border-radius:3px;padding:3px 12px;white-space:nowrap;color:rgba(212,197,160,.55);animation:fadeIn .15s ease both;}
+
+/* ── ACHIEVEMENT TOAST ── */
+.ach{position:fixed;top:52px;left:50%;transform:translateX(-50%);padding:10px 32px;border-radius:0 0 12px 12px;z-index:200;text-align:center;background:linear-gradient(135deg,rgba(6,13,24,.97),rgba(10,22,36,.97));border:1px solid rgba(201,168,76,.36);border-top:none;animation:achSlide .34s ease forwards;box-shadow:0 10px 36px rgba(0,0,0,.55);}
 .ach-t{font-family:'Cinzel',serif;font-size:10.5px;letter-spacing:.24em;color:#c9a84c;text-transform:uppercase;}
 .ach-s{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13.5px;color:rgba(212,197,160,.62);margin-top:3px;}
-.msg-bar{font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(212,197,160,.45);font-size:15px;text-align:center;min-height:22px;}
-.path-card{border-radius:8px;padding:16px 10px;cursor:pointer;text-align:center;transition:all .24s;border:1.5px solid;flex:1;min-width:110px;background:rgba(6,13,24,.65);}
-.path-card:hover{transform:translateY(-3px);}
+
+/* ── OVERLAY / MODAL ── */
 .overlay{position:fixed;inset:0;top:52px;background:rgba(3,8,16,.93);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;}
 .modal{background:linear-gradient(148deg,#0a1826,#060d18);border:1px solid rgba(26,158,138,.26);border-radius:13px;padding:28px;max-width:468px;width:100%;max-height:calc(100vh - 100px);overflow-y:auto;}
 .inp{width:100%;background:rgba(6,13,24,.82);border:1px solid rgba(26,158,138,.26);border-radius:4px;padding:10px 14px;color:#d4c5a0;font-family:'Cormorant Garamond',serif;font-size:16px;outline:none;transition:border-color .2s;}
 .inp:focus{border-color:#1a9e8a;}
 .inp::placeholder{color:rgba(212,197,160,.22);}
 .lb-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;background:rgba(6,13,24,.82);border:1px solid rgba(26,158,138,.14);}
-@media(max-width:480px){.store{width:clamp(46px,9vw,62px);}.pit{width:clamp(40px,8vw,58px);height:clamp(40px,8vw,58px);}}
-`;
+.path-card{border-radius:8px;padding:16px 10px;cursor:pointer;text-align:center;transition:all .24s;border:1.5px solid;flex:1;min-width:110px;}
+.path-card:hover{transform:translateY(-3px);}
+.over-card{text-align:center;padding:14px 22px;border-radius:10px;min-width:140px;animation:fadeIn .4s ease both;}
+@media(max-width:480px){.store{width:clamp(46px,9vw,62px);}.pit{width:clamp(40px,8vw,58px);height:clamp(40px,8vw,58px);}  }
+</style>
+</head>
+<body>
 
-// ══════════════════════════════════════════════════
-//  MAIN GAME APP
-// ══════════════════════════════════════════════════
-function HelixraOlinda(){
-  const [screen,setScreen]=useState("menu");
-  const [mode,setMode]=useState("ai");
-  const [p1,setP1]=useState({name:"Seeker",path:"Nature"});
-  const [board,setBoard]=useState(freshBoard());
-  const [turn,setTurn]=useState(1);
-  const [msg,setMsg]=useState("");
-  const [busy,setBusy]=useState(false);
-  const [hlPit,setHlPit]=useState(null);
-  const [flashSet,setFlashSet]=useState(new Set());
-  const [fourSet,setFourSet]=useState(new Set());
-  const [ach,setAch]=useState(null);
-  const [cap,setCap]=useState([0,0]);
-  const [lb,setLb]=useState([]);
-  const [showRules,setShowRules]=useState(false);
-  const [tmpPath,setTmpPath]=useState("Nature");
-  const [tmpName,setTmpName]=useState("");
-  const [finalBoard,setFinalBoard]=useState(null);
+<!-- TOP BAR -->
+<div class="topbar">
+  <a href="../" class="tb-logo">
+    <img src="../assets/img/helixra-logo.png" alt="Helixra"/>
+    <span class="tb-brand">Helixra&#8482;</span>
+  </a>
+  <span class="tb-chapter">Chapter I &mdash; Olinda Keliya</span>
+  <a href="../" class="tb-back">&#8592; Back</a>
+</div>
 
-  const stars=useMemo(()=>Array.from({length:45},(_,i)=>({
-    x:(i*37+13)%97,y:(i*53+7)%82,sz:1+(i%2),dur:3+i*.35,del:i*.12
-  })),[]);
+<!-- LOADING (hidden when React mounts) -->
+<div id="loading">
+  <img src="../assets/img/helixra-logo.png" alt=""/>
+  <div class="ld-text">Preparing the ancient board&hellip;</div>
+</div>
 
-  function toast(title,sub){setAch({title,sub});setTimeout(()=>setAch(null),2800);}
-  function triggerFlash(nb,prev){
-    const ch=new Set([...Array(14).keys()].filter(i=>nb[i]!==prev[i]));
-    const fours=new Set([...Array(14).keys()].filter(i=>nb[i]===4&&prev[i]!==4));
-    setFlashSet(ch);setFourSet(fours);
-    setTimeout(()=>setFlashSet(new Set()),580);
-    setTimeout(()=>setFourSet(new Set()),820);
+<div id="root"></div>
+
+<!-- CDN: React 18 only, no other deps -->
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<!-- Babel for JSX -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+
+<script type="text/babel">
+// ─── GLOBALS ──────────────────────────────────────────────────────
+const { useState, useRef, useMemo } = React;
+const { flushSync } = ReactDOM;
+
+// ─── GAME CONSTANTS ───────────────────────────────────────────────
+const P1S = 6, P2S = 13;
+const TOP_ROW = [12,11,10,9,8,7];
+const BOT_ROW  = [0,1,2,3,4,5];
+const SOW_MS   = 160;  // ms between each seed hop
+const PICK_MS  = 190;  // ms pause after pickup
+const LAND_MS  = 110;  // ms pause after last seed lands
+const CAPT_MS  = 380;  // ms capture flash
+const BONUS_MS = 640;  // ms bonus turn glow
+
+const PATHS = {
+  Nature:   { color:"#5a9e2a", glow:"rgba(90,158,42,0.4)",   dark:"#3d7a1a", desc:"Grow with patience" },
+  Ritual:   { color:"#c9a84c", glow:"rgba(201,168,76,0.4)",  dark:"#9a7528", desc:"Follow the sacred cycle" },
+  Movement: { color:"#1a9e8a", glow:"rgba(26,158,138,0.4)",  dark:"#0d7a6c", desc:"Flow like river waters" },
+  Strategy: { color:"#9a7050", glow:"rgba(154,112,80,0.4)",  dark:"#705030", desc:"Command with wisdom" },
+};
+const getRank = w => w<22?"Apprentice":w<35?"Keeper":w<43?"Chronicler":"Sage";
+const getArch = (w,c) => c>=4?"The Strategist":w>=43?"The Sage":w>=35?"The Chronicler":"The Keeper";
+
+// ─── PURE GAME LOGIC ──────────────────────────────────────────────
+const freshBoard = () => { const b=Array(14).fill(4); b[P1S]=0; b[P2S]=0; return b; };
+const isOver = b => b.slice(0,6).every(x=>!x) || b.slice(7,13).every(x=>!x);
+
+function calcPath(board, idx) {
+  const op = idx<=5?P2S:P1S;
+  let s=board[idx], cur=idx; const path=[];
+  while(s>0){ cur=(cur+1)%14; if(cur===op)continue; path.push(cur); s--; }
+  return path;
+}
+
+function applyMove(board, idx) {
+  const b=[...board], pl=idx<=5?1:2, my=pl===1?P1S:P2S, op=pl===1?P2S:P1S;
+  let s=b[idx]; b[idx]=0; let cur=idx; let captured=0;
+  while(s>0){ cur=(cur+1)%14; if(cur===op)continue; b[cur]++; s--; }
+  const ex=cur===my;
+  if(!ex){ const own=pl===1?cur<=5:(cur>=7&&cur<=12); if(own&&b[cur]===1&&b[12-cur]>0){ captured=1+b[12-cur]; b[my]+=captured; b[cur]=0; b[12-cur]=0; } }
+  if(isOver(b)){ for(let j=0;j<6;j++){b[P1S]+=b[j];b[j]=0;} for(let j=7;j<13;j++){b[P2S]+=b[j];b[j]=0;} }
+  return {b,ex,captured,last:cur};
+}
+
+function minimax(board,d,al,be,max){
+  if(!d||isOver(board)) return board[P2S]-board[P1S];
+  const ps=max?[7,8,9,10,11,12]:[0,1,2,3,4,5];
+  const mv=ps.filter(i=>board[i]>0); if(!mv.length) return board[P2S]-board[P1S];
+  if(max){ let v=-999; for(const m of mv){const r=applyMove(board,m);v=Math.max(v,minimax(r.b,d-1,al,be,r.ex));al=Math.max(al,v);if(be<=al)break;} return v; }
+  else   { let v=999;  for(const m of mv){const r=applyMove(board,m);v=Math.min(v,minimax(r.b,d-1,al,be,!r.ex));be=Math.min(be,v);if(be<=al)break;} return v; }
+}
+function getAIMove(board){
+  const mv=[7,8,9,10,11,12].filter(i=>board[i]>0); if(!mv.length) return null;
+  let best=-999,pick=mv[0];
+  for(const m of mv){ const r=applyMove(board,m); const s=minimax(r.b,5,-999,999,r.ex); if(s>best){best=s;pick=m;} }
+  return pick;
+}
+
+// ─── SEED IDENTITY TRACKING ───────────────────────────────────────
+// Each seed has a unique numeric ID so CSS knows exactly which
+// element is new (gets seedDrop animation) vs existing (no animation)
+function makeFreshIds(ctrRef){
+  let c=ctrRef.current;
+  const ids={};
+  for(let i=0;i<14;i++){ const n=(i===P1S||i===P2S)?0:4; ids[i]=Array.from({length:n},()=>c++); }
+  ctrRef.current=c;
+  return ids;
+}
+function cloneIds(ids){ return Object.fromEntries(Object.entries(ids).map(([k,v])=>[k,[...v]])); }
+
+// ─── SVG BERRY ────────────────────────────────────────────────────
+function Berry({size=12}){
+  return(
+    <svg width={size} height={size} viewBox="0 0 100 100" style={{flexShrink:0,display:"block"}}>
+      <defs>
+        <radialGradient id="bg" cx="34%" cy="28%" r="72%">
+          <stop offset="0%" stopColor="#ff8c78"/>
+          <stop offset="22%" stopColor="#d42e1d"/>
+          <stop offset="60%" stopColor="#8c1812"/>
+          <stop offset="100%" stopColor="#4c0d09"/>
+        </radialGradient>
+        <radialGradient id="sp" cx="42%" cy="38%" r="50%">
+          <stop offset="0%" stopColor="#1c0608"/>
+          <stop offset="100%" stopColor="#060202"/>
+        </radialGradient>
+      </defs>
+      <circle cx="50" cy="50" r="46" fill="url(#bg)"/>
+      <ellipse cx="32" cy="28" rx="17" ry="15" fill="url(#sp)" opacity="0.92"/>
+      <ellipse cx="71" cy="22" rx="13" ry="8" fill="rgba(255,238,218,0.4)" transform="rotate(-22 71 22)"/>
+      <circle cx="76" cy="36" r="5" fill="rgba(255,215,195,0.2)"/>
+    </svg>
+  );
+}
+
+// ─── PIT COMPONENT ────────────────────────────────────────────────
+function Pit({pitIdx, seedIds=[], isClickable, isPath, isLanding,
+              isCapture, isSowing, isFour, isBonusActive, pathColor, onClick, onEnter, onLeave}){
+  const count = seedIds.length;
+  const sz = count<=3?14:count<=6?12:count<=9?10:count<=12?9:8;
+
+  let cls = "pit";
+  if(isClickable)   cls += " pit-can";
+  if(isClickable && isBonusActive) cls += " pit-bonus-ring"; // gold breathing
+  if(isPath)        cls += " pit-path";
+  if(isLanding)     cls += " pit-land";
+  if(isSowing)      cls += " pit-sow";
+  if(isCapture)     cls += " pit-capt";
+
+  return(
+    <div className={cls}
+      onClick={isClickable?onClick:undefined}
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
+      style={isClickable?{"--path-color":pathColor||"rgba(26,158,138,.5)"}:undefined}>
+      <div className="seeds-wrap">
+        {seedIds.map(id=>(
+          <div key={id} className="seed-in">
+            <Berry size={sz}/>
+          </div>
+        ))}
+      </div>
+      {count>0 && <span className="pit-cnt">{count}</span>}
+      {count===0 && <span style={{color:"rgba(200,180,130,.1)",fontSize:12}}>·</span>}
+    </div>
+  );
+}
+
+// ─── STORE COMPONENT ──────────────────────────────────────────────
+function Store({seedIds=[], label, bonus}){
+  const count = seedIds.length;
+  const showNum = count > 18;
+  const sz = showNum?9:count<=8?10:count<=14?9:8;
+  return(
+    <div className={`store${bonus?" store-bonus":""}`}>
+      {showNum?(
+        <div style={{textAlign:"center"}}>
+          <Berry size={12}/>
+          <div className="store-count">{count}</div>
+        </div>
+      ):(
+        <div className="seeds-wrap" style={{maxWidth:62}}>
+          {seedIds.map(id=>(
+            <div key={id} className="seed-in"><Berry size={sz}/></div>
+          ))}
+        </div>
+      )}
+      <div className="store-lbl">{label}</div>
+    </div>
+  );
+}
+
+// ─── MOONSTONE ────────────────────────────────────────────────────
+function Moonstone(){
+  return(
+    <div className="moonstone">
+      <div style={{position:"absolute",width:"62%",height:"1.5px",background:"rgba(80,62,42,.5)",top:"50%",left:"19%",transform:"translateY(-50%)"}}/>
+      <div style={{position:"absolute",height:"62%",width:"1.5px",background:"rgba(80,62,42,.5)",left:"50%",top:"19%",transform:"translateX(-50%)"}}/>
+      {[[28,28],[28,62],[62,28],[62,62]].map(([x,y],i)=>(
+        <div key={i} style={{position:"absolute",width:5,height:5,borderRadius:"50%",background:"rgba(72,56,38,.65)",top:`${y}%`,left:`${x}%`,transform:"translate(-50%,-50%)"}}/>
+      ))}
+    </div>
+  );
+}
+
+// ─── PATH ICON ────────────────────────────────────────────────────
+function PathIcon({path,size=26}){
+  const p=PATHS[path]||PATHS.Ritual;
+  return(
+    <div style={{width:size,height:size,borderRadius:"50%",border:`1.5px solid ${p.color}`,background:`${p.glow.replace('.4','.16')}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+      <div style={{width:size*.52,height:size*.52,borderRadius:"50%",background:`radial-gradient(circle at 40% 35%,${p.color},${p.dark})`,opacity:.88}}/>
+    </div>
+  );
+}
+
+// ─── MAIN APP ─────────────────────────────────────────────────────
+function App(){
+  const [screen,   setScreen]   = useState("menu");
+  const [mode,     setMode]     = useState("ai");
+  const [p1,       setP1]       = useState({name:"Seeker",path:"Nature"});
+  const [tmpPath,  setTmpPath]  = useState("Nature");
+  const [tmpName,  setTmpName]  = useState("");
+  const [showRules,setShowRules]= useState(false);
+  const [lb,       setLb]       = useState([]);
+  const [finalBrd, setFinalBrd] = useState(null);
+
+  const [board,    setBoard]    = useState(freshBoard);
+  const [pitIds,   setPitIds]   = useState(()=>{const c={current:0};return makeFreshIds(c);});
+  const [turn,     setTurn]     = useState(1);
+  const [msg,      setMsg]      = useState("");
+  const [busy,     setBusy]     = useState(false);
+  const [cap,      setCap]      = useState([0,0]);
+
+  // Animation state
+  const [hoverPit, setHoverPit] = useState(null);
+  const [prevPath, setPrevPath] = useState([]);
+  const [prevLand, setPrevLand] = useState(null);
+  const [prevCapt, setPrevCapt] = useState(null);
+  const [sowPit,   setSowPit]   = useState(null);
+  const [captPits, setCaptPits] = useState([]);
+  const [bonusOn,  setBonusOn]  = useState(false);
+  const [bonusActive, setBonusActive] = useState(false); // player's pits glow gold — waiting for their bonus click
+  const [bonusRow,    setBonusRow]    = useState(false); // player's row flashes on bonus earn
+  const [ach,      setAch]      = useState(null);
+
+  const seedCtr = useRef(2000);
+  const stars = useMemo(()=>Array.from({length:45},(_,i)=>({x:(i*37+13)%97,y:(i*53+7)%82,sz:1+(i%2),dur:3+i*.35,del:i*.12})),[]);
+
+  // ── helpers
+  const sleep = ms => new Promise(r=>setTimeout(r,ms));
+  function toast(t,s,type="normal"){
+    setAch({t,s,type});
+    setTimeout(()=>setAch(null), type==="bonus"?3500:2800);
   }
-  function doStart(){
-    setP1({name:tmpName.trim()||"Seeker",path:tmpPath});
-    setBoard(freshBoard());setTurn(1);setMsg("Choose a pit to sow your seeds");
-    setBusy(false);setHlPit(null);setFlashSet(new Set());setFourSet(new Set());
-    setAch(null);setFinalBoard(null);setCap([0,0]);setScreen("game");
+  const addSeed  = (ids,pit) => ({...ids,[pit]:[...ids[pit],seedCtr.current++]});
+  const clearPit = (ids,pit) => ({...ids,[pit]:[]});
+
+  // ── preview
+  function showPreview(idx){
+    if(busy||!canClick(idx)) return;
+    const path=calcPath(board,idx);
+    if(!path.length) return;
+    const land=path[path.length-1];
+    const pl=idx<=5?1:2, myS=pl===1?P1S:P2S;
+    const own=pl===1?land<=5:(land>=7&&land<=12);
+    setHoverPit(idx);
+    setPrevPath(path.slice(0,-1));
+    setPrevLand(land);
+    setPrevCapt(land!==myS&&own&&board[land]===0&&board[12-land]>0 ? 12-land : null);
   }
-  function replay(){
-    setBoard(freshBoard());setTurn(1);setMsg("Choose a pit to sow your seeds");
-    setBusy(false);setHlPit(null);setFlashSet(new Set());setFourSet(new Set());
-    setAch(null);setFinalBoard(null);setCap([0,0]);setScreen("game");
-  }
-  function runAI(cur){
-    const pick=getAIMove(cur); if(pick===null){finalizeGame(cur);return;}
-    setHlPit(pick);
-    setTimeout(()=>{
-      const{b:nb,ex,captured}=sowSeeds(cur,pick);
-      triggerFlash(nb,cur);setBoard(nb);setHlPit(null);
-      if(captured>0){setCap(c=>[c[0],c[1]+1]);if(captured>=8)toast("NAGA STRIKE","The Advisor devours the harvest");}
-      if(ex&&!captured)toast("BONUS TURN","The Advisor continues...");
-      if(isOver(nb)){finalizeGame(nb);return;}
-      if(ex){setMsg("Royal Advisor takes another turn...");setTimeout(()=>runAI(nb),960);}
-      else{setTurn(1);setMsg("Choose a pit to sow your seeds");setBusy(false);}
-    },660);
-  }
-  function handlePit(idx){
-    if(busy||!board[idx])return;
-    if(turn===1&&idx>5)return;
-    if(turn===2&&(idx<7||idx>12))return;
-    setBusy(true);setHlPit(idx);
-    setTimeout(()=>{
-      const{b:nb,ex,captured}=sowSeeds(board,idx);
-      triggerFlash(nb,board);setBoard(nb);setHlPit(null);
-      if(captured>=8)toast("NAGA STRIKE",`Claimed ${captured} seeds!`);
-      if(captured>0)setCap(c=>[c[0]+1,c[1]]);
-      if(ex&&!captured)toast("BONUS TURN","Seeds flow back to you");
-      if(isOver(nb)){finalizeGame(nb);return;}
-      if(ex){
-        setMsg("✦ Bonus turn! Sow again.");
-        if(mode==="ai"&&turn===2)setTimeout(()=>runAI(nb),960);
-        else setBusy(false);
-      } else {
-        const nx=turn===1?2:1;setTurn(nx);
-        if(mode==="ai"&&nx===2){setMsg("Royal Advisor considers the board...");setTimeout(()=>runAI(nb),480);}
-        else{setMsg(nx===1?"Choose a pit to sow your seeds":"Player 2 - choose a pit");setBusy(false);}
+  function clearPreview(){setHoverPit(null);setPrevPath([]);setPrevLand(null);setPrevCapt(null);}
+
+  // ── core sow (all animation lives here)
+  async function animateSow(fromPit, startBoard, startIds){
+    const b=[...startBoard];
+    let ids=cloneIds(startIds);
+    const pl=fromPit<=5?1:2, myS=pl===1?P1S:P2S, opS=pl===1?P2S:P1S;
+    let s=b[fromPit];
+
+    // 1. pick up
+    b[fromPit]=0; ids=clearPit(ids,fromPit);
+    flushSync(()=>{setBoard([...b]);setPitIds({...ids});setSowPit(fromPit);});
+    await sleep(PICK_MS);
+
+    // 2. sow one by one
+    let cur=fromPit;
+    while(s>0){
+      cur=(cur+1)%14; if(cur===opS) continue;
+      b[cur]++; ids=addSeed(ids,cur);
+      flushSync(()=>{setBoard([...b]);setPitIds({...ids});setSowPit(cur);});
+      s--;
+      if(s>0) await sleep(SOW_MS);
+    }
+    flushSync(()=>setSowPit(null));
+    await sleep(LAND_MS);
+
+    // 3. capture check
+    const ex=cur===myS;
+    let captured=0;
+    if(!ex){
+      const own=pl===1?cur<=5:(cur>=7&&cur<=12);
+      const opp=12-cur;
+      if(own&&b[cur]===1&&b[opp]>0){
+        captured=1+b[opp];
+        flushSync(()=>setCaptPits([cur,opp]));     // flash
+        await sleep(CAPT_MS);
+        b[myS]+=captured; b[cur]=0; b[opp]=0;
+        ids=clearPit(ids,cur); ids=clearPit(ids,opp);
+        for(let i=0;i<captured;i++) ids=addSeed(ids,myS);
+        flushSync(()=>{setBoard([...b]);setPitIds({...ids});setCaptPits([]);});
+        await sleep(200);
       }
-    },290);
+    }
+
+    // 4. bonus glow
+    if(ex){
+      flushSync(()=>setBonusOn(true));
+      await sleep(BONUS_MS);
+      flushSync(()=>setBonusOn(false));
+    }
+
+    // 5. end of game sweep
+    if(isOver(b)){
+      await sleep(300);
+      for(let i=0;i<6;i++){  for(let j=0;j<ids[i].length;j++) ids=addSeed(ids,P1S); ids=clearPit(ids,i); b[P1S]+=b[i];b[i]=0; }
+      for(let i=7;i<13;i++){ for(let j=0;j<ids[i].length;j++) ids=addSeed(ids,P2S); ids=clearPit(ids,i); b[P2S]+=b[i];b[i]=0; }
+      flushSync(()=>{setBoard([...b]);setPitIds({...ids});});
+      await sleep(500);
+    }
+    return {b,ids,ex,captured};
   }
+
+  // ── player turn
+  async function handlePit(idx){
+    if(busy||!board[idx]) return;
+    if(turn===1&&idx>5) return;
+    if(turn===2&&(idx<7||idx>12)) return;
+    setBusy(true);
+    setBonusActive(false); // clear previous bonus ring
+    clearPreview();
+    const {b,ids,ex,captured}=await animateSow(idx,board,pitIds);
+
+    // Fix 1: every capture is a Naga Strike — no artificial threshold
+    if(captured > 0) toast("NAGA STRIKE", `${captured} seed${captured>1?"s":""} captured!`, "capture");
+    if(captured>0) setCap(c=>[c[0]+1,c[1]]);
+
+    if(isOver(b)){finalizeGame(b);return;}
+
+    if(ex){
+      // Fix 2: dramatic bonus turn — toast + row flash + gold rings
+      toast("BONUS TURN", "The seeds return to you — sow again!", "bonus");
+      setBonusRow(true);
+      setTimeout(()=>setBonusRow(false), 700);
+      setMsg("★  BONUS TURN — choose your next pit");
+      setBonusActive(true); // gold breathing rings activate
+      if(mode==="ai"&&turn===2) setTimeout(()=>runAI(b,ids),600);
+      else setBusy(false);
+    } else {
+      const nx=turn===1?2:1; setTurn(nx);
+      if(mode==="ai"&&nx===2){ setMsg("Royal Advisor considers the board..."); setTimeout(()=>runAI(b,ids),500); }
+      else{ setMsg(nx===1?"Choose a pit to sow your seeds":"Player 2 - choose a pit"); setBusy(false); }
+    }
+  }
+
+  // ── AI turn (setTimeout lets UI render "thinking" msg before minimax runs)
+  function runAI(curBoard,curIds){
+    setTimeout(async()=>{
+      const pick=getAIMove(curBoard);
+      if(pick===null){finalizeGame(curBoard);return;}
+      // briefly highlight chosen pit
+      flushSync(()=>setSowPit(pick));
+      await sleep(360);
+      flushSync(()=>setSowPit(null));
+      await sleep(100);
+      const {b,ids,ex,captured}=await animateSow(pick,curBoard,curIds);
+      if(captured > 0) toast("NAGA STRIKE", `Advisor captures ${captured} seed${captured>1?"s":""}!`, "capture");
+      if(captured>0) setCap(c=>[c[0],c[1]+1]);
+      if(ex) toast("BONUS TURN", "The Advisor plays again...", "bonus");
+      if(isOver(b)){finalizeGame(b);return;}
+      if(ex){ setMsg("Royal Advisor takes another turn..."); setTimeout(()=>runAI(b,ids),700); }
+      else{ setTurn(1); setMsg("Choose a pit to sow your seeds"); setBusy(false); }
+    },50);
+  }
+
   function finalizeGame(nb){
-    setBusy(false);setFinalBoard(nb);
+    setBusy(false); setFinalBrd(nb);
     const w=nb[P1S]>nb[P2S]?1:nb[P2S]>nb[P1S]?2:0;
-    if(w===1)toast("WISDOM CLAIMED",`${p1.name} ascends as ${getRank(nb[P1S])}`);
-    else if(w===2)toast("THE CYCLE TURNS","The Royal Advisor prevails");
+    if(w===1) toast("WISDOM CLAIMED",`${p1.name} ascends as ${getRank(nb[P1S])}`);
+    else if(w===2) toast("THE CYCLE TURNS","The Royal Advisor prevails");
     else toast("EQUAL HARVEST","The ancestors are honoured");
     setLb(prev=>[...prev,{name:p1.name,path:p1.path,wisdom:nb[P1S],captures:cap[0],rank:getRank(nb[P1S]),arch:getArch(nb[P1S],cap[0])}].sort((a,b)=>b.wisdom-a.wisdom).slice(0,10));
     setBoard(nb);
-    setTimeout(()=>setScreen("over"),1300);
+    setTimeout(()=>setScreen("over"),1400);
   }
+
   function canClick(idx){
-    if(busy||!board[idx])return false;
-    if(turn===1&&idx<=5)return true;
-    if(turn===2&&mode==="pvp"&&idx>=7&&idx<=12)return true;
+    if(busy||!board[idx]) return false;
+    if(turn===1&&idx<=5) return true;
+    if(turn===2&&mode==="pvp"&&idx>=7&&idx<=12) return true;
     return false;
   }
+
+  function doStart(){
+    setP1({name:tmpName.trim()||"Seeker",path:tmpPath});
+    const c={current:seedCtr.current}; const ids=makeFreshIds(c); seedCtr.current=c.current;
+    setBoard(freshBoard()); setPitIds(ids); setTurn(1);
+    setMsg("Choose a pit to sow your seeds");
+    setBusy(false); clearPreview(); setSowPit(null); setCaptPits([]); setBonusOn(false);
+    setAch(null); setCap([0,0]); setFinalBrd(null); setScreen("game");
+  }
+  function replay(){
+    const c={current:seedCtr.current}; const ids=makeFreshIds(c); seedCtr.current=c.current;
+    setBoard(freshBoard()); setPitIds(ids); setTurn(1);
+    setMsg("Choose a pit to sow your seeds");
+    setBusy(false); clearPreview(); setSowPit(null); setCaptPits([]); setBonusOn(false);
+    setAch(null); setCap([0,0]); setFinalBrd(null); setScreen("game");
+  }
+
   const p2Name=mode==="ai"?"Royal Advisor":"Player 2";
   const p2Path=mode==="ai"?"Ritual":"Strategy";
-  const pi1=PATHS[p1.path],pi2=PATHS[p2Path];
-  const fb=finalBoard||board;
+  const pi1=PATHS[p1.path], pi2=PATHS[p2Path];
+  const fb=finalBrd||board;
   const bW=fb[P1S]===fb[P2S]?0:fb[P1S]>fb[P2S]?1:2;
 
+  // ── preview hint text
+  const hintText = ()=>{
+    if(hoverPit===null||prevLand===null) return null;
+    if(prevCapt!==null) return `◆  Lands in pit ${prevLand} — CAPTURE ${board[prevCapt]||0} seeds`;
+    if(prevLand===P1S||prevLand===P2S) return "◆  Lands in your Wisdom Store — BONUS TURN";
+    return `◆  Lands in pit ${prevLand} — ${board[prevLand]===0?"empty pit":"occupied pit"}`;
+  };
+
+  // ── render ────────────────────────────────────────────────────
   return(
     <div className="ok">
-      <style>{G}</style>
-      <BerryDefs/>
-      {stars.map((s,i)=>(
-        <div key={i} className="star" style={{left:`${s.x}%`,top:`${s.y}%`,width:s.sz,height:s.sz,animationDuration:`${s.dur}s`,animationDelay:`${s.del}s`}}/>
-      ))}
-      {(screen==="menu"||screen==="over")&&Array.from({length:8},(_,i)=>(
-        <div key={i} className="fseed" style={{left:`${6+i*11}%`,width:`${5+(i%3)*2}px`,height:`${5+(i%3)*2}px`,animationDuration:`${12+i*1.5}s`,animationDelay:`${i*1.1}s`}}/>
-      ))}
-      {ach&&<div className="ach"><div className="ach-t">{ach.title}</div><div className="ach-s">{ach.sub}</div></div>}
 
-      {/* MENU */}
+      {/* Stars */}
+      {stars.map((s,i)=>(<div key={i} className="star" style={{left:`${s.x}%`,top:`${s.y}%`,width:s.sz,height:s.sz,animationDuration:`${s.dur}s`,animationDelay:`${s.del}s`}}/>))}
+      {(screen==="menu"||screen==="over")&&Array.from({length:8},(_,i)=>(<div key={i} className="fseed" style={{left:`${6+i*11}%`,width:`${5+(i%3)*2}px`,height:`${5+(i%3)*2}px`,animationDuration:`${12+i*1.5}s`,animationDelay:`${i*1.1}s`}}/>))}
+
+      {/* Achievement */}
+      {ach&&<div className={`ach${ach.type==="bonus"?" ach-bonus":""}`}><div className="ach-t">{ach.t}</div><div className="ach-s">{ach.s}</div></div>}
+
+      {/* ══ MENU ══ */}
       {screen==="menu"&&(
         <div style={{textAlign:"center",zIndex:1}}>
           <div className="brand brand-glow" style={{fontSize:"clamp(42px,9vw,76px)",fontWeight:900,lineHeight:1}}>HELIXRA</div>
-          <div className="stone" style={{fontSize:"clamp(9px,1.4vw,11px)",color:"rgba(212,197,160,.3)",marginTop:6,letterSpacing:".28em"}}>Sri Lankan Games · Eternal Legacy</div>
+          <div className="stone" style={{fontSize:"clamp(9px,1.4vw,11px)",color:"rgba(212,197,160,.3)",marginTop:6,letterSpacing:".28em"}}>Sri Lankan Games &middot; Eternal Legacy</div>
           <div className="sep" style={{width:120,margin:"16px auto"}}/>
-          <div className="stone" style={{fontSize:"clamp(9px,1.5vw,10.5px)",color:"rgba(26,158,138,.65)",marginBottom:10,letterSpacing:".3em"}}>Chapter I</div>
+          <div className="stone" style={{fontSize:10,color:"rgba(26,158,138,.65)",marginBottom:10}}>Chapter I</div>
           <div style={{fontFamily:"'Cinzel',serif",fontSize:"clamp(22px,5vw,38px)",fontWeight:600,color:"#d4c5a0",letterSpacing:".05em"}}>Olinda Keliya</div>
           <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:"clamp(14px,2.6vw,20px)",color:"rgba(212,197,160,.28)",marginTop:4}}>ඔලිඳ කෙළිය</div>
           <div className="sep" style={{width:90,margin:"22px auto"}}/>
           <button className="btn btn-gold" onClick={()=>{setMode("ai");setScreen("path");}}>vs Royal Advisor</button>
           <button className="btn btn-teal" onClick={()=>{setMode("pvp");setScreen("path");}}>2 Players Local</button>
-          <button className="btn btn-dim" onClick={()=>setShowRules(true)}>Ancestral Rules</button>
+          <button className="btn btn-dim"  onClick={()=>setShowRules(true)}>Ancestral Rules</button>
           {lb.length>0&&<button className="btn btn-dim" onClick={()=>setScreen("leaderboard")} style={{color:"rgba(201,168,76,.42)"}}>Ancestral Record ◆</button>}
           <div style={{marginTop:24,color:"rgba(212,197,160,.1)",fontSize:9,fontFamily:"'Cinzel',serif",letterSpacing:".22em"}}>YELLOW HOUSE PRODUCTIONS</div>
         </div>
       )}
 
-      {/* PATH SELECTION */}
+      {/* ══ PATH SELECTION ══ */}
       {screen==="path"&&(
         <div style={{textAlign:"center",zIndex:1,width:"100%",maxWidth:580}}>
           <div className="stone" style={{fontSize:10,color:"rgba(26,158,138,.72)",letterSpacing:".3em",marginBottom:8}}>Choose Your Path</div>
-          <div style={{fontFamily:"'Cinzel',serif",fontSize:"clamp(20px,4.5vw,30px)",color:"#d4c5a0",fontWeight:600,marginBottom:6}}>Select Your Lineage</div>
-          <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",color:"rgba(212,197,160,.35)",fontSize:14,marginBottom:22}}>Your path defines your aura and style of play</div>
+          <div style={{fontFamily:"'Cinzel',serif",fontSize:"clamp(20px,4.5vw,30px)",color:"#d4c5a0",fontWeight:600,marginBottom:20}}>Select Your Lineage</div>
           <div style={{display:"flex",gap:10,flexWrap:"wrap",justifyContent:"center",marginBottom:24}}>
             {Object.entries(PATHS).map(([key,p])=>{
               const sel=tmpPath===key;
               return(
-                <div key={key} className="path-card"
-                  style={{borderColor:sel?p.color:"rgba(212,197,160,.1)",background:sel?`${p.glow.replace('.4','.14')}`:"rgba(6,13,24,.65)",boxShadow:sel?`0 0 22px ${p.glow}`:"none"}}
-                  onClick={()=>setTmpPath(key)}>
+                <div key={key} className="path-card" onClick={()=>setTmpPath(key)}
+                  style={{borderColor:sel?p.color:"rgba(212,197,160,.1)",background:sel?`${p.glow.replace('.4','.14')}`:"rgba(6,13,24,.65)",boxShadow:sel?`0 0 22px ${p.glow}`:"none"}}>
                   <div style={{width:48,height:48,borderRadius:"50%",margin:"0 auto 10px",border:`2px solid ${p.color}`,background:`${p.glow.replace('.4','.18')}`,display:"flex",alignItems:"center",justifyContent:"center"}}>
                     <div style={{width:28,height:28,borderRadius:"50%",background:`radial-gradient(circle at 40% 35%,${p.color},${p.dark})`,opacity:.88}}/>
                   </div>
@@ -392,111 +615,130 @@ function HelixraOlinda(){
             <input className="inp" placeholder="Enter your lineage name..." value={tmpName} onChange={e=>setTmpName(e.target.value)} maxLength={20} style={{maxWidth:280,margin:"0 auto",display:"block"}}/>
           </div>
           <button className="btn btn-gold" onClick={doStart}>Begin the Game</button>
-          <button className="btn btn-dim" onClick={()=>setScreen("menu")} style={{marginTop:4}}>← Return</button>
+          <button className="btn btn-dim" onClick={()=>setScreen("menu")} style={{marginTop:4}}>&#8592; Return</button>
         </div>
       )}
 
-      {/* GAME */}
+      {/* ══ GAME ══ */}
       {screen==="game"&&(
         <div className="game-wrap">
+          {/* Header */}
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%"}}>
-            <button className="ghost" onClick={()=>setScreen("menu")}>← Menu</button>
+            <button className="ghost" onClick={()=>setScreen("menu")}>&#8592; Menu</button>
             <div style={{textAlign:"center"}}>
               <div className="brand" style={{fontSize:13,letterSpacing:".16em"}}>HELIXRA</div>
-              <div style={{fontFamily:"'Cinzel',serif",fontSize:8,color:"rgba(212,197,160,.26)",letterSpacing:".2em"}}>CHAPTER I — OLINDA KELIYA</div>
+              <div style={{fontFamily:"'Cinzel',serif",fontSize:8,color:"rgba(212,197,160,.26)",letterSpacing:".2em"}}>CHAPTER I &mdash; OLINDA KELIYA</div>
             </div>
             <button className="ghost" onClick={()=>setShowRules(true)}>Rules</button>
           </div>
+
           {/* P2 bar */}
           <div className="pbar" style={{borderColor:`${pi2.color}35`}}>
             <div className="pname">
               {turn===2&&<div className="adot" style={{background:pi2.color,boxShadow:`0 0 8px ${pi2.color}`}}/>}
-              <PathIcon path={p2Path} size={26}/>
+              <PathIcon path={p2Path}/>
               <span>{p2Name}</span>
               <span className="pbadge" style={{color:pi2.color,borderColor:`${pi2.color}50`,background:`${pi2.glow.replace('.4','.1')}`}}>{p2Path}</span>
             </div>
             <div><div className="wlbl">WISDOM</div><div className="wisdom-val">{board[P2S]}</div></div>
           </div>
-          {/* Board */}
+
+          {/* BOARD */}
           <div className="board-outer">
-            <div className="store" style={{borderColor:`${pi2.color}30`}}>
-              <StoreSeeds count={board[P2S]}/>
-              <div className="store-lbl">Wisdom</div>
-            </div>
+            <Store seedIds={pitIds[P2S]||[]} label={mode==="ai"?"AI":"P2"} bonus={bonusOn&&turn===2}/>
             <div className="pits-grid">
+              {/* Top row P2 */}
               <div className="pits-row">
                 {TOP_ROW.map(i=>(
-                  <div key={i} className={`pit${canClick(i)?" can":""}${hlPit===i?" hl":""}${flashSet.has(i)?" fl":""}${fourSet.has(i)?" four":""}`}
-                    onClick={()=>handlePit(i)} style={canClick(i)?{borderColor:`${pi2.color}42`}:{}}>
-                    <PitSeeds count={board[i]}/>
-                    {board[i]>0&&<span className="pit-cnt">{board[i]}</span>}
-                  </div>
+                  <Pit key={i} pitIdx={i} seedIds={pitIds[i]||[]}
+                    isClickable={canClick(i)}
+                    isPath={prevPath.includes(i)}
+                    isLanding={prevLand===i}
+                    isCapture={captPits.includes(i)||prevCapt===i}
+                    isSowing={sowPit===i}
+                    pathColor={pi2.color}
+                    onClick={()=>handlePit(i)}
+                    onEnter={()=>showPreview(i)}
+                    onLeave={clearPreview}
+                  />
                 ))}
               </div>
+              {/* Center moonstone */}
               <div style={{display:"flex",alignItems:"center",gap:8}}>
                 <div className="mid-div" style={{flex:1}}/>
                 <Moonstone/>
                 <div className="mid-div" style={{flex:1}}/>
               </div>
-              <div className="pits-row">
+              {/* Bottom row P1 */}
+              <div className={`pits-row${bonusRow?" row-bonus":""}`}>
                 {BOT_ROW.map(i=>(
-                  <div key={i} className={`pit${canClick(i)?" can":""}${hlPit===i?" hl":""}${flashSet.has(i)?" fl":""}${fourSet.has(i)?" four":""}`}
-                    onClick={()=>handlePit(i)} style={canClick(i)?{borderColor:`${pi1.color}42`}:{}}>
-                    <PitSeeds count={board[i]}/>
-                    {board[i]>0&&<span className="pit-cnt">{board[i]}</span>}
-                  </div>
+                  <Pit key={i} pitIdx={i} seedIds={pitIds[i]||[]}
+                    isClickable={canClick(i)}
+                    isPath={prevPath.includes(i)}
+                    isLanding={prevLand===i}
+                    isCapture={captPits.includes(i)||prevCapt===i}
+                    isSowing={sowPit===i}
+                    isBonusActive={bonusActive && canClick(i)}
+                    pathColor={pi1.color}
+                    onClick={()=>handlePit(i)}
+                    onEnter={()=>showPreview(i)}
+                    onLeave={clearPreview}
+                  />
                 ))}
               </div>
             </div>
-            <div className="store" style={{borderColor:`${pi1.color}30`}}>
-              <StoreSeeds count={board[P1S]}/>
-              <div className="store-lbl">Wisdom</div>
-            </div>
+            <Store seedIds={pitIds[P1S]||[]} label="You" bonus={bonusOn&&turn===1}/>
           </div>
+
           {/* P1 bar */}
           <div className="pbar" style={{borderColor:`${pi1.color}35`}}>
             <div className="pname">
               {turn===1&&<div className="adot" style={{background:pi1.color,boxShadow:`0 0 8px ${pi1.color}`}}/>}
-              <PathIcon path={p1.path} size={26}/>
+              <PathIcon path={p1.path}/>
               <span>{p1.name}</span>
               <span className="pbadge" style={{color:pi1.color,borderColor:`${pi1.color}50`,background:`${pi1.glow.replace('.4','.1')}`}}>{p1.path}</span>
               {cap[0]>0&&<span style={{fontFamily:"'Cinzel',serif",fontSize:8,color:"rgba(212,197,160,.35)"}}>{cap[0]} cap{cap[0]!==1?"s":""}</span>}
             </div>
             <div><div className="wlbl">WISDOM</div><div className="wisdom-val">{board[P1S]}</div></div>
           </div>
-          <div className="msg-bar">{msg}</div>
+
+          {/* Message + preview hint */}
+          <div className="msg-area">
+            <div className="msg-bar">{msg}</div>
+            {hintText()&&<div className="preview-hint">{hintText()}</div>}
+          </div>
         </div>
       )}
 
-      {/* GAME OVER */}
+      {/* ══ GAME OVER ══ */}
       {screen==="over"&&(
-        <div style={{textAlign:"center",zIndex:1,maxWidth:540,width:"100%"}}>
+        <div style={{textAlign:"center",zIndex:1,maxWidth:540,width:"100%",animation:"fadeIn .4s ease both"}}>
           <div className="stone" style={{fontSize:9.5,color:"rgba(212,197,160,.28)",letterSpacing:".26em",marginBottom:12}}>Ancestral Record</div>
           <div className="brand brand-glow" style={{fontSize:"clamp(24px,5.5vw,48px)",fontWeight:900,marginBottom:6}}>
             {bW===0?"Equal Harvest":bW===1?"Wisdom Claimed":"The Cycle Turns"}
           </div>
-          <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",color:"rgba(212,197,160,.36)",fontSize:15,marginBottom:24}}>
+          <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",color:"rgba(212,197,160,.36)",fontSize:15,marginBottom:26}}>
             {bW===1?`${p1.name} ascends as ${getRank(fb[P1S])}.`:bW===2?"The Royal Advisor prevails.":"The ancestors honour an equal harvest."}
           </div>
-          <div style={{display:"flex",gap:16,justifyContent:"center",marginBottom:24,flexWrap:"wrap"}}>
-            {[{label:p1.name,score:fb[P1S],path:p1.path,isWin:bW===1},{label:p2Name,score:fb[P2S],path:p2Path,isWin:bW===2}].map(({label,score,path,isWin})=>(
-              <div key={label} style={{textAlign:"center",padding:"14px 20px",background:"rgba(6,13,24,.82)",border:`1.5px solid ${isWin?PATHS[path].color:"rgba(212,197,160,.09)"}`,borderRadius:10,minWidth:140,boxShadow:isWin?`0 0 24px ${PATHS[path].glow}`:"none"}}>
+          <div style={{display:"flex",gap:16,justifyContent:"center",marginBottom:26,flexWrap:"wrap"}}>
+            {[{label:p1.name,score:fb[P1S],path:p1.path,isWin:bW===1},{label:p2Name,score:fb[P2S],path:p2Path,isWin:bW===2}].map(({label,score,path,isWin},di)=>(
+              <div key={label} className="over-card" style={{animationDelay:`${di*.15}s`,background:"rgba(6,13,24,.82)",border:`1.5px solid ${isWin?PATHS[path].color:"rgba(212,197,160,.09)"}`,boxShadow:isWin?`0 0 26px ${PATHS[path].glow}`:"none"}}>
                 <div style={{fontFamily:"'Cinzel',serif",fontSize:9,letterSpacing:".2em",color:"rgba(212,197,160,.35)",textTransform:"uppercase",marginBottom:6}}>{label}</div>
-                <div className="brand" style={{fontSize:"clamp(38px,8vw,56px)",fontWeight:400,color:isWin?PATHS[path].color:"rgba(212,197,160,.5)"}}>{score}</div>
+                <div className="brand" style={{fontSize:"clamp(40px,8vw,58px)",fontWeight:400,color:isWin?PATHS[path].color:"rgba(212,197,160,.5)"}}>{score}</div>
                 <div style={{fontFamily:"'Cinzel',serif",fontSize:8,color:`${PATHS[path].color}88`,letterSpacing:".1em",marginTop:4}}>{path}</div>
               </div>
             ))}
           </div>
           <button className="btn btn-gold" onClick={replay}>Play Again</button>
           <button className="btn btn-teal" onClick={()=>setScreen("path")}>Change Lineage</button>
-          <button className="btn btn-dim" onClick={()=>setScreen("menu")}>Main Menu</button>
+          <button className="btn btn-dim"  onClick={()=>setScreen("menu")}>Main Menu</button>
           {lb.length>0&&<button className="btn btn-dim" onClick={()=>setScreen("leaderboard")} style={{color:"rgba(201,168,76,.4)"}}>Ancestral Record ◆</button>}
         </div>
       )}
 
-      {/* LEADERBOARD */}
+      {/* ══ LEADERBOARD ══ */}
       {screen==="leaderboard"&&(
-        <div style={{zIndex:1,width:"100%",maxWidth:560}}>
+        <div style={{zIndex:1,width:"100%",maxWidth:540}}>
           <div style={{textAlign:"center",marginBottom:18}}>
             <div className="stone" style={{fontSize:10,color:"rgba(26,158,138,.68)",letterSpacing:".28em",marginBottom:7}}>Hall of Sages</div>
             <div className="brand brand-glow" style={{fontSize:"clamp(22px,4.5vw,32px)"}}>Ancestral Record</div>
@@ -505,10 +747,10 @@ function HelixraOlinda(){
             {lb.map((e,i)=>(
               <div key={i} className="lb-row" style={{borderColor:i===0?"rgba(201,168,76,.32)":"rgba(26,158,138,.13)"}}>
                 <div style={{fontFamily:"'Cinzel Decorative',serif",fontSize:14,color:i===0?"#c9a84c":"rgba(212,197,160,.35)",minWidth:26,textAlign:"center"}}>{i+1}.</div>
-                <PathIcon path={e.path} size={34}/>
+                <PathIcon path={e.path}/>
                 <div style={{flex:1}}>
                   <div style={{fontFamily:"'Cinzel',serif",fontSize:12,color:"#d4c5a0",letterSpacing:".05em"}}>{e.name}</div>
-                  <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:11,color:"rgba(212,197,160,.38)"}}>{e.rank} · {e.arch}</div>
+                  <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:11,color:"rgba(212,197,160,.38)"}}>{e.rank} &middot; {e.arch}</div>
                 </div>
                 <div style={{textAlign:"right"}}>
                   <div style={{fontFamily:"'Cinzel Decorative',serif",fontSize:20,color:"#c9a84c"}}>{e.wisdom}</div>
@@ -517,29 +759,29 @@ function HelixraOlinda(){
               </div>
             ))}
           </div>
-          <button className="btn btn-dim" style={{marginTop:18}} onClick={()=>setScreen("menu")}>← Return</button>
+          <button className="btn btn-dim" style={{marginTop:18}} onClick={()=>setScreen("menu")}>&#8592; Return</button>
         </div>
       )}
 
-      {/* RULES */}
+      {/* ══ RULES ══ */}
       {showRules&&(
         <div className="overlay" onClick={()=>setShowRules(false)}>
           <div className="modal" onClick={e=>e.stopPropagation()}>
             <div className="brand" style={{fontSize:17,marginBottom:4}}>Ancestral Rules</div>
-            <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",color:"rgba(212,197,160,.34)",fontSize:13,marginBottom:18}}>ඔලිඳ කෙළිය - The Way of the Seeds</div>
+            <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",color:"rgba(212,197,160,.34)",fontSize:13,marginBottom:18}}>ඔලිඳ කෙළිය &middot; The Way of the Seeds</div>
             {[
-              ["Your Domain","The bottom row is yours. Your Wisdom Store is on the right."],
-              ["Sowing","Select any pit on your side with seeds. They travel counter-clockwise, one per pit."],
-              ["Bonus Turn","Last seed in your own Wisdom Store - the cycle continues. Go again."],
-              ["The Naga Strike","Last seed lands in an empty pit on your side - claim those seeds plus all seeds directly opposite."],
-              ["The Four Flash","When a pit reaches exactly 4 seeds, a golden flash signals the ancestors watching."],
-              ["End of Cycle","When one side empties, remaining seeds go to their keeper. Most wisdom wins."],
+              ["Your Domain","The bottom row is yours. Your Wisdom Store is on the right. You make one choice per turn — which pit to sow from."],
+              ["Move Preview","Hover any pit before clicking to see exactly where your seeds travel, where the last seed lands, and if a capture is waiting."],
+              ["Sowing","Click a pit. Seeds lift out and drop counter-clockwise, one per pit, one at a time. Watch them travel."],
+              ["Bonus Turn","Last seed drops into your Wisdom Store — go again immediately. The store pulses gold."],
+              ["The Naga Strike","Last seed lands in your own empty pit — claim those seeds plus all seeds directly opposite."],
+              ["End of Cycle","When one side empties, remaining seeds return to their keeper. Most wisdom wins."],
             ].map(([t,d])=>(
-              <div key={t} style={{display:"flex",gap:10,marginBottom:11}}>
-                <span style={{color:"#1a9e8a",fontFamily:"'Cinzel',serif",fontSize:10,flexShrink:0,marginTop:3}}>◆</span>
+              <div key={t} style={{display:"flex",gap:10,marginBottom:12}}>
+                <span style={{color:"#1a9e8a",fontFamily:"'Cinzel',serif",fontSize:10,flexShrink:0,marginTop:3}}>&#9670;</span>
                 <div>
-                  <span style={{fontFamily:"'Cinzel',serif",fontSize:11,color:"#c9a84c",letterSpacing:".06em"}}>{t}</span>
-                  <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:14,color:"rgba(212,197,160,.7)"}}> - {d}</span>
+                  <div style={{fontFamily:"'Cinzel',serif",fontSize:11,color:"#c9a84c",letterSpacing:".06em",marginBottom:3}}>{t}</div>
+                  <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:14,color:"rgba(212,197,160,.68)",lineHeight:1.6}}>{d}</div>
                 </div>
               </div>
             ))}
@@ -551,9 +793,10 @@ function HelixraOlinda(){
   );
 }
 
-// Hide loading, mount app
-document.getElementById('loading').style.display='none';
-ReactDOM.render(<HelixraOlinda/>, document.getElementById('root'));
+// ── MOUNT ──────────────────────────────────────────────────────────
+document.getElementById('loading').style.display = 'none';
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
 </script>
 </body>
 </html>
