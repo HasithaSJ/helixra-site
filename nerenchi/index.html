@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Helixra · Chapter II · Nerenchi · නෙරෙංචි</title>
+<meta name="description" content="Nerenchi — Sri Lanka's ancient three-in-a-row board game. Chapter II of the Helixra universe."/>
+<link rel="icon" href="../assets/img/helixra-logo.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+Sinhala:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:#f4ede0;min-height:100vh;overflow-x:hidden;}
+body{font-family:"Geist",system-ui,sans-serif;color:#1f1814;}
+button{font-family:inherit;cursor:pointer;outline:none;}
+
+@keyframes pieceIn{0%{transform:scale(0) translateY(-8px);opacity:0;}70%{transform:scale(1.12) translateY(1px);}100%{transform:scale(1) translateY(0);opacity:1;}}
+@keyframes millPulse{0%,100%{opacity:0.25;}50%{opacity:0.75;}}
+@keyframes toastDrop{from{transform:translateX(-50%) translateY(-90%);opacity:0;}to{transform:translateX(-50%) translateY(0);opacity:1;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+@keyframes twinkle{0%,100%{opacity:.08;}50%{opacity:.32;}}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.piece-enter{animation:pieceIn .22s cubic-bezier(.34,1.56,.64,1) both;}
+.mill-glow{animation:millPulse 1.1s ease-in-out infinite;}
+.fade-up{animation:fadeUp .35s ease both;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useMemo, useCallback } = React;
+
+// ═══════════════════════════════════════════════════════
+// DESIGN TOKENS (from design-canvas.jsx / hifi.jsx)
+// ═══════════════════════════════════════════════════════
+const HX = {
+  paper:'#f4ede0', paperHi:'#faf6ea', paperLo:'#e8dec9',
+  ink:'#1f1814', inkSoft:'#2a1f17', muted:'#6b5d4a',
+  terra:'#c96442', terraDeep:'#a14a2c', teak:'#6b563d', gold:'#b8945c',
+  rule:'rgba(31,24,20,0.14)',
+};
+const F = {
+  display:'"Cormorant Garamond","EB Garamond",Georgia,serif',
+  body:'"Geist","DM Sans",system-ui,sans-serif',
+  mono:'"JetBrains Mono",ui-monospace,monospace',
+  sinhala:'"Noto Serif Sinhala","Iskoola Pota",serif',
+};
+const BTN = {
+  base:{display:'inline-flex',alignItems:'center',gap:8,padding:'11px 22px',borderRadius:999,
+    cursor:'pointer',fontFamily:F.body,fontSize:13,fontWeight:500,transition:'all .18s'},
+};
+const btn  = {...BTN.base,background:'transparent',color:HX.ink,border:`1.5px solid ${HX.ink}`};
+const btnS = {...BTN.base,background:HX.ink,color:HX.paper,border:`1.5px solid ${HX.ink}`};
+const btnT = {...BTN.base,background:HX.terra,color:HX.paper,border:`1.5px solid ${HX.terra}`};
+
+// ═══════════════════════════════════════════════════════
+// BOARD GEOMETRY (exact from board.jsx)
+// ═══════════════════════════════════════════════════════
+const POS = {
+  1:[50,50],  2:[250,50],  3:[450,50],
+  4:[110,110],5:[250,110], 6:[390,110],
+  7:[170,170],8:[250,170], 9:[330,170],
+  10:[50,250],11:[110,250],12:[170,250],
+  13:[330,250],14:[390,250],15:[450,250],
+  16:[170,330],17:[250,330],18:[330,330],
+  19:[110,390],20:[250,390],21:[390,390],
+  22:[50,450],23:[250,450],24:[450,450],
+};
+
+// All board lines (for rendering + mill detection)
+const BOARD_LINES = [
+  [1,2,3,15,24,23,22,10,1],  // outer square
+  [4,5,6,14,21,20,19,11,4],  // middle square
+  [7,8,9,13,18,17,16,12,7],  // inner square
+  [2,5,8],[10,11,12],[13,14,15],[17,20,23],  // cardinal connectors
+  [1,4,7],[3,6,9],[18,21,24],[16,19,22],     // diagonal connectors
+];
+
+// All valid 3-in-a-row (Nerenchi) formations — from Sinhala source
+const MILLS = [
+  [1,2,3],[3,15,24],[24,23,22],[22,10,1],   // outer
+  [4,5,6],[6,14,21],[21,20,19],[19,11,4],   // middle
+  [7,8,9],[9,13,18],[18,17,16],[16,12,7],   // inner
+  [2,5,8],[10,11,12],[13,14,15],[17,20,23], // cardinals
+  [1,4,7],[3,6,9],[18,21,24],[16,19,22],    // diagonals
+];
+
+// Legal Phase-2 movement adjacency — corner vertical restriction applied
+// Corners 1,3,22,24 CANNOT move along diagonal connectors (Sinhala source: "1→7 forbidden")
+const ADJ = {
+  1:[2,10],         3:[2,15],         22:[10,23],       24:[23,15],
+  2:[1,3,5],        4:[5,11,7],       5:[4,6,2,8],      6:[5,14,9],
+  7:[8,12,4],       8:[7,9,5],        9:[8,13,6],
+  10:[22,1,11],     11:[19,4,10,12],  12:[7,16,11],
+  13:[9,18,14],     14:[6,21,13,15],  15:[3,24,14],
+  16:[12,17,19],    17:[16,18,20],    18:[17,13,21],
+  19:[11,20,16],    20:[19,21,17,23], 21:[20,14,18],
+  23:[22,24,20],
+};
+
+// ═══════════════════════════════════════════════════════
+// GAME ENGINE
+// ═══════════════════════════════════════════════════════
+const ALL_POS = Object.keys(POS).map(Number);
+
+function checkMill(board, pos, owner) {
+  for (const m of MILLS) {
+    if (m.includes(pos) && m.every(p => board[p] === owner)) return m;
+  }
+  return null;
+}
+
+function countPieces(board, owner) {
+  return ALL_POS.filter(p => board[p] === owner).length;
+}
+
+function emptyPositions(board) {
+  return ALL_POS.filter(p => !board[p]);
+}
+
+function legalMovesFrom(board, pos) {
+  return (ADJ[pos] || []).filter(p => !board[p]);
+}
+
+function hasAnyMove(board, owner) {
+  return ALL_POS.some(p => board[p] === owner && legalMovesFrom(board, p).length > 0);
+}
+
+// 3-empty rule: when exactly 3 spots empty, placing at pos forming a mill is forbidden
+function is3EmptyForbidden(board, pos, owner) {
+  if (emptyPositions(board).length !== 3) return false;
+  const test = { ...board, [pos]: owner };
+  return checkMill(test, pos, owner) !== null;
+}
+
+// All forbidden positions for current placement
+function getForbiddenPositions(board, owner) {
+  if (emptyPositions(board).length !== 3) return [];
+  return emptyPositions(board).filter(p => is3EmptyForbidden(board, p, owner));
+}
+
+// ═══════════════════════════════════════════════════════
+// AI ENGINE
+// ═══════════════════════════════════════════════════════
+function evalBoard(board, owner) {
+  const opp = owner === 'M' ? 'P' : 'M';
+  const mine = countPieces(board, owner);
+  const theirs = countPieces(board, opp);
+  if (theirs <= 2) return 9000;
+  if (mine <= 2) return -9000;
+  if (!hasAnyMove(board, opp) && opp === 'M') return 9000;
+  if (!hasAnyMove(board, owner) && owner === 'M') return -9000;
+  let s = (mine - theirs) * 100;
+  for (const m of MILLS) {
+    const mc = m.filter(p => board[p] === owner).length;
+    const tc = m.filter(p => board[p] === opp).length;
+    if (tc === 0) s += mc * mc * 8;
+    if (mc === 0) s -= tc * tc * 8;
+  }
+  // mobility
+  const myMoves = ALL_POS.filter(p => board[p] === owner).reduce((a,p) => a + legalMovesFrom(board,p).length, 0);
+  const oppMoves = ALL_POS.filter(p => board[p] === opp).reduce((a,p) => a + legalMovesFrom(board,p).length, 0);
+  s += (myMoves - oppMoves) * 3;
+  return s;
+}
+
+function minimaxPhase2(board, depth, alpha, beta, isMax, aiOwner) {
+  const cur = isMax ? aiOwner : (aiOwner === 'M' ? 'P' : 'M');
+  const opp = cur === 'M' ? 'P' : 'M';
+  if (depth === 0) return { score: evalBoard(board, aiOwner) };
+  const mine = countPieces(board, cur);
+  const theirs = countPieces(board, opp);
+  if (theirs <= 2) return { score: isMax ? 9000 : -9000 };
+  if (mine <= 2) return { score: isMax ? -9000 : 9000 };
+  if (!hasAnyMove(board, cur)) {
+    if (cur === 'M') return { score: isMax ? -9000 : 9000 };
+    return { score: evalBoard(board, aiOwner) };
+  }
+  let best = isMax ? { score: -Infinity } : { score: Infinity };
+  const moves = [];
+  for (const pos of ALL_POS) {
+    if (board[pos] !== cur) continue;
+    for (const to of legalMovesFrom(board, pos)) moves.push([pos, to]);
+  }
+  for (const [from, to] of moves) {
+    const nb = { ...board };
+    nb[to] = cur; delete nb[from];
+    const formed = checkMill(nb, to, cur);
+    if (formed) {
+      // Auto-pick best capture for eval
+      const oppPieces = ALL_POS.filter(p => nb[p] === opp);
+      let capBoard = nb;
+      if (oppPieces.length) {
+        let bestCap = oppPieces[0], bestCapScore = -Infinity;
+        for (const cp of oppPieces) {
+          const tb = { ...nb }; delete tb[cp];
+          const sc = evalBoard(tb, aiOwner);
+          if (sc > bestCapScore) { bestCapScore = sc; bestCap = cp; }
+        }
+        capBoard = { ...nb }; delete capBoard[bestCap];
+      }
+      const r = minimaxPhase2(capBoard, depth-1, alpha, beta, !isMax, aiOwner);
+      if (isMax && r.score > best.score) { best = { score: r.score, from, to }; alpha = Math.max(alpha, r.score); }
+      else if (!isMax && r.score < best.score) { best = { score: r.score, from, to }; beta = Math.min(beta, r.score); }
+    } else {
+      const r = minimaxPhase2(nb, depth-1, alpha, beta, !isMax, aiOwner);
+      if (isMax && r.score > best.score) { best = { score: r.score, from, to }; alpha = Math.max(alpha, r.score); }
+      else if (!isMax && r.score < best.score) { best = { score: r.score, from, to }; beta = Math.min(beta, r.score); }
+    }
+    if (beta <= alpha) break;
+  }
+  return best;
+}
+
+function aiPlacePhase1(board, owner) {
+  const opp = owner === 'M' ? 'P' : 'M';
+  const empty = emptyPositions(board);
+  const allowed = empty.filter(p => !is3EmptyForbidden(board, p, owner));
+  if (!allowed.length) return empty[0];
+  // Complete own mill
+  for (const p of allowed) {
+    const t = { ...board, [p]: owner };
+    if (checkMill(t, p, owner)) return p;
+  }
+  // Block opponent mill
+  for (const p of allowed) {
+    const t = { ...board, [p]: opp };
+    if (checkMill(t, p, opp)) return p;
+  }
+  // Score by potential
+  let best = allowed[0], bestScore = -Infinity;
+  for (const p of allowed) {
+    let score = 0;
+    for (const m of MILLS) {
+      if (!m.includes(p)) continue;
+      const mc = m.filter(x => board[x] === owner).length;
+      const tc = m.filter(x => board[x] === opp).length;
+      if (tc === 0) score += (mc + 1) * 3;
+      if (mc === 0) score -= tc * 2;
+    }
+    // center bias
+    const [x, y] = POS[p];
+    score += (300 - (Math.abs(x-250) + Math.abs(y-250))) / 50;
+    if (score > bestScore) { bestScore = score; best = p; }
+  }
+  return best;
+}
+
+function aiBestCapture(board, owner) {
+  const opp = owner === 'M' ? 'P' : 'M';
+  const targets = ALL_POS.filter(p => board[p] === opp);
+  if (!targets.length) return null;
+  let best = targets[0], bestScore = -Infinity;
+  for (const p of targets) {
+    const nb = { ...board }; delete nb[p];
+    const s = evalBoard(nb, owner);
+    if (s > bestScore) { bestScore = s; best = p; }
+  }
+  return best;
+}
+
+// ═══════════════════════════════════════════════════════
+// SVG BOARD COMPONENT
+// ═══════════════════════════════════════════════════════
+function NBoard({ board, phase, selected, hints=[], forbidden=[], millHighlight=[], onPosClick, size=480, showNums=false }) {
+  const scale = size / 500;
+  return (
+    <svg viewBox="0 0 500 500" width={size} height={size} style={{ display:'block' }}>
+      {/* Board background */}
+      <rect x="0" y="0" width="500" height="500" rx="10" fill={HX.paperHi}/>
+
+      {/* Board lines */}
+      <g fill="none" stroke={HX.ink} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.88">
+        {BOARD_LINES.map((line, i) => (
+          <polyline key={i} points={line.map(p => POS[p].join(',')).join(' ')}/>
+        ))}
+      </g>
+
+      {/* Mill highlight glow */}
+      {millHighlight.map(p => {
+        const [x,y] = POS[p];
+        return (
+          <circle key={`mg${p}`} cx={x} cy={y} r="24"
+            fill={HX.terra} opacity="0" className="mill-glow"
+            style={{ animationDelay: `${Math.random()*0.2}s` }}/>
+        );
+      })}
+
+      {/* Positions */}
+      {ALL_POS.map(p => {
+        const [x, y] = POS[p];
+        const piece = board[p];
+        const isHint = hints.includes(p);
+        const isForbidden = forbidden.includes(p);
+        const isSelected = selected === p;
+        const inMill = millHighlight.includes(p);
+        return (
+          <g key={p} onClick={() => onPosClick && onPosClick(p)}
+            style={{ cursor: onPosClick ? 'pointer' : 'default' }}>
+
+            {/* Selected ring */}
+            {isSelected && (
+              <circle cx={x} cy={y} r="22" fill="none" stroke={HX.terra} strokeWidth="2.5" opacity="0.9"/>
+            )}
+
+            {/* Mill ring */}
+            {inMill && !isSelected && (
+              <circle cx={x} cy={y} r="20" fill="none" stroke={HX.terra} strokeWidth="1.5" opacity="0.7"/>
+            )}
+
+            {/* Hint dot */}
+            {isHint && !piece && (
+              <circle cx={x} cy={y} r="8" fill={HX.terra} opacity="0.65"/>
+            )}
+
+            {/* Forbidden X */}
+            {isForbidden && !piece && (
+              <>
+                <circle cx={x} cy={y} r="12" fill="none" stroke={HX.terra} strokeWidth="1.5" opacity="0.4"/>
+                <line x1={x-7} y1={y-7} x2={x+7} y2={y+7} stroke={HX.terra} strokeWidth="1.5" opacity="0.5"/>
+                <line x1={x-7} y1={y+7} x2={x+7} y2={y-7} stroke={HX.terra} strokeWidth="1.5" opacity="0.5"/>
+              </>
+            )}
+
+            {/* Empty dot */}
+            {!piece && !isHint && !isForbidden && (
+              <circle cx={x} cy={y} r="4" fill={HX.ink} opacity="0.35"/>
+            )}
+
+            {/* Pieces */}
+            {piece === 'M' && <MStone cx={x} cy={y} selected={isSelected} inMill={inMill}/>}
+            {piece === 'P' && <PStone cx={x} cy={y} selected={isSelected} inMill={inMill}/>}
+
+            {/* Position number (dev/tutorial) */}
+            {showNums && (
+              <text x={x} y={y-18} textAnchor="middle"
+                style={{ fontFamily:F.mono, fontSize: 9, fill: HX.muted }}>
+                {p}
+              </text>
+            )}
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+function MStone({ cx, cy, selected, inMill }) {
+  return (
+    <g className="piece-enter">
+      <ellipse cx={cx} cy={cy+2.5} rx="14" ry="4.5" fill="rgba(0,0,0,0.2)"/>
+      <circle cx={cx} cy={cy} r="14" fill="#0a0806" stroke="rgba(0,0,0,0.8)" strokeWidth="0.5"/>
+      <ellipse cx={cx-4} cy={cy-4} rx="5.5" ry="3" fill="rgba(255,255,255,0.1)" transform={`rotate(-20,${cx-4},${cy-4})`}/>
+    </g>
+  );
+}
+
+function PStone({ cx, cy, selected, inMill }) {
+  return (
+    <g className="piece-enter">
+      <ellipse cx={cx} cy={cy+2.5} rx="14" ry="4.5" fill="rgba(0,0,0,0.12)"/>
+      <circle cx={cx} cy={cy} r="14" fill={HX.paperLo} stroke={HX.teak} strokeWidth="1"/>
+      <ellipse cx={cx-4} cy={cy-4} rx="6" ry="3.5" fill="rgba(255,255,255,0.65)" transform={`rotate(-20,${cx-4},${cy-4})`}/>
+    </g>
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// HELIXRA MARK
+// ═══════════════════════════════════════════════════════
+function HXMark({ size=24, color=HX.ink }) {
+  return (
+    <svg viewBox="0 0 32 32" width={size} height={size} style={{ display:'inline-block', verticalAlign:'middle' }}>
+      <rect x="2.5" y="2.5" width="27" height="27" fill="none" stroke={color} strokeWidth="1.4"/>
+      <rect x="8" y="8" width="16" height="16" fill="none" stroke={color} strokeWidth="1.4"/>
+      <rect x="13" y="13" width="6" height="6" fill="none" stroke={color} strokeWidth="1.4"/>
+      <circle cx="16" cy="16" r="1.5" fill={HX.terra}/>
+    </svg>
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// SHARED NAV
+// ═══════════════════════════════════════════════════════
+function Nav({ onMenu }) {
+  return (
+    <div style={{ display:'flex', alignItems:'center', gap:24, padding:'18px 40px',
+        borderBottom:`1px solid ${HX.rule}`, background:HX.paper, position:'sticky', top:0, zIndex:10 }}>
+      <button onClick={onMenu} style={{ ...btn, padding:'8px 14px', fontSize:12,
+          display:'flex', alignItems:'center', gap:8 }}>
+        <HXMark size={18}/>
+        <span style={{ fontFamily:F.body, fontWeight:600, letterSpacing:'2px', fontSize:11, textTransform:'uppercase' }}>Helixra</span>
+      </button>
+      <div style={{ fontFamily:F.mono, fontSize:10, letterSpacing:'2px', textTransform:'uppercase', color:HX.muted }}>
+        Chapter 02 · Nerenchi · නෙරෙංචි
+      </div>
+      <div style={{ flex:1 }}/>
+      <a href="../" style={{ ...btn, padding:'7px 14px', fontSize:11, textDecoration:'none' }}>← Chapter I</a>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// SCREEN: HOME
+// ═══════════════════════════════════════════════════════
+function HomeScreen({ onPlay }) {
+  const demo = { 1:'M', 10:'M', 22:'M', 19:'M', 4:'M', 3:'P', 6:'P', 8:'P', 15:'P', 21:'P' };
+  return (
+    <div style={{ minHeight:'100vh', background:HX.paper, position:'relative', overflow:'hidden' }}>
+      {/* decorative bg squares */}
+      <svg style={{ position:'absolute', right:-120, top:-100, opacity:0.05, pointerEvents:'none' }}
+        viewBox="0 0 500 500" width="700" height="700">
+        <rect x="20" y="20" width="460" height="460" fill="none" stroke={HX.ink} strokeWidth="1.5"/>
+        <rect x="100" y="100" width="300" height="300" fill="none" stroke={HX.ink} strokeWidth="1.5"/>
+        <rect x="180" y="180" width="140" height="140" fill="none" stroke={HX.ink} strokeWidth="1.5"/>
+      </svg>
+
+      <Nav onMenu={() => window.location.href = '../'}/>
+
+      <div style={{ display:'grid', gridTemplateColumns:'1.1fr 1fr', gap:80, padding:'70px 80px 0',
+          maxWidth:1400, margin:'0 auto' }}>
+        {/* left */}
+        <div className="fade-up">
+          <div style={{ fontFamily:F.mono, fontSize:11, letterSpacing:'2px', textTransform:'uppercase',
+              color:HX.terra, display:'flex', alignItems:'center', gap:12, marginBottom:20 }}>
+            <span style={{ width:28, height:1, background:HX.terra, display:'inline-block' }}/>
+            Chapter 02 of the Helixra Codex
+          </div>
+          <h1 style={{ fontFamily:F.display, fontSize:'clamp(72px,9vw,128px)', lineHeight:0.95,
+              fontWeight:400, letterSpacing:-2, color:HX.ink }}>
+            Nerenchi<span style={{ color:HX.terra }}>.</span>
+          </h1>
+          <div style={{ fontFamily:F.sinhala, fontSize:26, color:HX.muted, marginTop:10 }}>
+            නෙරෙංචි · ඉත්තන්කෙළිය
+          </div>
+          <p style={{ fontFamily:F.display, fontStyle:'italic', fontSize:20, lineHeight:1.5,
+              color:HX.inkSoft, maxWidth:500, marginTop:28 }}>
+            Two players, twenty-two stones, twenty-four positions carved into wood
+            so the lines would not fade. One side has more pieces. The other plays second.
+            The balance is the game.
+          </p>
+          <div style={{ fontFamily:F.mono, fontSize:10, letterSpacing:'1.5px', textTransform:'uppercase',
+              color:HX.terra, marginTop:20 }}>
+            Source rules confirmed · Pandula Endagama, village oral tradition
+          </div>
+          <div style={{ display:'flex', gap:12, marginTop:36, flexWrap:'wrap' }}>
+            <button style={btnT} onClick={onPlay}>▶  Play Nerenchi</button>
+            <button style={btn}>Learn the rules</button>
+          </div>
+          <div style={{ display:'flex', gap:48, marginTop:60, fontFamily:F.mono, fontSize:11,
+              letterSpacing:'1.5px', textTransform:'uppercase', color:HX.muted }}>
+            {[['22','pieces placed'],['24','positions'],['2','phases'],['12/10','asymmetric']].map(([n,l])=>(
+              <div key={n}>
+                <div style={{ fontFamily:F.display, fontSize:32, color:HX.ink, fontWeight:500, letterSpacing:'-0.5px' }}>{n}</div>
+                <div style={{ marginTop:4 }}>{l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* right — board demo */}
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'center', position:'relative' }} className="fade-up">
+          <div style={{ background:HX.paperHi, borderRadius:16, padding:32,
+              border:`1px solid ${HX.rule}`,
+              boxShadow:'0 40px 80px -30px rgba(31,24,20,0.22), 0 0 0 1px rgba(31,24,20,0.04)' }}>
+            <NBoard board={demo} phase={2} millHighlight={[1,10,22]} size={440}/>
+          </div>
+          <div style={{ position:'absolute', bottom:20, left:10, fontFamily:F.mono, fontSize:9,
+              letterSpacing:'1.5px', textTransform:'uppercase', color:HX.muted,
+              background:HX.paper, padding:'4px 10px', border:`1px solid ${HX.rule}` }}>
+            mid-game · nerenchi forming 1·10·22
+          </div>
+        </div>
+      </div>
+
+      {/* bottom strip */}
+      <div style={{ marginTop:60, padding:'20px 80px', borderTop:`1px solid ${HX.rule}`,
+          display:'flex', justifyContent:'space-between', alignItems:'center',
+          fontFamily:F.mono, fontSize:10, letterSpacing:'1.5px', textTransform:'uppercase', color:HX.muted }}>
+        <span>Helixra · a universe of Sri Lankan games</span>
+        <div style={{ display:'flex', gap:28 }}>
+          <span style={{ opacity:.5 }}>← 01 · Olinda Keliya</span>
+          <span style={{ color:HX.ink }}>● 02 · Nerenchi</span>
+          <span style={{ opacity:.35 }}>03 · coming →</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// SCREEN: ROLE SELECT
+// ═══════════════════════════════════════════════════════
+function RoleScreen({ onRole, onBack }) {
+  const [hovered, setHovered] = useState(null);
+  return (
+    <div style={{ minHeight:'100vh', background:HX.paper }}>
+      <Nav onMenu={onBack}/>
+      <div style={{ padding:'52px 80px', maxWidth:1200, margin:'0 auto' }} className="fade-up">
+        <div style={{ fontFamily:F.mono, fontSize:11, letterSpacing:'2px', textTransform:'uppercase', color:HX.muted }}>
+          Step 01 · choose your role
+        </div>
+        <h2 style={{ fontFamily:F.display, fontSize:64, fontWeight:500, letterSpacing:-1, marginTop:12 }}>
+          Choose your side.
+        </h2>
+        <p style={{ fontFamily:F.display, fontStyle:'italic', fontSize:19, color:HX.muted,
+            marginTop:10, maxWidth:680 }}>
+          The two sides are not symmetrical. Initiative for one, immunity for the other —
+          the asymmetry is the inheritance of the game.
+        </p>
+
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:22, marginTop:44 }}>
+          {/* Muththadiya card */}
+          <div style={{ background:HX.ink, color:HX.paper, borderRadius:14, padding:36,
+              position:'relative', overflow:'hidden', cursor:'pointer', transition:'transform .2s',
+              transform: hovered === 'M' ? 'translateY(-4px)' : 'none',
+              boxShadow: hovered === 'M' ? '0 20px 48px -12px rgba(31,24,20,0.5)' : '0 8px 24px -8px rgba(31,24,20,0.3)' }}
+            onMouseEnter={()=>setHovered('M')} onMouseLeave={()=>setHovered(null)}
+            onClick={()=>onRole('M')}>
+            {/* big stone bg */}
+            <div style={{ position:'absolute', right:-50, top:-50, width:220, height:220, borderRadius:'50%',
+                background:'#0a0806', border:'1px solid rgba(244,237,224,0.1)',
+                boxShadow:'inset 14px -18px 36px rgba(255,255,255,0.06), inset -12px 14px 36px rgba(0,0,0,0.5)' }}/>
+            <div style={{ position:'relative', zIndex:1 }}>
+              <div style={{ fontFamily:F.mono, fontSize:10, letterSpacing:'2px', textTransform:'uppercase',
+                  color:'rgba(244,237,224,0.6)' }}>
+                Mulgalkaraya · the one of the first stone
+              </div>
+              <div style={{ fontFamily:F.display, fontSize:62, fontWeight:500, letterSpacing:-1, marginTop:10 }}>
+                Muththadiya
+              </div>
+              <div style={{ fontFamily:F.sinhala, fontSize:24, color:'rgba(244,237,224,0.65)', marginTop:4 }}>
+                මුත්තැඩියා
+              </div>
+              <p style={{ fontFamily:F.display, fontStyle:'italic', fontSize:16, lineHeight:1.55,
+                  color:'rgba(244,237,224,0.8)', marginTop:22, maxWidth:380 }}>
+                The aggressor. Sets the tempo and shapes the board, but must keep their
+                opponent breathing — block Piththadiya's last move and you forfeit.
+              </p>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:1,
+                  marginTop:28, background:'rgba(244,237,224,0.15)', border:'1px solid rgba(244,237,224,0.15)' }}>
+                {[['12','pieces in hand'],['1st','to place'],['1st','to move'],['Can','lose by block']].map(([k,v],i)=>(
+                  <div key={i} style={{ background:HX.ink, padding:'14px 16px' }}>
+                    <div style={{ fontFamily:F.display, fontSize:28, fontWeight:500 }}>{k}</div>
+                    <div style={{ fontFamily:F.mono, fontSize:9, letterSpacing:'1.5px', textTransform:'uppercase',
+                        color:'rgba(244,237,224,0.5)', marginTop:6 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Piththadiya card */}
+          <div style={{ background:HX.paperHi, color:HX.ink, borderRadius:14, padding:36,
+              position:'relative', overflow:'hidden', cursor:'pointer', transition:'transform .2s',
+              border:`1px solid ${HX.rule}`,
+              transform: hovered === 'P' ? 'translateY(-4px)' : 'none',
+              boxShadow: hovered === 'P' ? '0 20px 48px -12px rgba(31,24,20,0.22)' : 'none' }}
+            onMouseEnter={()=>setHovered('P')} onMouseLeave={()=>setHovered(null)}
+            onClick={()=>onRole('P')}>
+            {/* big stone bg */}
+            <div style={{ position:'absolute', right:-50, top:-50, width:220, height:220, borderRadius:'50%',
+                background:HX.paperLo, border:`1px solid ${HX.rule}`,
+                boxShadow:'inset 14px -14px 28px rgba(0,0,0,0.1), inset -12px 12px 28px rgba(255,255,255,0.6)' }}/>
+            <div style={{ position:'relative', zIndex:1 }}>
+              <div style={{ fontFamily:F.mono, fontSize:10, letterSpacing:'2px', textTransform:'uppercase', color:HX.muted }}>
+                Aggalkaraya · the one of the last stone
+              </div>
+              <div style={{ fontFamily:F.display, fontSize:62, fontWeight:500, letterSpacing:-1, marginTop:10 }}>
+                Piththadiya
+              </div>
+              <div style={{ fontFamily:F.sinhala, fontSize:24, color:HX.muted, marginTop:4 }}>
+                පිත්තැඩියා
+              </div>
+              <p style={{ fontFamily:F.display, fontStyle:'italic', fontSize:16, lineHeight:1.55,
+                  color:HX.inkSoft, marginTop:22, maxWidth:380 }}>
+                The responder. Always sees their opponent's move first. Fewer pieces,
+                but the safety of never losing to a block.
+              </p>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:1,
+                  marginTop:28, background:HX.rule, border:`1px solid ${HX.rule}` }}>
+                {[['10','pieces in hand'],['2nd','to place'],['2nd','to move'],['Cannot','lose by block']].map(([k,v],i)=>(
+                  <div key={i} style={{ background:HX.paperHi, padding:'14px 16px' }}>
+                    <div style={{ fontFamily:F.display, fontSize:28, fontWeight:500 }}>{k}</div>
+                    <div style={{ fontFamily:F.mono, fontSize:9, letterSpacing:'1.5px', textTransform:'uppercase',
+                        color:HX.muted, marginTop:6 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display:'flex', gap:12, marginTop:36, alignItems:'center' }}>
+          <button style={btn} onClick={onBack}>← Back</button>
+          <button style={btnT} onClick={()=>onRole('M')}>Begin as Muththadiya →</button>
+          <button style={{...btn, marginLeft:8}} onClick={()=>onRole('P')}>Begin as Piththadiya →</button>
+          <span style={{ fontFamily:F.mono, fontSize:11, letterSpacing:'1.5px', textTransform:'uppercase',
+              color:HX.muted, marginLeft:12 }}>
+            or &nbsp;<button style={{ background:'none', border:'none', cursor:'pointer',
+                fontFamily:F.mono, fontSize:11, color:HX.terra, letterSpacing:'1.5px', textTransform:'uppercase' }}
+              onClick={()=>onRole(Math.random()>.5?'M':'P')}>⇋ let the board decide</button>
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// SCREEN: GAME
+// ═══════════════════════════════════════════════════════
+function GameScreen({ playerRole, onEnd, onMenu }) {
+  const aiRole = playerRole === 'M' ? 'P' : 'M';
+  const isAI = true; // always vs AI in this build
+
+  const [g, setG] = useState(() => ({
+    phase: 1,
+    board: {},
+    turn: 'M',
+    mLeft: 12,
+    pLeft: 10,
+    placed: 0,
+    bonus: false,        // phase 1 bonus placement pending
+    bonusFor: null,      // which player earned bonus
+    captureMode: false,  // phase 2: waiting for capture selection
+    captureFor: null,
+    lastMill: null,
+    selected: null,      // phase 2: selected position
+    winner: null,
+    winReason: '',
+    mCaptured: 0,
+    pCaptured: 0,
+    log: [],
+  }));
+
+  const [toast, setToast] = useState(null);
+  const [showRules, setShowRules] = useState(false);
+  const aiTimer = useRef(null);
+
+  const showToast = (title, sub, dur=2200) => {
+    setToast({ title, sub });
+    setTimeout(() => setToast(null), dur);
+  };
+
+  const addLog = (g, entry) => ({ ...g, log: [...g.log.slice(-30), entry] });
+
+  // ── PHASE 1: Place a piece ──────────────────────────
+  const doPlace = useCallback((state, pos, owner) => {
+    if (state.board[pos]) return state;
+    if (is3EmptyForbidden(state.board, pos, owner)) return state;
+
+    const board2 = { ...state.board, [pos]: owner };
+    const mill = checkMill(board2, pos, owner);
+    const placed2 = state.placed + 1;
+    const opp = owner === 'M' ? 'P' : 'M';
+
+    let ns = {
+      ...state,
+      board: board2,
+      placed: placed2,
+      mLeft: owner === 'M' ? state.mLeft - 1 : state.mLeft,
+      pLeft: owner === 'P' ? state.pLeft - 1 : state.pLeft,
+    };
+    ns = addLog(ns, `${placed2}. ${owner} place ${pos}${mill ? ` → Nerenchi! ${mill.join('·')}` : ''}`);
+
+    if (mill) {
+      ns.lastMill = mill;
+      // Bonus: place one more piece (cannot chain another Nerenchi)
+      const piecesLeft = owner === 'M' ? ns.mLeft : ns.pLeft;
+      if (piecesLeft > 0 && placed2 < 22) {
+        ns.bonus = true;
+        ns.bonusFor = owner;
+        return ns;
+      }
+    }
+
+    // Check phase transition
+    if (placed2 >= 22) {
+      ns.phase = 2;
+      ns.turn = 'M'; // Muththadiya always moves first in Phase 2
+      ns.bonus = false;
+      ns.bonusFor = null;
+      ns.lastMill = null;
+      return ns;
+    }
+
+    // Switch turns
+    ns.turn = opp;
+    ns.bonus = false;
+    ns.bonusFor = null;
+    return ns;
+  }, []);
+
+  // ── PHASE 2: Move a piece ───────────────────────────
+  const doMove = useCallback((state, from, to, owner) => {
+    if (!state.board[from] || state.board[from] !== owner) return state;
+    if (state.board[to]) return state;
+    if (!ADJ[from] || !ADJ[from].includes(to)) return state;
+
+    const board2 = { ...state.board };
+    board2[to] = owner;
+    delete board2[from];
+
+    const mill = checkMill(board2, to, owner);
+    let ns = { ...state, board: board2, selected: null, lastMill: mill || null };
+    ns = addLog(ns, `${state.log.length + 1}. ${owner} ${from}→${to}${mill ? ` Nerenchi ${mill.join('·')}` : ''}`);
+
+    if (mill) {
+      ns.captureMode = true;
+      ns.captureFor = owner;
+      return ns;
+    }
+
+    return checkWinPhase2(ns, owner);
+  }, []);
+
+  // ── CAPTURE ─────────────────────────────────────────
+  const doCapture = useCallback((state, capturePos) => {
+    const owner = state.captureFor;
+    const opp = owner === 'M' ? 'P' : 'M';
+    if (state.board[capturePos] !== opp) return state;
+
+    const board2 = { ...state.board };
+    delete board2[capturePos];
+
+    let ns = {
+      ...state,
+      board: board2,
+      captureMode: false,
+      captureFor: null,
+      mCaptured: owner === 'M' ? state.mCaptured + 1 : state.mCaptured,
+      pCaptured: owner === 'P' ? state.pCaptured + 1 : state.pCaptured,
+    };
+    ns = addLog(ns, `   × captured ${opp} at ${capturePos}`);
+    return checkWinPhase2(ns, owner);
+  }, []);
+
+  function checkWinPhase2(state, lastMoved) {
+    const opp = lastMoved === 'M' ? 'P' : 'M';
+    const oppCount = countPieces(state.board, opp);
+    if (oppCount <= 2) {
+      return { ...state, winner: lastMoved, winReason: `Reduced to 2 pieces` };
+    }
+    if (!hasAnyMove(state.board, opp)) {
+      if (opp === 'M') {
+        return { ...state, winner: lastMoved, winReason: `Muththadiya blocked — no legal move` };
+      }
+      // Piththadiya cannot lose by block — just pass (edge case)
+    }
+    return { ...state, turn: opp };
+  }
+
+  // ── HANDLE BOARD CLICK ──────────────────────────────
+  const handleClick = useCallback((pos) => {
+    setG(prev => {
+      if (prev.winner) return prev;
+      const isPlayerTurn = prev.turn === playerRole;
+      const curTurn = prev.turn;
+
+      // Capture mode
+      if (prev.captureMode) {
+        if (!isPlayerTurn && isAI) return prev; // AI captures
+        const opp = prev.captureFor === 'M' ? 'P' : 'M';
+        if (prev.board[pos] !== opp) return prev;
+        return doCapture(prev, pos);
+      }
+
+      if (!isPlayerTurn && isAI) return prev; // Not player's turn
+
+      if (prev.phase === 1) {
+        // Phase 1: placing
+        const owner = curTurn;
+        if (prev.bonus && prev.bonusFor !== owner) return prev;
+        if (prev.board[pos]) return prev;
+        if (is3EmptyForbidden(prev.board, pos, owner)) return prev;
+        return doPlace(prev, pos, owner);
+      }
+
+      if (prev.phase === 2) {
+        // Phase 2: select or move
+        if (prev.selected === null) {
+          if (prev.board[pos] === curTurn) {
+            return { ...prev, selected: pos };
+          }
+        } else {
+          if (prev.board[pos] === curTurn) {
+            return { ...prev, selected: pos }; // reselect
+          }
+          if (!prev.board[pos] && ADJ[prev.selected]?.includes(pos)) {
+            return doMove(prev, prev.selected, pos, curTurn);
+          }
+          return { ...prev, selected: null };
+        }
+      }
+
+      return prev;
+    });
+  }, [playerRole, doPlace, doMove, doCapture]);
+
+  // ── AI TURN ──────────────────────────────────────────
+  useEffect(() => {
+    if (aiTimer.current) clearTimeout(aiTimer.current);
+
+    if (g.winner) return;
+    if (g.turn !== aiRole && !(g.captureMode && g.captureFor === aiRole)) return;
+
+    const delay = g.phase === 1 ? 600 : 900;
+
+    aiTimer.current = setTimeout(() => {
+      setG(prev => {
+        if (prev.winner) return prev;
+
+        // AI capture
+        if (prev.captureMode && prev.captureFor === aiRole) {
+          const cap = aiBestCapture(prev.board, aiRole);
+          if (!cap) return { ...prev, captureMode: false, captureFor: null };
+          const ns = doCapture(prev, cap);
+          if (ns.winner) showToast(
+            ns.winner === playerRole ? 'You win.' : 'Piththadiya wins.',
+            ns.winReason, 4000
+          );
+          return ns;
+        }
+
+        // AI place (Phase 1)
+        if (prev.phase === 1 && prev.turn === aiRole) {
+          const pos = aiPlacePhase1(prev.board, aiRole);
+          if (!pos) return prev;
+          const ns = doPlace(prev, pos, aiRole);
+          if (ns.lastMill) showToast('Nerenchi!', `${aiRole === 'M' ? 'Muththadiya' : 'Piththadiya'} forms ${ns.lastMill.join('·')}`);
+          return ns;
+        }
+
+        // AI move (Phase 2)
+        if (prev.phase === 2 && prev.turn === aiRole) {
+          const result = minimaxPhase2(prev.board, 4, -Infinity, Infinity, true, aiRole);
+          if (!result.from) return prev;
+          const ns = doMove(prev, result.from, result.to, aiRole);
+          if (ns.lastMill) showToast('Nerenchi!', `Captures your piece`);
+          if (ns.winner) showToast(
+            ns.winner === playerRole ? 'You win.' : `${aiRole === 'M' ? 'Muththadiya' : 'Piththadiya'} wins.`,
+            ns.winReason, 4000
+          );
+          return ns;
+        }
+
+        return prev;
+      });
+    }, delay);
+
+    return () => clearTimeout(aiTimer.current);
+  }, [g.turn, g.phase, g.captureMode, g.captureFor, g.winner, aiRole, playerRole]);
+
+  // Show nerenchi toast when mill forms
+  useEffect(() => {
+    if (g.lastMill && g.turn !== aiRole && !g.bonus) {
+      if (g.phase === 1 && g.bonusFor === playerRole) {
+        showToast('Nerenchi!', `Place your bonus piece`);
+      }
+    }
+  }, [g.lastMill]);
+
+  // Win detection
+  useEffect(() => {
+    if (g.winner) {
+      setTimeout(() => onEnd({
+        winner: g.winner,
+        playerRole,
+        mCaptured: g.mCaptured,
+        pCaptured: g.pCaptured,
+        moves: g.log.length,
+        phase: g.phase,
+        winReason: g.winReason,
+      }), 1600);
+    }
+  }, [g.winner]);
+
+  // ── DERIVE UI STATE ──────────────────────────────────
+  const isPlayerTurn = g.turn === playerRole;
+  const isCapturePlayer = g.captureMode && g.captureFor === playerRole;
+  const opp = playerRole === 'M' ? 'P' : 'M';
+  const forbidden = g.phase === 1 && isPlayerTurn && !g.captureMode
+    ? getForbiddenPositions(g.board, g.turn) : [];
+
+  // Hints: legal moves for selected piece
+  const hints = g.phase === 2 && g.selected && isPlayerTurn
+    ? legalMovesFrom(g.board, g.selected) : [];
+
+  // Capturable positions
+  const capturable = isCapturePlayer
+    ? ALL_POS.filter(p => g.board[p] === (playerRole === 'M' ? 'P' : 'M')) : [];
+
+  function getStatusText() {
+    if (g.winner) return g.winner === playerRole ? 'You win.' : 'Opponent wins.';
+    if (g.captureMode) {
+      return isCapturePlayer ? 'Nerenchi — choose an opponent piece to capture.'
+        : `${g.captureFor === 'M' ? 'Muththadiya' : 'Piththadiya'} forming a capture…`;
+    }
+    if (g.phase === 1) {
+      if (isPlayerTurn) {
+        if (g.bonus && g.bonusFor === playerRole) return 'Nerenchi — place your bonus piece.';
+        return `Place a piece · ${g.turn === 'M' ? g.mLeft : g.pLeft} remaining`;
+      }
+      return 'Opponent placing…';
+    }
+    if (g.phase === 2) {
+      if (isPlayerTurn) {
+        if (g.selected) return `Moving piece from ${g.selected} — choose destination`;
+        return 'Choose a piece to move.';
+      }
+      return 'Opponent thinking…';
+    }
+    return '';
+  }
+
+  const playerName = playerRole === 'M' ? 'Muththadiya' : 'Piththadiya';
+  const playerSinhala = playerRole === 'M' ? 'මුත්තැඩියා' : 'පිත්තැඩියා';
+  const aiName = aiRole === 'M' ? 'Muththadiya' : 'Piththadiya';
+  const aiSinhala = aiRole === 'M' ? 'මුත්තැඩියා' : 'පිත්තැඩියා';
+  const playerPieces = countPieces(g.board, playerRole);
+  const aiPieces = countPieces(g.board, aiRole);
+  const playerCaptures = playerRole === 'M' ? g.mCaptured : g.pCaptured;
+  const aiCaptures = aiRole === 'M' ? g.mCaptured : g.pCaptured;
+
+  return (
+    <div style={{ minHeight:'100vh', background:HX.paper, display:'flex', flexDirection:'column' }}>
+
+      {/* Toast */}
+      {toast && (
+        <div style={{ position:'fixed', top:0, left:'50%', transform:'translateX(-50%)',
+            zIndex:500, background:HX.paperHi, color:HX.ink, padding:'12px 32px',
+            borderBottom:`1.5px solid ${HX.terra}`, borderLeft:`1px solid ${HX.rule}`,
+            borderRight:`1px solid ${HX.rule}`, borderRadius:'0 0 10px 10px',
+            animation:'toastDrop .3s ease', boxShadow:'0 8px 32px rgba(31,24,20,0.18)' }}>
+          <div style={{ fontFamily:F.mono, fontSize:11, letterSpacing:'2px', textTransform:'uppercase', color:HX.terra }}>
+            {toast.title}
+          </div>
+          <div style={{ fontFamily:F.display, fontStyle:'italic', fontSize:15, color:HX.muted, marginTop:3 }}>
+            {toast.sub}
+          </div>
+        </div>
+      )}
+
+      {/* Capture modal */}
+      {isCapturePlayer && (
+        <div style={{ position:'fixed', inset:0, zIndex:100,
+            background:'rgba(31,24,20,0.45)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <div style={{ background:HX.paperHi, color:HX.ink, borderRadius:14, padding:38,
+              maxWidth:640, width:'90%', border:`1px solid ${HX.rule}`,
+              boxShadow:'0 50px 100px -30px rgba(0,0,0,0.45)', animation:'fadeUp .25s ease' }}>
+            <div style={{ fontFamily:F.mono, fontSize:11, letterSpacing:'2px', textTransform:'uppercase',
+                color:HX.terra, display:'flex', alignItems:'center', gap:12 }}>
+              <span style={{ width:28, height:1, background:HX.terra, display:'inline-block' }}/>
+              Nerenchi formed · {g.lastMill ? g.lastMill.join(' · ') : ''}
+            </div>
+            <h3 style={{ fontFamily:F.display, fontSize:46, fontWeight:500, letterSpacing:-1, marginTop:12 }}>
+              Take a piece.
+            </h3>
+            <p style={{ fontFamily:F.display, fontStyle:'italic', fontSize:16, color:HX.muted, marginTop:6 }}>
+              Any of your opponent's stones is yours to claim. Wisdom says: choose the one whose absence reshapes the board.
+            </p>
+            <div style={{ display:'flex', flexWrap:'wrap', gap:10, marginTop:26 }}>
+              {capturable.map(p => (
+                <button key={p} onClick={()=>handleClick(p)} style={{
+                  background: HX.paper, border:`1.5px solid ${HX.rule}`, borderRadius:10,
+                  padding:'14px 20px', cursor:'pointer', textAlign:'center',
+                  fontFamily:F.mono, fontSize:12, color:HX.ink,
+                  transition:'all .15s',
+                  ':hover': { borderColor: HX.terra }
+                }}
+                  onMouseEnter={e=>{e.currentTarget.style.borderColor=HX.terra;e.currentTarget.style.background=HX.paperLo;}}
+                  onMouseLeave={e=>{e.currentTarget.style.borderColor=HX.rule;e.currentTarget.style.background=HX.paper;}}>
+                  <div style={{ width:28, height:28, borderRadius:'50%', margin:'0 auto 10px',
+                      background:HX.paperLo, border:`1px solid ${HX.teak}`,
+                      boxShadow:'inset 3px -3px 6px rgba(0,0,0,0.12)' }}/>
+                  pos {p}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Rules panel */}
+      {showRules && (
+        <div style={{ position:'fixed', inset:0, zIndex:100,
+            background:'rgba(31,24,20,0.5)', display:'flex', alignItems:'center', justifyContent:'center' }}
+          onClick={()=>setShowRules(false)}>
+          <div style={{ background:HX.paperHi, color:HX.ink, borderRadius:14, padding:38,
+              maxWidth:560, width:'90%', maxHeight:'85vh', overflowY:'auto',
+              border:`1px solid ${HX.rule}`, boxShadow:'0 50px 100px -30px rgba(0,0,0,0.4)' }}
+            onClick={e=>e.stopPropagation()}>
+            <div style={{ fontFamily:F.display, fontSize:42, fontWeight:500, letterSpacing:-1 }}>Rules.</div>
+            <div style={{ fontFamily:F.sinhala, fontSize:18, color:HX.muted, marginTop:4 }}>
+              Sinhala source: Pandula Endagama · village oral tradition
+            </div>
+            {[
+              ['Muththadiya & Piththadiya','First mover has 12 pieces. Second mover (Piththadiya) has 10 pieces. Total placed: 22. Two positions remain empty for movement.'],
+              ['Phase 1 · Placing','Players alternate placing pieces on empty positions. Only Muththadiya can block Piththadiya — not the reverse.'],
+              ['Nerenchi','Three pieces of one player in a straight line — horizontal, vertical, or diagonal — is a Nerenchi. The player places one bonus piece immediately (no chain).'],
+              ['3-empty Rule','When only 3 positions remain empty, you may not place in a position that would form a Nerenchi (the bonus placement would leave only 1 empty spot).'],
+              ['Phase 2 · Moving','Players move one piece per turn along any line to an adjacent empty position. Corner restriction: pieces at corners 1, 3, 22, 24 cannot move vertically along diagonal lines.'],
+              ['Capture','Forming a Nerenchi in Phase 2 lets you remove any one opponent piece from the board.'],
+              ['Depath Padima','The master technique: position your pieces so moving in either direction creates a Nerenchi.'],
+              ['Winning','Reduce your opponent to 2 pieces. Or block all of Muththadiya\'s moves (Piththadiya cannot lose by blocking).'],
+            ].map(([t,d])=>(
+              <div key={t} style={{ display:'flex', gap:12, marginTop:18 }}>
+                <span style={{ color:HX.terra, fontFamily:F.mono, fontSize:10, flexShrink:0, marginTop:3 }}>◆</span>
+                <div>
+                  <div style={{ fontFamily:F.display, fontSize:18, fontWeight:500, color:HX.ink }}>{t}</div>
+                  <div style={{ fontFamily:F.body, fontSize:14, color:HX.muted, marginTop:5, lineHeight:1.6 }}>{d}</div>
+                </div>
+              </div>
+            ))}
+            <button style={{ ...btnT, marginTop:26 }} onClick={()=>setShowRules(false)}>Close rules</button>
+          </div>
+        </div>
+      )}
+
+      {/* Top bar */}
+      <div style={{ display:'flex', alignItems:'center', gap:16, padding:'14px 28px',
+          background:HX.paperLo, borderBottom:`1px solid ${HX.rule}`, flexShrink:0 }}>
+        <HXMark size={20}/>
+        <span style={{ fontFamily:F.body, fontWeight:600, fontSize:10, letterSpacing:'2.5px', textTransform:'uppercase' }}>
+          Helixra · Ch. 02 · Nerenchi
+        </span>
+        <div style={{ flex:1 }}/>
+        {/* Phase badge */}
+        <div style={{ fontFamily:F.mono, fontSize:10, letterSpacing:'2px', textTransform:'uppercase',
+            padding:'6px 16px', border:`1px solid ${HX.rule}`, borderRadius:999, color:HX.muted }}>
+          Phase {g.phase} · {g.phase === 1 ? 'Placing' : 'Moving'}
+          {g.phase === 1 && ` · ${g.placed}/22`}
+        </div>
+        <button style={btn} onClick={()=>setShowRules(true)}>Rules</button>
+        <button style={btn} onClick={onMenu}>Menu</button>
+      </div>
+
+      {/* 3-column game layout */}
+      <div style={{ flex:1, display:'grid', gridTemplateColumns:'280px 1fr 260px', overflow:'hidden' }}>
+
+        {/* LEFT RAIL */}
+        <div style={{ background:HX.paperLo, borderRight:`1px solid ${HX.rule}`,
+            padding:22, display:'flex', flexDirection:'column', gap:14, overflowY:'auto' }}>
+
+          {/* Player card (human) */}
+          <PlayerCard
+            name={playerName} sinhala={playerSinhala} isM={playerRole==='M'}
+            pieces={playerPieces} captured={playerCaptures} left={playerRole==='M'?g.mLeft:g.pLeft}
+            active={isPlayerTurn && !g.captureMode} phase={g.phase} you/>
+
+          {/* AI card */}
+          <PlayerCard
+            name={aiName} sinhala={aiSinhala} isM={aiRole==='M'}
+            pieces={aiPieces} captured={aiCaptures} left={aiRole==='M'?g.mLeft:g.pLeft}
+            active={!isPlayerTurn && !g.captureMode} phase={g.phase} you={false}
+            thinking={!isPlayerTurn && !g.captureMode}/>
+
+          <div style={{ flex:1 }}/>
+
+          {/* Asymmetry reminder */}
+          <div style={{ padding:14, background:HX.paperHi, border:`1px solid ${HX.rule}`, borderRadius:8 }}>
+            <div style={{ fontFamily:F.mono, fontSize:9, letterSpacing:'1.5px', textTransform:'uppercase', color:HX.muted }}>
+              Asymmetry
+            </div>
+            <p style={{ fontFamily:F.display, fontStyle:'italic', fontSize:13, lineHeight:1.5, color:HX.inkSoft, marginTop:6 }}>
+              {playerRole === 'M'
+                ? 'You are Muththadiya. Keep your opponent breathing — block their last move and you forfeit.'
+                : 'You are Piththadiya. You cannot lose by being blocked. Fewer pieces, but the safer role.'}
+            </p>
+          </div>
+        </div>
+
+        {/* CENTER — BOARD */}
+        <div style={{ display:'flex', flexDirection:'column', alignItems:'center',
+            padding:'20px 24px 24px', background:HX.paper, overflow:'auto' }}>
+
+          {/* Status bar */}
+          <div style={{ fontFamily:F.mono, fontSize:11, letterSpacing:'1.5px', textTransform:'uppercase',
+              color: g.captureMode ? HX.terra : isPlayerTurn ? HX.ink : HX.muted,
+              padding:'7px 18px', border:`1px solid ${g.captureMode ? HX.terra : HX.rule}`,
+              borderRadius:999, marginBottom:18 }}>
+            {getStatusText()}
+          </div>
+
+          {/* Board */}
+          <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <div style={{ background:HX.paperHi, borderRadius:14, padding:28,
+                border:`1px solid ${HX.rule}`,
+                boxShadow:'0 24px 60px -20px rgba(31,24,20,0.22), 0 0 0 1px rgba(31,24,20,0.04)' }}>
+              <NBoard
+                board={g.board}
+                phase={g.phase}
+                selected={g.selected}
+                hints={isCapturePlayer ? capturable : hints}
+                forbidden={forbidden}
+                millHighlight={g.lastMill || []}
+                onPosClick={handleClick}
+                size={Math.min(460, window.innerWidth - 600)}
+              />
+            </div>
+          </div>
+
+          {/* Board actions */}
+          <div style={{ display:'flex', gap:10, marginTop:20 }}>
+            {g.selected && g.phase === 2 && (
+              <button style={btn} onClick={()=>setG(p=>({...p,selected:null}))}>Deselect</button>
+            )}
+            <button style={btn} onClick={()=>setShowRules(true)}>Rules</button>
+            <button style={btn} onClick={onMenu}>Resign</button>
+          </div>
+
+          {/* Depath Padima hint */}
+          {g.phase === 2 && g.selected && (()=>{
+            const to1 = legalMovesFrom(g.board, g.selected);
+            let depathTo = null;
+            for (const to of to1) {
+              const nb = { ...g.board, [to]: playerRole }; delete nb[g.selected];
+              if (checkMill(nb, to, playerRole)) {
+                // Check if moving back also forms mill
+                const nb2 = { ...g.board, [g.selected]: playerRole };
+                if (checkMill(nb2, g.selected, playerRole)) { depathTo = to; break; }
+              }
+            }
+            if (depathTo) return (
+              <div style={{ marginTop:10, fontFamily:F.mono, fontSize:10, letterSpacing:'1.5px',
+                  textTransform:'uppercase', color:HX.terra }}>
+                ◆ Depath Padima · දෙපාම පැදීම detected
+              </div>
+            );
+            return null;
+          })()}
+        </div>
+
+        {/* RIGHT RAIL — move log */}
+        <div style={{ background:HX.paperLo, borderLeft:`1px solid ${HX.rule}`,
+            padding:22, display:'flex', flexDirection:'column', overflowY:'auto' }}>
+          <div style={{ fontFamily:F.mono, fontSize:10, letterSpacing:'2px', textTransform:'uppercase', color:HX.muted }}>
+            Move log
+          </div>
+          <div style={{ marginTop:14, flex:1, overflowY:'auto' }}>
+            {g.log.length === 0 && (
+              <div style={{ fontFamily:F.display, fontStyle:'italic', fontSize:14, color:HX.muted, marginTop:6 }}>
+                The board is silent.
+              </div>
+            )}
+            {g.log.map((entry, i) => (
+              <div key={i} style={{
+                fontFamily:F.mono, fontSize:11, lineHeight:1.9,
+                color: entry.includes('Nerenchi') ? HX.terra : entry.includes('×') ? HX.terraDeep : HX.inkSoft,
+                fontWeight: entry.includes('Nerenchi') || entry.includes('×') ? 600 : 400,
+                borderLeft: i === g.log.length-1 ? `2px solid ${HX.terra}` : '2px solid transparent',
+                paddingLeft: 8, marginLeft: -8,
+              }}>
+                {entry}
+              </div>
+            ))}
+          </div>
+          {/* Pieces in play summary */}
+          <div style={{ marginTop:16, padding:14, background:HX.paperHi,
+              border:`1px solid ${HX.rule}`, borderRadius:8 }}>
+            <div style={{ fontFamily:F.mono, fontSize:9, letterSpacing:'1.5px', textTransform:'uppercase', color:HX.muted }}>
+              Pieces on board
+            </div>
+            <div style={{ display:'flex', gap:8, marginTop:10, flexWrap:'wrap' }}>
+              {ALL_POS.filter(p=>g.board[p]==='M').map(p=>(
+                <div key={p} style={{ width:14, height:14, borderRadius:'50%', background:'#0a0806' }}/>
+              ))}
+            </div>
+            <div style={{ display:'flex', gap:8, marginTop:6, flexWrap:'wrap' }}>
+              {ALL_POS.filter(p=>g.board[p]==='P').map(p=>(
+                <div key={p} style={{ width:14, height:14, borderRadius:'50%',
+                    background:HX.paperLo, border:`1px solid ${HX.teak}` }}/>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Player info card
+function PlayerCard({ name, sinhala, isM, pieces, captured, left, active, phase, you, thinking }) {
+  return (
+    <div style={{
+      background: active ? HX.ink : HX.paperHi, color: active ? HX.paper : HX.ink,
+      borderRadius:10, padding:16, border: active ? 'none' : `1px solid ${HX.rule}`,
+      transition:'background .3s, color .3s',
+    }}>
+      <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+        <div style={{
+          width:38, height:38, borderRadius:'50%', flexShrink:0,
+          background: isM ? '#0a0806' : HX.paperLo,
+          border:`1px solid ${active ? 'rgba(244,237,224,0.2)' : HX.teak}`,
+          boxShadow: isM
+            ? 'inset 4px -5px 8px rgba(255,255,255,0.08)'
+            : 'inset 4px -5px 8px rgba(0,0,0,0.1), inset -3px 4px 8px rgba(255,255,255,0.65)',
+        }}/>
+        <div style={{ flex:1, minWidth:0 }}>
+          <div style={{ fontFamily:F.display, fontSize:20, fontWeight:500, lineHeight:1 }}>{name}</div>
+          <div style={{ fontFamily:F.sinhala, fontSize:11, marginTop:3,
+              color: active ? 'rgba(244,237,224,0.6)' : HX.muted }}>
+            {sinhala}{you ? ' · you' : ' · ai'}
+          </div>
+        </div>
+        {active && !thinking && (
+          <div style={{ width:7, height:7, borderRadius:'50%', background:HX.terra,
+              boxShadow:`0 0 8px ${HX.terra}` }}/>
+        )}
+        {thinking && (
+          <div style={{ fontFamily:F.mono, fontSize:9, letterSpacing:'1.5px',
+              color: active ? 'rgba(244,237,224,0.5)' : HX.muted }}>…</div>
+        )}
+      </div>
+      <div style={{
+        display:'flex', justifyContent:'space-between', marginTop:12, paddingTop:10,
+        borderTop:`1px solid ${active ? 'rgba(244,237,224,0.1)' : HX.rule}`,
+        fontFamily:F.mono, fontSize:9, letterSpacing:'1.5px', textTransform:'uppercase',
+        color: active ? 'rgba(244,237,224,0.55)' : HX.muted,
+      }}>
+        <span>{phase===1 ? `${left} to place` : `${pieces} on board`}</span>
+        <span>cap · {captured}</span>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// SCREEN: GAME OVER
+// ═══════════════════════════════════════════════════════
+function OverScreen({ result, onPlay, onMenu }) {
+  const playerWon = result.winner === result.playerRole;
+  const playerName = result.playerRole === 'M' ? 'Muththadiya' : 'Piththadiya';
+  const aiName = result.playerRole === 'M' ? 'Piththadiya' : 'Muththadiya';
+  return (
+    <div style={{ minHeight:'100vh', background:HX.paper }}>
+      <Nav onMenu={onMenu}/>
+      <div style={{ padding:'60px 80px', maxWidth:900, margin:'0 auto' }} className="fade-up">
+        <div style={{ fontFamily:F.mono, fontSize:11, letterSpacing:'2px', textTransform:'uppercase',
+            color:HX.muted }}>
+          Game over · {result.moves} moves
+        </div>
+        <h2 style={{ fontFamily:F.display, fontSize:'clamp(52px,7vw,96px)', fontWeight:400,
+            letterSpacing:-2, lineHeight:0.95, marginTop:14, color:HX.ink }}>
+          {playerWon ? 'Well played.' : 'The board remembers.'}
+        </h2>
+        <div style={{ fontFamily:F.sinhala, fontSize:22, color:HX.muted, marginTop:10 }}>
+          {playerWon ? 'ජය ඔබේ ය.' : 'ක්‍රීඩාව ව‍ෙ‍නෙකාගේ ය.'}
+        </div>
+        <p style={{ fontFamily:F.display, fontStyle:'italic', fontSize:18, color:HX.inkSoft,
+            marginTop:20, maxWidth:560, lineHeight:1.5 }}>
+          {result.winReason}
+        </p>
+
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:1,
+            marginTop:40, background:HX.rule, border:`1px solid ${HX.rule}`, maxWidth:520 }}>
+          {[
+            [playerName, playerWon ? 'Winner' : 'Defeated'],
+            [result.moves.toString(), 'Total moves'],
+            [(result.playerRole==='M'?result.mCaptured:result.pCaptured).toString(), 'Captures'],
+            [result.phase===2?'Phase 2':'Phase 1', 'Ended in'],
+          ].map(([k,v],i)=>(
+            <div key={i} style={{ background:HX.paperHi, padding:'18px 14px' }}>
+              <div style={{ fontFamily:F.display, fontSize:26, fontWeight:500 }}>{k}</div>
+              <div style={{ fontFamily:F.mono, fontSize:9, letterSpacing:'1.5px', textTransform:'uppercase',
+                  color:HX.muted, marginTop:6 }}>{v}</div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ display:'flex', gap:12, marginTop:44 }}>
+          <button style={btnT} onClick={onPlay}>▶  Play again</button>
+          <button style={btn} onClick={onMenu}>Main menu</button>
+        </div>
+
+        {/* Chapter teaser */}
+        <div style={{ marginTop:60, padding:24, background:HX.paperHi, border:`1px solid ${HX.rule}`,
+            borderRadius:12, maxWidth:560 }}>
+          <div style={{ fontFamily:F.mono, fontSize:10, letterSpacing:'2px', textTransform:'uppercase', color:HX.muted }}>
+            Coming next
+          </div>
+          <div style={{ fontFamily:F.display, fontSize:36, fontWeight:500, letterSpacing:-0.5, marginTop:8 }}>
+            Chapter III ·
+            <span style={{ color:HX.terra }}> ?</span>
+          </div>
+          <div style={{ fontFamily:F.display, fontStyle:'italic', fontSize:15, color:HX.muted, marginTop:8 }}>
+            The Helixra universe is expanding. The next Sri Lankan game is being archived.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// ROOT APP
+// ═══════════════════════════════════════════════════════
+function App() {
+  const [screen, setScreen] = useState('home'); // home | role | game | over
+  const [playerRole, setPlayerRole] = useState('M');
+  const [result, setResult] = useState(null);
+
+  if (screen === 'home') return <HomeScreen onPlay={() => setScreen('role')}/>;
+  if (screen === 'role') return (
+    <RoleScreen
+      onRole={r => { setPlayerRole(r); setScreen('game'); }}
+      onBack={() => setScreen('home')}
+    />
+  );
+  if (screen === 'game') return (
+    <GameScreen
+      playerRole={playerRole}
+      onEnd={r => { setResult(r); setScreen('over'); }}
+      onMenu={() => setScreen('home')}
+    />
+  );
+  if (screen === 'over') return (
+    <OverScreen
+      result={result}
+      onPlay={() => setScreen('role')}
+      onMenu={() => setScreen('home')}
+    />
+  );
+  return null;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
