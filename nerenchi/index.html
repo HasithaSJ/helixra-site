@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Helixra · Chapter II · Nerenchi · නෙරෙංචි</title>
-<meta name="description" content="Nerenchi — Sri Lanka's ancient three-in-a-row board game. Chapter II of the Helixra universe."/>
+<title>Helixra - Chapter II - Nerenchi - නෙරෙංචි</title>
+<meta name="description" content="Nerenchi - Sri Lanka's ancient three-in-a-row board game. Chapter II of the Helixra universe."/>
 <link rel="icon" href="../assets/img/helixra-logo.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -83,7 +83,7 @@ const BOARD_LINES = [
   [1,4,7],[3,6,9],[18,21,24],[16,19,22],     // diagonal connectors
 ];
 
-// All valid 3-in-a-row (Nerenchi) formations — from Sinhala source
+// All valid 3-in-a-row (Nerenchi) formations - from Sinhala source
 const MILLS = [
   [1,2,3],[3,15,24],[24,23,22],[22,10,1],   // outer
   [4,5,6],[6,14,21],[21,20,19],[19,11,4],   // middle
@@ -92,7 +92,7 @@ const MILLS = [
   [1,4,7],[3,6,9],[18,21,24],[16,19,22],    // diagonals
 ];
 
-// Legal Phase-2 movement adjacency — corner vertical restriction applied
+// Legal Phase-2 movement adjacency - corner vertical restriction applied
 // Corners 1,3,22,24 CANNOT move along diagonal connectors (Sinhala source: "1→7 forbidden")
 const ADJ = {
   1:[2,10],         3:[2,15],         22:[10,23],       24:[23,15],
@@ -391,18 +391,22 @@ function HXMark({ size=24, color=HX.ink }) {
 // ═══════════════════════════════════════════════════════
 function Nav({ onMenu }) {
   return (
-    <div style={{ display:'flex', alignItems:'center', gap:24, padding:'18px 40px',
+    <div style={{ display:'flex', alignItems:'center', gap:24, padding:'14px 40px',
         borderBottom:`1px solid ${HX.rule}`, background:HX.paper, position:'sticky', top:0, zIndex:10 }}>
-      <button onClick={onMenu} style={{ ...btn, padding:'8px 14px', fontSize:12,
-          display:'flex', alignItems:'center', gap:8 }}>
-        <HXMark size={18}/>
-        <span style={{ fontFamily:F.body, fontWeight:600, letterSpacing:'2px', fontSize:11, textTransform:'uppercase' }}>Helixra</span>
+      <button onClick={onMenu} style={{ background:'none', border:`1.5px solid ${HX.ink}`,
+          borderRadius:999, padding:'7px 16px', cursor:'pointer',
+          display:'flex', alignItems:'center', gap:10 }}>
+        <img src="../assets/img/helixra-logo.png" alt="Helixra"
+          style={{ height:26, display:'block', mixBlendMode:'multiply' }}
+          onError={e => { e.target.style.display='none'; }}/>
+        <span style={{ fontFamily:F.body, fontWeight:600, letterSpacing:'2.5px', fontSize:11,
+            textTransform:'uppercase', color:HX.ink }}>Helixra</span>
       </button>
       <div style={{ fontFamily:F.mono, fontSize:10, letterSpacing:'2px', textTransform:'uppercase', color:HX.muted }}>
-        Chapter 02 · Nerenchi · නෙරෙංචි
+        Chapter 02 - Nerenchi - නෙරෙංචි
       </div>
       <div style={{ flex:1 }}/>
-      <a href="../" style={{ ...btn, padding:'7px 14px', fontSize:11, textDecoration:'none' }}>← Chapter I</a>
+      <a href="../" style={{ ...btn, padding:'7px 16px', fontSize:11, textDecoration:'none' }}>&#8592; Back</a>
     </div>
   );
 }
@@ -412,6 +416,7 @@ function Nav({ onMenu }) {
 // ═══════════════════════════════════════════════════════
 function HomeScreen({ onPlay }) {
   const demo = { 1:'M', 10:'M', 22:'M', 19:'M', 4:'M', 3:'P', 6:'P', 8:'P', 15:'P', 21:'P' };
+  const [showRules, setShowRules] = React.useState(false);
   return (
     <div style={{ minHeight:'100vh', background:HX.paper, position:'relative', overflow:'hidden' }}>
       {/* decorative bg squares */}
@@ -438,7 +443,7 @@ function HomeScreen({ onPlay }) {
             Nerenchi<span style={{ color:HX.terra }}>.</span>
           </h1>
           <div style={{ fontFamily:F.sinhala, fontSize:26, color:HX.muted, marginTop:10 }}>
-            නෙරෙංචි · ඉත්තන්කෙළිය
+            නෙරෙංචි - ඉත්තන්කෙළිය
           </div>
           <p style={{ fontFamily:F.display, fontStyle:'italic', fontSize:20, lineHeight:1.5,
               color:HX.inkSoft, maxWidth:500, marginTop:28 }}>
@@ -448,11 +453,11 @@ function HomeScreen({ onPlay }) {
           </p>
           <div style={{ fontFamily:F.mono, fontSize:10, letterSpacing:'1.5px', textTransform:'uppercase',
               color:HX.terra, marginTop:20 }}>
-            Source rules confirmed · Pandula Endagama, village oral tradition
+            Source rules confirmed - village oral tradition
           </div>
           <div style={{ display:'flex', gap:12, marginTop:36, flexWrap:'wrap' }}>
             <button style={btnT} onClick={onPlay}>▶  Play Nerenchi</button>
-            <button style={btn}>Learn the rules</button>
+            <button style={btn} onClick={() => setShowRules(true)}>Learn the rules</button>
           </div>
           <div style={{ display:'flex', gap:48, marginTop:60, fontFamily:F.mono, fontSize:11,
               letterSpacing:'1.5px', textTransform:'uppercase', color:HX.muted }}>
@@ -464,7 +469,7 @@ function HomeScreen({ onPlay }) {
             ))}
           </div>
         </div>
-        {/* right — board demo */}
+        {/* right - board demo */}
         <div style={{ display:'flex', alignItems:'center', justifyContent:'center', position:'relative' }} className="fade-up">
           <div style={{ background:HX.paperHi, borderRadius:16, padding:32,
               border:`1px solid ${HX.rule}`,
@@ -474,7 +479,7 @@ function HomeScreen({ onPlay }) {
           <div style={{ position:'absolute', bottom:20, left:10, fontFamily:F.mono, fontSize:9,
               letterSpacing:'1.5px', textTransform:'uppercase', color:HX.muted,
               background:HX.paper, padding:'4px 10px', border:`1px solid ${HX.rule}` }}>
-            mid-game · nerenchi forming 1·10·22
+            mid-game - nerenchi forming 1·10·22
           </div>
         </div>
       </div>
@@ -483,13 +488,48 @@ function HomeScreen({ onPlay }) {
       <div style={{ marginTop:60, padding:'20px 80px', borderTop:`1px solid ${HX.rule}`,
           display:'flex', justifyContent:'space-between', alignItems:'center',
           fontFamily:F.mono, fontSize:10, letterSpacing:'1.5px', textTransform:'uppercase', color:HX.muted }}>
-        <span>Helixra · a universe of Sri Lankan games</span>
+        <span>Sri Lankan Games - Eternal Legacy</span>
         <div style={{ display:'flex', gap:28 }}>
-          <span style={{ opacity:.5 }}>← 01 · Olinda Keliya</span>
-          <span style={{ color:HX.ink }}>● 02 · Nerenchi</span>
-          <span style={{ opacity:.35 }}>03 · coming →</span>
+          <span style={{ opacity:.5 }}>01 - Olinda Keliya</span>
+          <span style={{ color:HX.ink }}>02 - Nerenchi</span>
+          <span style={{ opacity:.35 }}>03 - coming</span>
         </div>
       </div>
+
+      {showRules && (
+        <div style={{ position:'fixed', inset:0, zIndex:200,
+            background:'rgba(31,24,20,0.5)', display:'flex', alignItems:'center', justifyContent:'center' }}
+          onClick={() => setShowRules(false)}>
+          <div style={{ background:HX.paperHi, color:HX.ink, borderRadius:14, padding:38,
+              maxWidth:560, width:'90%', maxHeight:'85vh', overflowY:'auto',
+              border:`1px solid ${HX.rule}`, boxShadow:'0 50px 100px -30px rgba(0,0,0,0.4)' }}
+            onClick={e => e.stopPropagation()}>
+            <div style={{ fontFamily:F.display, fontSize:42, fontWeight:500, letterSpacing:-1 }}>Rules.</div>
+            <div style={{ fontFamily:F.sinhala, fontSize:16, color:HX.muted, marginTop:4 }}>
+              Source - Pandula Endagama, village oral tradition
+            </div>
+            {[
+              ['Muththadiya and Piththadiya','First mover has 12 pieces. Second mover (Piththadiya) has 10. Total placed: 22, leaving 2 empty for movement.'],
+              ['Phase 1 - Placing','Alternate placing one piece per turn. Forming a Nerenchi earns one bonus placement - no chain.'],
+              ['Nerenchi','Three pieces in a straight line - horizontal, vertical, or diagonal.'],
+              ['3-empty Rule','When only 3 positions remain empty, placing in a Nerenchi-forming spot is forbidden.'],
+              ['Phase 2 - Moving','Move one piece per turn to an adjacent empty position. Corners 1, 3, 22, 24 cannot move along diagonal lines.'],
+              ['Capture','Forming a Nerenchi in Phase 2 - remove any one opponent piece.'],
+              ['Depath Padima','Position pieces so moving in either direction creates a Nerenchi. The master technique.'],
+              ['Winning','Reduce opponent to 2 pieces, or block all of Muththadiya moves. Piththadiya cannot lose by blocking.'],
+            ].map(([t, d]) => (
+              <div key={t} style={{ display:'flex', gap:12, marginTop:18 }}>
+                <span style={{ color:HX.terra, flexShrink:0, marginTop:2, fontFamily:F.mono, fontSize:12 }}>-</span>
+                <div>
+                  <div style={{ fontFamily:F.display, fontSize:18, fontWeight:500 }}>{t}</div>
+                  <div style={{ fontFamily:F.body, fontSize:14, color:HX.muted, marginTop:4, lineHeight:1.6 }}>{d}</div>
+                </div>
+              </div>
+            ))}
+            <button style={{ ...btnT, marginTop:26 }} onClick={() => setShowRules(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -504,14 +544,14 @@ function RoleScreen({ onRole, onBack }) {
       <Nav onMenu={onBack}/>
       <div style={{ padding:'52px 80px', maxWidth:1200, margin:'0 auto' }} className="fade-up">
         <div style={{ fontFamily:F.mono, fontSize:11, letterSpacing:'2px', textTransform:'uppercase', color:HX.muted }}>
-          Step 01 · choose your role
+          Step 01 - choose your role
         </div>
         <h2 style={{ fontFamily:F.display, fontSize:64, fontWeight:500, letterSpacing:-1, marginTop:12 }}>
           Choose your side.
         </h2>
         <p style={{ fontFamily:F.display, fontStyle:'italic', fontSize:19, color:HX.muted,
             marginTop:10, maxWidth:680 }}>
-          The two sides are not symmetrical. Initiative for one, immunity for the other —
+          The two sides are not symmetrical. Initiative for one, immunity for the other -
           the asymmetry is the inheritance of the game.
         </p>
 
@@ -530,7 +570,7 @@ function RoleScreen({ onRole, onBack }) {
             <div style={{ position:'relative', zIndex:1 }}>
               <div style={{ fontFamily:F.mono, fontSize:10, letterSpacing:'2px', textTransform:'uppercase',
                   color:'rgba(244,237,224,0.6)' }}>
-                Mulgalkaraya · the one of the first stone
+                Mulgalkaraya - the one of the first stone
               </div>
               <div style={{ fontFamily:F.display, fontSize:62, fontWeight:500, letterSpacing:-1, marginTop:10 }}>
                 Muththadiya
@@ -541,7 +581,7 @@ function RoleScreen({ onRole, onBack }) {
               <p style={{ fontFamily:F.display, fontStyle:'italic', fontSize:16, lineHeight:1.55,
                   color:'rgba(244,237,224,0.8)', marginTop:22, maxWidth:380 }}>
                 The aggressor. Sets the tempo and shapes the board, but must keep their
-                opponent breathing — block Piththadiya's last move and you forfeit.
+                opponent breathing - block Piththadiya's last move and you forfeit.
               </p>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:1,
                   marginTop:28, background:'rgba(244,237,224,0.15)', border:'1px solid rgba(244,237,224,0.15)' }}>
@@ -570,7 +610,7 @@ function RoleScreen({ onRole, onBack }) {
                 boxShadow:'inset 14px -14px 28px rgba(0,0,0,0.1), inset -12px 12px 28px rgba(255,255,255,0.6)' }}/>
             <div style={{ position:'relative', zIndex:1 }}>
               <div style={{ fontFamily:F.mono, fontSize:10, letterSpacing:'2px', textTransform:'uppercase', color:HX.muted }}>
-                Aggalkaraya · the one of the last stone
+                Aggalkaraya - the one of the last stone
               </div>
               <div style={{ fontFamily:F.display, fontSize:62, fontWeight:500, letterSpacing:-1, marginTop:10 }}>
                 Piththadiya
@@ -750,9 +790,9 @@ function GameScreen({ playerRole, onEnd, onMenu }) {
     }
     if (!hasAnyMove(state.board, opp)) {
       if (opp === 'M') {
-        return { ...state, winner: lastMoved, winReason: `Muththadiya blocked — no legal move` };
+        return { ...state, winner: lastMoved, winReason: `Muththadiya blocked - no legal move` };
       }
-      // Piththadiya cannot lose by block — just pass (edge case)
+      // Piththadiya cannot lose by block - just pass (edge case)
     }
     return { ...state, turn: opp };
   }
@@ -900,19 +940,19 @@ function GameScreen({ playerRole, onEnd, onMenu }) {
   function getStatusText() {
     if (g.winner) return g.winner === playerRole ? 'You win.' : 'Opponent wins.';
     if (g.captureMode) {
-      return isCapturePlayer ? 'Nerenchi — choose an opponent piece to capture.'
+      return isCapturePlayer ? 'Nerenchi - choose an opponent piece to capture.'
         : `${g.captureFor === 'M' ? 'Muththadiya' : 'Piththadiya'} forming a capture…`;
     }
     if (g.phase === 1) {
       if (isPlayerTurn) {
-        if (g.bonus && g.bonusFor === playerRole) return 'Nerenchi — place your bonus piece.';
-        return `Place a piece · ${g.turn === 'M' ? g.mLeft : g.pLeft} remaining`;
+        if (g.bonus && g.bonusFor === playerRole) return 'Nerenchi - place your bonus piece.';
+        return `Place a piece - ${g.turn === 'M' ? g.mLeft : g.pLeft} remaining`;
       }
       return 'Opponent placing…';
     }
     if (g.phase === 2) {
       if (isPlayerTurn) {
-        if (g.selected) return `Moving piece from ${g.selected} — choose destination`;
+        if (g.selected) return `Moving piece from ${g.selected} - choose destination`;
         return 'Choose a piece to move.';
       }
       return 'Opponent thinking…';
@@ -958,7 +998,7 @@ function GameScreen({ playerRole, onEnd, onMenu }) {
             <div style={{ fontFamily:F.mono, fontSize:11, letterSpacing:'2px', textTransform:'uppercase',
                 color:HX.terra, display:'flex', alignItems:'center', gap:12 }}>
               <span style={{ width:28, height:1, background:HX.terra, display:'inline-block' }}/>
-              Nerenchi formed · {g.lastMill ? g.lastMill.join(' · ') : ''}
+              Nerenchi formed - {g.lastMill ? g.lastMill.join(' - ') : ''}
             </div>
             <h3 style={{ fontFamily:F.display, fontSize:46, fontWeight:500, letterSpacing:-1, marginTop:12 }}>
               Take a piece.
@@ -999,14 +1039,14 @@ function GameScreen({ playerRole, onEnd, onMenu }) {
             onClick={e=>e.stopPropagation()}>
             <div style={{ fontFamily:F.display, fontSize:42, fontWeight:500, letterSpacing:-1 }}>Rules.</div>
             <div style={{ fontFamily:F.sinhala, fontSize:18, color:HX.muted, marginTop:4 }}>
-              Sinhala source: Pandula Endagama · village oral tradition
+              Sinhala source: Pandula Endagama - village oral tradition
             </div>
             {[
               ['Muththadiya & Piththadiya','First mover has 12 pieces. Second mover (Piththadiya) has 10 pieces. Total placed: 22. Two positions remain empty for movement.'],
-              ['Phase 1 · Placing','Players alternate placing pieces on empty positions. Only Muththadiya can block Piththadiya — not the reverse.'],
-              ['Nerenchi','Three pieces of one player in a straight line — horizontal, vertical, or diagonal — is a Nerenchi. The player places one bonus piece immediately (no chain).'],
+              ['Phase 1 - Placing','Players alternate placing pieces on empty positions. Only Muththadiya can block Piththadiya - not the reverse.'],
+              ['Nerenchi','Three pieces of one player in a straight line - horizontal, vertical, or diagonal - is a Nerenchi. The player places one bonus piece immediately (no chain).'],
               ['3-empty Rule','When only 3 positions remain empty, you may not place in a position that would form a Nerenchi (the bonus placement would leave only 1 empty spot).'],
-              ['Phase 2 · Moving','Players move one piece per turn along any line to an adjacent empty position. Corner restriction: pieces at corners 1, 3, 22, 24 cannot move vertically along diagonal lines.'],
+              ['Phase 2 - Moving','Players move one piece per turn along any line to an adjacent empty position. Corner restriction: pieces at corners 1, 3, 22, 24 cannot move vertically along diagonal lines.'],
               ['Capture','Forming a Nerenchi in Phase 2 lets you remove any one opponent piece from the board.'],
               ['Depath Padima','The master technique: position your pieces so moving in either direction creates a Nerenchi.'],
               ['Winning','Reduce your opponent to 2 pieces. Or block all of Muththadiya\'s moves (Piththadiya cannot lose by blocking).'],
@@ -1029,14 +1069,14 @@ function GameScreen({ playerRole, onEnd, onMenu }) {
           background:HX.paperLo, borderBottom:`1px solid ${HX.rule}`, flexShrink:0 }}>
         <HXMark size={20}/>
         <span style={{ fontFamily:F.body, fontWeight:600, fontSize:10, letterSpacing:'2.5px', textTransform:'uppercase' }}>
-          Helixra · Ch. 02 · Nerenchi
+          Helixra - Ch. 02 - Nerenchi
         </span>
         <div style={{ flex:1 }}/>
         {/* Phase badge */}
         <div style={{ fontFamily:F.mono, fontSize:10, letterSpacing:'2px', textTransform:'uppercase',
             padding:'6px 16px', border:`1px solid ${HX.rule}`, borderRadius:999, color:HX.muted }}>
-          Phase {g.phase} · {g.phase === 1 ? 'Placing' : 'Moving'}
-          {g.phase === 1 && ` · ${g.placed}/22`}
+          Phase {g.phase} - {g.phase === 1 ? 'Placing' : 'Moving'}
+          {g.phase === 1 && ` - ${g.placed}/22`}
         </div>
         <button style={btn} onClick={()=>setShowRules(true)}>Rules</button>
         <button style={btn} onClick={onMenu}>Menu</button>
@@ -1071,13 +1111,13 @@ function GameScreen({ playerRole, onEnd, onMenu }) {
             </div>
             <p style={{ fontFamily:F.display, fontStyle:'italic', fontSize:13, lineHeight:1.5, color:HX.inkSoft, marginTop:6 }}>
               {playerRole === 'M'
-                ? 'You are Muththadiya. Keep your opponent breathing — block their last move and you forfeit.'
+                ? 'You are Muththadiya. Keep your opponent breathing - block their last move and you forfeit.'
                 : 'You are Piththadiya. You cannot lose by being blocked. Fewer pieces, but the safer role.'}
             </p>
           </div>
         </div>
 
-        {/* CENTER — BOARD */}
+        {/* CENTER - BOARD */}
         <div style={{ display:'flex', flexDirection:'column', alignItems:'center',
             padding:'20px 24px 24px', background:HX.paper, overflow:'auto' }}>
 
@@ -1131,14 +1171,14 @@ function GameScreen({ playerRole, onEnd, onMenu }) {
             if (depathTo) return (
               <div style={{ marginTop:10, fontFamily:F.mono, fontSize:10, letterSpacing:'1.5px',
                   textTransform:'uppercase', color:HX.terra }}>
-                ◆ Depath Padima · දෙපාම පැදීම detected
+                ◆ Depath Padima - දෙපාම පැදීම detected
               </div>
             );
             return null;
           })()}
         </div>
 
-        {/* RIGHT RAIL — move log */}
+        {/* RIGHT RAIL - move log */}
         <div style={{ background:HX.paperLo, borderLeft:`1px solid ${HX.rule}`,
             padding:22, display:'flex', flexDirection:'column', overflowY:'auto' }}>
           <div style={{ fontFamily:F.mono, fontSize:10, letterSpacing:'2px', textTransform:'uppercase', color:HX.muted }}>
@@ -1207,7 +1247,7 @@ function PlayerCard({ name, sinhala, isM, pieces, captured, left, active, phase,
           <div style={{ fontFamily:F.display, fontSize:20, fontWeight:500, lineHeight:1 }}>{name}</div>
           <div style={{ fontFamily:F.sinhala, fontSize:11, marginTop:3,
               color: active ? 'rgba(244,237,224,0.6)' : HX.muted }}>
-            {sinhala}{you ? ' · you' : ' · ai'}
+            {sinhala}{you ? ' - you' : ' - ai'}
           </div>
         </div>
         {active && !thinking && (
@@ -1226,7 +1266,7 @@ function PlayerCard({ name, sinhala, isM, pieces, captured, left, active, phase,
         color: active ? 'rgba(244,237,224,0.55)' : HX.muted,
       }}>
         <span>{phase===1 ? `${left} to place` : `${pieces} on board`}</span>
-        <span>cap · {captured}</span>
+        <span>cap - {captured}</span>
       </div>
     </div>
   );
@@ -1245,7 +1285,7 @@ function OverScreen({ result, onPlay, onMenu }) {
       <div style={{ padding:'60px 80px', maxWidth:900, margin:'0 auto' }} className="fade-up">
         <div style={{ fontFamily:F.mono, fontSize:11, letterSpacing:'2px', textTransform:'uppercase',
             color:HX.muted }}>
-          Game over · {result.moves} moves
+          Game over - {result.moves} moves
         </div>
         <h2 style={{ fontFamily:F.display, fontSize:'clamp(52px,7vw,96px)', fontWeight:400,
             letterSpacing:-2, lineHeight:0.95, marginTop:14, color:HX.ink }}>
