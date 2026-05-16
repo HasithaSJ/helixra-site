@@ -70,12 +70,12 @@ body{
   position: relative;
 }
 
-/* MASTER BACKGROUND LAYER GRAVITY HOOKS */
+/* MASTER BACKGROUND VECTOR LAYERING */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: -2; /* Pushed to baseline absolute back canvas */
+  z-index: -2; 
   background-image: url("./assets/img/bg-pattern.jpg"); 
   background-repeat: no-repeat; 
   background-size: cover;        
@@ -87,7 +87,7 @@ body::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: -1; /* Pushed beneath the content view layer so elements stay sharp and rich */
+  z-index: -1; 
   background: linear-gradient(
     to bottom,
     rgba(11, 15, 25, 0.76) 0%,
@@ -176,7 +176,6 @@ h1,h2,h3,h4{font-family:"Abril Fatface",serif!important;font-weight:400;color:#f
   flex-shrink:0;
 }
 
-/* DECORATIVE SEED ELEMENT WRAPPER FOR MOBILE VIEWS */
 .mobile-seed-divider-strip {
   display: none;
   justify-content: center;
@@ -186,7 +185,7 @@ h1,h2,h3,h4{font-family:"Abril Fatface",serif!important;font-weight:400;color:#f
   width: 100%;
   max-width: 400px;
   position: relative;
-  z-index: 10; /* Pulls seeds inside stacked phone screens in front of dark gradients safely */
+  z-index: 10;
 }
 
 @media(max-width:1024px){
@@ -633,7 +632,7 @@ function App(){
         </div>
       </div>
 
-      {/* HORIZONTAL MOBILE SEED CONSTALLATION STRIP */}
+      {/* HORIZONTAL MOBILE SEED CONFIGURATION STRIP */}
       <div className="mobile-seed-divider-strip">
         <Seed size={18} rotate={15} delay={0} />
         <div style={{width:"45px",height:"1px",background:"linear-gradient(to right, transparent, rgba(225,175,83,0.25), transparent)"}}/>
@@ -650,7 +649,7 @@ function App(){
         
         <div style={{display:"flex",flexDirection:"column",gap:"1.8rem"}}>
           <div style={{background:"linear-gradient(135deg, rgba(17,24,39,0.4) 0%, rgba(13,21,39,0.4) 100%)",backdropFilter:"blur(1px)",borderRadius:20,padding:"2.5rem",border:`2px solid ${amberMid}`,boxShadow:"0 15px 40px rgba(0,0,0,0.4)",display:"flex",gap:24,alignItems:"center",flexWrap:"wrap"}}>
-            <div style={{flexShrink:0,width:80,height:80,borderRadius:12,background:#0b0f19,border:"1px solid rgba(225,175,83,0.5)",display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",padding:8,boxShadow:"0 8px 24px rgba(225,175,83,0.15)"}}>
+            <div style={{flexShrink:0,width:80,height:80,borderRadius:12,background:"#0b0f19",border:"1px solid rgba(225,175,83,0.5)",display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",padding:8,boxShadow:"0 8px 24px rgba(225,175,83,0.15)"}}>
               <img src="./assets/img/nia-logo.png" alt="National Innovation Agency Logo" style={{width:"100%",height:"100%",objectFit:"contain"}}
                 onError={e=>{e.target.outerHTML=`<div style="font-family:monospace;font-weight:700;font-size:1.1rem;color:#e1af53">NIA</div>`;}}/>
             </div>
@@ -741,7 +740,7 @@ function App(){
           
           <div style={{position:"absolute",zIndex:10,display:"flex",alignItems:"center",justifyContent:"center"}}>
             <img src="./assets/img/helixra-logo.png" alt="Helixra Core" 
-              style={{width:"120px",height:"auto",objectFit:"contain",filter:"drop-shadow(0 4px 24px rgba(225,175,83,0.25))"}}
+              style={{width:"230px",height:"auto",objectFit:"contain",filter:"drop-shadow(0 4px 24px rgba(225,175,83,0.25))"}}
               onError={e=>{e.target.style.display="none";}}/>
           </div>
 
@@ -874,7 +873,7 @@ function App(){
               <div style={{background:"rgba(8,12,20,0.40)",backdropFilter:"blur(1px)",borderRadius:16,padding:"2.2rem 2rem",border:"1px solid rgba(255,255,255,0.04)",boxShadow:"0 10px 30px rgba(0,0,0,0.2)"}}>
                 <p style={{fontFamily:"monospace",fontSize:"0.65rem",letterSpacing:"0.15em",color:amberMid,margin:"0 0 24px",fontWeight:700,textTransform:"uppercase"}}>STUDIO PRINCIPAL ARCHITECTS</p>
                 
-                {/* UX Fix: Points photo target folders straight to plural directory mapping rules natively below */}
+                {/* Fixed Local Plural Folder Paths below for Principal Architects */}
                 <div style={{display:"flex",gap:20,alignItems:"start",marginBottom:24,borderBottom:"1px solid rgba(255,255,255,0.05)",paddingBottom:20}}>
                   <div className="founder-img-frame" style={{boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
                     <img src="./assets/images/hasitha.png" alt="Hasitha Jayathilaka" style={{width:"100%",height:"100%",objectFit:"cover"}}
