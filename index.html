@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Helixra™ — Ancient Worlds. Playable Futures.</title>
+<title>Helixra™ - Ancient Worlds. Playable Futures.</title>
 <meta name="description" content="A playable archive of Sri Lanka's traditional games, safeguarded for humanity through verified research, community consultation, and responsible technology."/>
-<meta property="og:title" content="Helixra™ — Ancient Worlds. Playable Futures."/>
+<meta property="og:title" content="Helixra™ - Ancient Worlds. Playable Futures."/>
 <meta property="og:description" content="A playable archive of Sri Lanka's traditional games, safeguarded for humanity."/>
 <meta property="og:image" content="https://helixra.art/assets/img/helixra-logo.png"/>
 <meta property="og:type" content="website"/>
@@ -13,10 +13,10 @@
 <meta property="og:site_name" content="Helixra"/>
 <meta property="og:locale" content="en_US"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Helixra™ — Ancient Worlds. Playable Futures."/>
+<meta name="twitter:title" content="Helixra™ - Ancient Worlds. Playable Futures."/>
 <meta name="twitter:description" content="A playable archive of Sri Lanka's traditional games, safeguarded for humanity."/>
 <meta name="twitter:image" content="https://helixra.art/assets/img/helixra-logo.png"/>
-<meta name="keywords" content="Olinda Keliya, Sri Lankan games, ancient board games, Mancala, Sri Lanka, Helixra, Yellow House Productions, cultural heritage games, traditional Sri Lankan board games"/>
+<meta name="keywords" content="Olinda Keliya, ඔළිඳ කෙළිය, Sri Lankan games, ancient board games, Mancala, Sri Lanka, Helixra, Yellow House Productions, cultural heritage games, traditional Sri Lankan board games, Nerenchi, නෙරෙංචි"/>
 <meta name="author" content="Yellow House Productions Pvt Ltd"/>
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large"/>
 <link rel="canonical" href="https://helixra.art/"/>
@@ -57,79 +57,109 @@
 <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:"Lora",Georgia,serif;}
-h1,h2,h3,h4{font-family:"Abril Fatface",serif!important}
+body{
+  margin:0;
+  font-family:"Inter",sans-serif;
+  background-color:#0b0f19;
+  color:#f3f4f6;
+  -webkit-font-smoothing:antialiased;
+  /* Fixed Contrast Background Pattern - Kundirakkan Vector Framework */
+  background-image:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04' fill-rule='evenodd'%3E%3Cpath d='M0 0h40v40H0V0zm40 40h40v40H40V40zm0-40h2v2h-2V0zm0 4h2v2h-2V4zm0 4h2v2h-2V8zm0 12h2v2h-2v-2zm0 12h2v2h-2v-2zm4 4h2v2h-2v-2zm4 0h2v2h-2v-2zm12 0h2v2h-2v-2zm12 0h2v2h-2v-2zM0 40h2v2H0v-2zm0 4h2v2H0v-2zm0 4h2v2H0v-2zm0 12h2v2H0v-2zm0 12h2v2H0v-2zm4-28h2v2H4v-2zm4 0h2v2H8v-2zm12 0h2v2h-2v-2zm12 0h2v2h-2v-2z'/%3E%3C/g%3E%3C/svg%3E");
+}
+h1,h2,h3,h4{font-family:"Abril Fatface",serif!important;font-weight:400;color:#ffffff;letter-spacing:0.02em;}
 
 @keyframes floatSeed{
   0%  {transform:rotate(28deg) translateY(0);}
-  50% {transform:rotate(24deg) translateY(-5px);}
+  50% {transform:rotate(24deg) translateY(-6px);}
   100%{transform:rotate(28deg) translateY(0);}
 }
 @keyframes ticker{
   0%  {transform:translateX(0);}
   100%{transform:translateX(-50%);}
 }
-.ticker-inner{animation:ticker 34s linear infinite;display:inline-block;white-space:nowrap;}
+.ticker-inner{animation:ticker 40s linear infinite;display:inline-block;white-space:nowrap;}
 
-/* ── 3-col layout: [left | seed spine | right] ── */
 .seed-pair{
   display:grid;
-  grid-template-columns:1fr 70px 1fr;
-  align-items:stretch;
-  max-width:1100px;
+  grid-template-columns:1fr 80px 1fr;
+  align-items:center;
+  max-width:1200px;
   margin:0 auto;
-  padding:0 2rem;
+  padding:6rem 2rem;
 }
-.fw{max-width:1100px;margin:0 auto;padding:4rem 2rem;}
+.fw{max-width:1200px;margin:0 auto;padding:6rem 2rem;}
 
-/* responsive grids */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;}
-.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
-.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;}
 
 .sdg-mob{display:none;}
-.sdg-orbit{display:block;}
+.sdg-orbit{display:flex;}
+
+.visual-frame{
+  background:#0e1422;
+  border:1px solid rgba(225,175,83,0.15);
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 12px 36px rgba(0,0,0,0.4);
+  position:relative;
+  transition:border-color 0.3s ease;
+}
+.visual-frame:hover{border-color:rgba(225,175,83,0.35);}
+.game-img-placeholder{width:100%;height:100%;object-fit:cover;opacity:0.85;transition:opacity 0.3s;}
+.game-img-placeholder:hover{opacity:1;}
+
+.founder-img-frame {
+  width:90px;
+  height:90px;
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid rgba(225,175,83,0.2);
+  background:#080c14;
+  flex-shrink:0;
+}
+
+@media(max-width:1024px){
+  .g3{grid-template-columns:1fr 1fr!important;gap:1.5rem;}
+}
 
 @media(max-width:900px){
-  .seed-pair{grid-template-columns:1fr!important;padding:0 1.2rem;}
+  .seed-pair{grid-template-columns:1fr!important;padding:4rem 1.5rem;gap:3rem;}
   .spine-col{display:none!important;}
-  .fw{padding:3rem 1.2rem;}
-  .g2,.g3,.g4{grid-template-columns:1fr!important;}
+  .fw{padding:4rem 1.5rem;}
+  .g2,.g3,.g4{grid-template-columns:1fr!important;gap:1.5rem;}
   .nav-links-d{display:none!important;}
   .sdg-orbit{display:none!important;}
   .sdg-mob{display:flex!important;}
-  .footer-g{grid-template-columns:1fr 1fr!important;}
+  .footer-g{grid-template-columns:1fr 1fr!important;gap:2rem;}
 }
 @media(max-width:560px){
   .footer-g{grid-template-columns:1fr!important;}
-  .hero-h{font-size:2.2rem!important;}
-  .fw{padding:2.5rem 1rem;}
+  .hero-h{font-size:2.8rem!important;}
+  .fw{padding:3rem 1rem;}
 }
 
-/* scroll reveal */
-.sr{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
+.sr{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(0.16, 1, 0.3, 1),transform .8s cubic-bezier(0.16, 1, 0.3, 1);}
 .sr.vis{opacity:1;transform:none;}
 
-/* WhatsApp float */
 .wa-float{
-  position:fixed;bottom:24px;right:24px;z-index:400;
-  width:52px;height:52px;border-radius:50%;
-  background:#25d366;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 18px rgba(0,0,0,0.3);text-decoration:none;
-  transition:transform .2s,box-shadow .2s;
+  position:fixed;bottom:28px;right:28px;z-index:400;
+  width:56px;height:56px;border-radius:50%;
+  background:#22c55e;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);text-decoration:none;
+  transition:transform .3s cubic-bezier(0.34, 1.56, 0.64, 1),box-shadow .3s;
 }
-.wa-float:hover{transform:scale(1.08);box-shadow:0 6px 24px rgba(0,0,0,0.35);}
-.wa-float svg{width:28px;height:28px;}
+.wa-float:hover{transform:scale(1.1);box-shadow:0 12px 28px rgba(34,197,94,0.3);}
+.wa-float svg{width:26px;height:26px;}
 </style>
 </head>
 <body>
 <div id="root"></div>
 
-<!-- Netlify form detection (hidden) -->
 <form name="helixra-subscribe" data-netlify="true" hidden>
   <input name="form-name" value="helixra-subscribe"/>
   <input name="name"/>
@@ -139,9 +169,9 @@ h1,h2,h3,h4{font-family:"Abril Fatface",serif!important}
 
 <script type="text/babel">
 
-/* ══ LOGO ══════════════════════════════════════════════════════════════════ */
+/* ══ LOGO VECTOR COMPONENT ═════════════════════════════════════════════════ */
 const HelixraLogo=({size=40,dark=false})=>{
-  const c=dark?"#2b1205":"#e1af53",c2=dark?"#6b2800":"#f0a040";
+  const c=dark?"#111827":"#e1af53",c2=dark?"#374151":"#f0a040";
   return(
     <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
       <circle cx="20" cy="20" r="19" stroke={c} strokeWidth="1.2" opacity="0.25"/>
@@ -151,107 +181,129 @@ const HelixraLogo=({size=40,dark=false})=>{
         stroke={c2} strokeWidth="1.7" strokeLinecap="round" fill="none" opacity="0.75"/>
       <circle cx="20" cy="20" r="3" fill={c}/>
       <circle cx="20" cy="9"  r="2"   fill={c} opacity="0.9"/>
-      <circle cx="31" cy="20" r="1.7" fill="#cf2b2b" opacity="0.85"/>
+      <circle cx="31" cy="20" r="1.7" fill="#ef4444" opacity="0.85"/>
       <circle cx="20" cy="31" r="1.7" fill={c2} opacity="0.65"/>
       <circle cx="12" cy="12" r="1.3" fill={c} opacity="0.5"/>
     </svg>
   );
 };
 
-/* ══ SEED ═══════════════════════════════════════════════════════════════════ */
-const Seed=({size=26,rotate=28,delay=0})=>(
-  <div style={{position:"relative",width:size,height:size*1.28,borderRadius:"50%",
-    background:"radial-gradient(circle at 35% 30%,#e84040,#cf2b2b 50%,#8b1010)",
-    border:"2.5px solid #2b1205",flexShrink:0,
-    boxShadow:"0 3px 10px rgba(0,0,0,0.3),inset 0 -2px 4px rgba(0,0,0,0.18)",
+/* ══ REALISTIC ASYMMETRICAL OLINDA SEED (SVG VECTOR EXECUTION) ════════════ */
+const Seed=({size=24,rotate=28,delay=0})=>(
+  <div style={{
+    position:"relative",
+    width:size,
+    height:size*1.3,
+    flexShrink:0,
     transform:`rotate(${rotate}deg)`,
-    animation:`floatSeed 4s ease-in-out infinite`,animationDelay:`${delay}s`}}>
-    <div style={{position:"absolute",top:3,left:3,width:9,height:9,
-      borderRadius:"50%",background:"rgba(255,255,255,0.5)",filter:"blur(1px)"}}/>
-    <div style={{position:"absolute",bottom:3,right:3,width:6,height:6,
-      borderRadius:"50%",background:"rgba(0,0,0,0.22)"}}/>
+    animation:`floatSeed 4s ease-in-out infinite`,
+    animationDelay:`${delay}s`,
+    filter:"drop-shadow(0 4px 8px rgba(0,0,0,0.5))"
+  }}>
+    <svg width="100%" height="100%" viewBox="0 0 30 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Seed Base Shadow/Gloss Layer */}
+      <ellipse cx="15" cy="20" rx="14" ry="19" fill="url(#olindaGloss)"/>
+      {/* Accurate Asymmetrical Black Spot Matrix Layer */}
+      <path d="M14 3 C22 4 28 11 28 20 C28 29 22 36 14 37 C18 33 20 27 20 20 C20 13 18 7 14 3 Z" fill="#0c0e12"/>
+      <ellipse cx="20" cy="20" rx="4" ry="9" fill="#1a1d24" opacity="0.4"/>
+      {/* Photorealistic 3D Specular Highlight Loop */}
+      <ellipse cx="9" cy="12" rx="3" ry="5" fill="#ffffff" opacity="0.45" transform="rotate(-15 9 12)"/>
+      <circle cx="7" cy="8" r="1" fill="#ffffff" opacity="0.6"/>
+      
+      <defs>
+        <radialGradient id="olindaGloss" cx="35%" cy="30%" r="65%" fx="35%" fy="30%">
+          <stop offset="0%" stopColor="#ff4d4d"/>
+          <stop offset="55%" stopColor="#d61c1c"/>
+          <stop offset="85%" stopColor="#9e0c0c"/>
+          <stop offset="100%" stopColor="#5c0303"/>
+        </radialGradient>
+      </defs>
+    </svg>
   </div>
 );
 
-/* ══ SEED SPINE — sits in 70px centre column, fills the row height ════════ */
-const SeedSpine=({count=14,showPod=false})=>(
+/* ══ CONNECTIVE SPINAL MATRIX & TEXTURED SEED POD ═════════════════════════ */
+const SeedSpine=({count=10,showPod=false})=>(
   <div className="spine-col" style={{display:"flex",flexDirection:"column",
-    alignItems:"center",position:"relative",zIndex:2}}>
+    alignItems:"center",position:"relative",zIndex:2,height:"100%"}}>
     {showPod&&(
-      <div style={{position:"relative",width:58,height:170,overflow:"hidden",flexShrink:0}}>
-        <div style={{position:"absolute",inset:0,
-          clipPath:"polygon(50% 0%,78% 8%,92% 28%,88% 56%,72% 82%,50% 100%,28% 82%,12% 56%,8% 28%,22% 8%)",
-          background:"linear-gradient(to bottom,#7a3d1b,#4b1d0a 60%,#2a0f05)"}}/>
-        <div style={{position:"absolute",left:"50%",top:10,transform:"translateX(-50%)",
-          width:22,height:150,borderRadius:999,background:"rgba(43,18,5,0.45)"}}/>
-        {[0,1,2,3].map(i=>(
+      <div style={{position:"relative",width:56,height:180,overflow:"visible",flexShrink:0,marginBottom:20}}>
+        {/* Exterior Textured Husk Pod */}
+        <div style={{
+          position:"absolute",inset:0,
+          clipPath:"polygon(50% 0%, 82% 10%, 96% 30%, 90% 60%, 74% 85%, 50% 100%, 26% 85%, 10% 60%, 4% 30%, 18% 10%)",
+          background:"linear-gradient(to bottom, #422213, #261107 50%, #120500)",
+          border:"1px solid rgba(255,255,255,0.04)",
+          boxShadow:"0 10px 24px rgba(0,0,0,0.6)"
+        }}/>
+        {/* Deep Core Cavity Shadow Layer */}
+        <div style={{position:"absolute",left:"50%",top:12,transform:"translateX(-50%)",
+          width:22,height:155,borderRadius:999,background:"linear-gradient(to bottom, #1a0a03, #000000)"}}/>
+        {/* Nested Synchronized Olinda Seeds inside the Pod */}
+        {[0,1,2,3,4].map(i=>(
           <div key={i} style={{position:"absolute",left:"50%",
-            transform:"translateX(-50%) rotate(28deg)",
-            width:28,height:34,borderRadius:"50%",
-            background:"radial-gradient(circle at 35% 30%,#e84040,#cf2b2b 50%,#8b1010)",
-            border:"2px solid #2b1205",top:14+i*34}}>
-            <div style={{position:"absolute",top:3,left:3,width:7,height:7,
-              borderRadius:"50%",background:"rgba(255,255,255,0.45)",filter:"blur(1px)"}}/>
+            transform:"translateX(-50%) rotate(18deg)",
+            width:22,height:28,top:20+i*26}}>
+            <Seed size={20} rotate={0} delay={i*0.1}/>
           </div>
         ))}
       </div>
     )}
-    <div style={{flex:1,width:1.5,background:"rgba(122,61,27,0.2)",
+    <div style={{flex:1,width:1,background:"linear-gradient(to bottom, transparent, rgba(225,175,83,0.15) 15%, rgba(225,175,83,0.15) 85%, transparent)",
       display:"flex",flexDirection:"column",alignItems:"center",
-      justifyContent:"space-evenly",padding:"8px 0",minHeight:80}}>
+      justifyContent:"space-evenly",padding:"16px 0",minHeight:120}}>
       {Array.from({length:count}).map((_,i)=>(
-        <Seed key={i} size={22+(i%3===1?5:0)} rotate={i%2===0?28:-22} delay={i*0.13}/>
+        <Seed key={i} size={18+(i%3===1?4:0)} rotate={i%2===0?24:-18} delay={i*0.2}/>
       ))}
     </div>
   </div>
 );
 
-/* ══ MINI SPINE — tight connector between full-width sections ════════════== */
-const MiniSpine=({count=4})=>(
-  <div style={{display:"flex",flexDirection:"column",alignItems:"center",zIndex:2}}>
+const MiniSpine=({count=3})=>(
+  <div style={{display:"flex",flexDirection:"column",alignItems:"center",margin:"2rem 0",zIndex:2,opacity:0.4}}>
     {Array.from({length:count}).map((_,i)=>(
       <div key={i} style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
-        <div style={{width:1.5,height:16,background:"rgba(122,61,27,0.2)"}}/>
-        <Seed size={20+(i===Math.floor(count/2)?5:0)} rotate={i%2===0?28:-22} delay={i*0.14}/>
+        <div style={{width:1,height:20,background:"rgba(225,175,83,0.15)"}}/>
+        <Seed size={16} rotate={i%2===0?20:-15} delay={i*0.15}/>
       </div>
     ))}
-    <div style={{width:1.5,height:16,background:"rgba(122,61,27,0.2)"}}/>
+    <div style={{width:1,height:20,background:"rgba(225,175,83,0.15)"}}/>
   </div>
 );
 
-/* ══ DATA ═══════════════════════════════════════════════════════════════════ */
+/* ══ SYSTEM REPOSITORY TOKENS ══════════════════════════════════════════════ */
 const VALUES=[
-  {num:"01",title:"Authenticity",  si:"සත්‍යතාව",       desc:"Sources cited. Specialists named. No claim without evidence.",         c:"#fca5a5"},
-  {num:"02",title:"Continuity",    si:"අඛණ්ඩතාව",       desc:"Living traditions, not museum relics. Heritage in motion.",            c:"#f9a8d4"},
-  {num:"03",title:"Consultation",  si:"සංවාදය",         desc:"Communities lead. We document, support, and step back.",               c:"#6ee7b7"},
-  {num:"04",title:"Attribution",   si:"ආරෝපණය",         desc:"Names stay attached to knowledge. Always, without exception.",         c:"#5eead4"},
-  {num:"05",title:"Accessibility", si:"ප්‍රවේශ්‍යතාව", desc:"Free, multilingual, forever. No paywall on heritage.",                c:"#93c5fd"},
-  {num:"06",title:"Stewardship",   si:"භාරකරුත්වය",     desc:"A custodian, not an owner. We hold; we do not claim.",                c:"#86efac"},
-  {num:"07",title:"Reciprocity",   si:"ප්‍රතිලාභීත්වය", desc:"Value flows back to source communities, not outward to us.",          c:"#fde047"},
-  {num:"08",title:"Rigour",        si:"නිරවද්‍යතාව",    desc:"Peer-reviewed. Cross-referenced. No cutting corners.",                c:"#fcd34d"},
-  {num:"09",title:"Joy",           si:"ප්‍රීතිය",       desc:"A game is meant to be played. Heritage belongs to delight.",          c:"#bfdbfe"},
+  {num:"01",title:"Authenticity",  si:"සත්‍යතාව",       desc:"Sources cited. Specialists named. No claim without raw empirical evidence.", c:"rgba(239,68,68,0.04)"},
+  {num:"02",title:"Continuity",    si:"අඛණ්ඩතාව",       desc:"Living traditions, not sterile museum relics. Ancient heritage in fluid motion.", c:"rgba(244,63,94,0.04)"},
+  {num:"03",title:"Consultation",  si:"සංවාදය",         desc:"Source communities lead. We document, build the architecture, and safely step back.", c:"rgba(16,185,129,0.04)"},
+  {num:"04",title:"Attribution",   si:"ආරෝපණය",         desc:"Individual and regional lineages stay attached to structural knowledge.", c:"rgba(20,184,166,0.04)"},
+  {num:"05",title:"Accessibility", si:"ප්‍රවේශ්‍යතාව", desc:"Free, web-native, multi-dialect systems forever. No capital barriers on heritage.", c:"rgba(59,130,246,0.04)"},
+  {num:"06",title:"Stewardship",   si:"භාරකරුත්වය",     desc:"Operating strictly as a strategic custodian. We protect; we do not own.", c:"rgba(34,197,94,0.04)"},
+  {num:"07",title:"Reciprocity",   si:"ප්‍රතිලාභීත්වය", desc:"Value distribution loops directly back to original rural communities, not outside parties.", c:"rgba(234,179,8,0.04)"},
+  {num:"08",title:"Rigour",        si:"නිරවද්‍යතාව",    desc:"Peer-reviewed system schemas. mico-ethnographies cross-referenced deeply.", c:"rgba(245,158,11,0.04)"},
+  {num:"09",title:"Joy",           si:"ප්‍රීතිය",       desc:"A system is kept alive when it creates play. Heritage belongs to delight.", c:"rgba(99,102,241,0.04)"},
 ];
 const SDG_GOALS=[
-  {num:"SDG 4", label:"Quality Education",         bg:"#C5192D",fg:"#fff"},
-  {num:"SDG 5", label:"Gender Equality",            bg:"#FF3A21",fg:"#fff"},
-  {num:"SDG 8", label:"Decent Work",                bg:"#A21942",fg:"#fff"},
-  {num:"SDG 10",label:"Reduced Inequalities",       bg:"#DD1367",fg:"#fff"},
-  {num:"SDG 11",label:"Sustainable Cities · 11.4",  bg:"#FD9D24",fg:"#2b1205"},
-  {num:"SDG 12",label:"Responsible Consumption",    bg:"#BF8B2E",fg:"#fff"},
-  {num:"SDG 16",label:"Peace & Institutions",       bg:"#00689D",fg:"#fff"},
-  {num:"SDG 17",label:"Partnerships",               bg:"#19486A",fg:"#fff"},
+  {num:"SDG 4", label:"Quality Education",         bg:"#1e1b1c",border:"#C5192D"},
+  {num:"SDG 5", label:"Gender Equality",            bg:"#1e1b1c",border:"#FF3A21"},
+  {num:"SDG 8", label:"Decent Work",                bg:"#1e1b1c",border:"#A21942"},
+  {num:"SDG 10",label:"Reduced Inequalities",       bg:"#1e1b1c",border:"#DD1367"},
+  {num:"SDG 11",label:"Sustainable Cities · 11.4",  bg:"#1e1b1c",border:"#FD9D24"},
+  {num:"SDG 12",label:"Responsible Consumption",    bg:"#1e1b1c",border:"#BF8B2E"},
+  {num:"SDG 16",label:"Peace & Institutions",       bg:"#1e1b1c",border:"#00689D"},
+  {num:"SDG 17",label:"Partnerships",               bg:"#1e1b1c",border:"#19486A"},
 ];
 const IMPACT=[
-  {label:"2 games live",                 c:"#fca5a5"},
-  {label:"14 documented rule sets",      c:"#fdba74"},
-  {label:"37 primary sources consulted", c:"#fde047"},
-  {label:"6 countries with players",     c:"#86efac"},
-  {label:"9 specialists engaged",        c:"#67e8f9"},
+  {label:"2 traditional engines live"},
+  {label:"14 authenticated rule configurations"},
+  {label:"37 deep historical sources indexed"},
+  {label:"6 cross-continental player bases"},
+  {label:"9 academic specialists engaged"},
 ];
 
-/* ══ SUBSCRIBE (Netlify) ════════════════════════════════════════════════════ */
+/* ══ SYSTEM SUBSCRIPTION MODULE ════════════════════════════════════════════ */
 function Subscribe(){
-  const amber="#c8862e",amberMid="#e1af53",maroon="#2b1205";
+  const amberMid="#e1af53", charcoalBg="#111827", cardBorder="rgba(225,175,83,0.15)";
   const [done,setDone]=React.useState(false);
   const [path,setPath]=React.useState('');
   async function submit(e){
@@ -266,573 +318,600 @@ function Subscribe(){
     setDone(true);
   }
   return(
-    <div style={{background:maroon,borderRadius:32,padding:"3rem 2.5rem",
-      textAlign:"center",boxShadow:"0 12px 44px rgba(43,18,5,0.22)"}}>
-      <span style={{fontFamily:"monospace",fontSize:"0.58rem",letterSpacing:"0.2em",
-        textTransform:"uppercase",color:"rgba(225,175,83,0.48)",display:"block",marginBottom:9}}>
-        Stay With the Archive
+    <div style={{background:charcoalBg,borderRadius:24,padding:"4rem 3rem",
+      textAlign:"center",border:`1px solid ${cardBorder}`,boxShadow:"0 20px 40px rgba(0,0,0,0.3)"}}>
+      <span style={{fontFamily:"monospace",fontSize:"0.65rem",letterSpacing:"0.25em",
+        textTransform:"uppercase",color:amberMid,opacity:0.6,display:"block",marginBottom:12}}>
+        STAY LINKED WITH THE ARCHIVE
       </span>
-      <h2 style={{fontFamily:"Abril Fatface,serif",fontSize:"clamp(1.9rem,3.5vw,2.7rem)",
-        color:amberMid,marginBottom:9}}>Sow Your Seed.</h2>
-      <p style={{color:"rgba(225,175,83,0.63)",fontStyle:"italic",marginBottom:24,fontSize:"0.9rem"}}>
-        Quarterly notes: new chapters, specialist interviews, methodology updates. No noise.
+      <h2 style={{fontSize:"clamp(2rem,4vw,2.8rem)",color:"#ffffff",marginBottom:12,marginTop:0}}>Sow Your Seed.</h2>
+      <p style={{color:"#94a3b8",maxWidth:540,margin:"0 auto 32px",lineHeight:1.6,fontSize:"0.95rem"}}>
+        Quarterly diagnostic dispatches: raw engineering logs, ethnographic files, methodology verification. Minimal footprint.
       </p>
       {done?(
-        <div style={{color:amberMid,fontSize:"1.1rem",fontStyle:"italic",padding:"1rem"}}>
-          🌱 The seeds have been sown. We'll reach out when the next chapter is ready.
+        <div style={{color:amberMid,fontSize:"1.1rem",fontWeight:500,padding:"1rem"}}>
+          🌱 Matrix link initialized. We'll synchronize when the next deployment ships.
         </div>
       ):(
-        <form onSubmit={submit}>
-          <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap",justifyContent:"center"}}>
-            <input name="name" type="text" placeholder="Your name..."
-              style={{background:"rgba(225,175,83,0.07)",border:"1.5px solid rgba(225,175,83,0.2)",
-                borderRadius:999,padding:"0.75rem 1.3rem",color:amberMid,fontFamily:"monospace",
-                fontSize:"0.78rem",outline:"none",flex:1,minWidth:160}}/>
-            <input name="email" type="email" placeholder="your@email.com" required
-              style={{background:"rgba(225,175,83,0.07)",border:"1.5px solid rgba(225,175,83,0.2)",
-                borderRadius:999,padding:"0.75rem 1.3rem",color:amberMid,fontFamily:"monospace",
-                fontSize:"0.78rem",outline:"none",flex:1.6,minWidth:200}}/>
+        <form onSubmit={submit} style={{maxWidth:600,margin:"0 auto"}}>
+          <div style={{display:"flex",gap:12,marginBottom:20,flexWrap:"wrap"}}>
+            <input name="name" type="text" placeholder="Identity name"
+              style={{background:"#0b0f19",border:"1px solid rgba(255,255,255,0.1)",
+                borderRadius:8,padding:"0.85rem 1.2rem",color:"#ffffff",
+                fontSize:"0.85rem",outline:"none",flex:1,minWidth:180}}/>
+            <input name="email" type="email" placeholder="secure@network.com" required
+              style={{background:"#0b0f19",border:"1px solid rgba(255,255,255,0.1)",
+                borderRadius:8,padding:"0.85rem 1.2rem",color:"#ffffff",
+                fontSize:"0.85rem",outline:"none",flex:1.5,minWidth:220}}/>
           </div>
-          <div style={{marginBottom:16}}>
-            <p style={{fontFamily:"monospace",fontSize:"0.58rem",letterSpacing:"0.15em",
-              textTransform:"uppercase",color:"rgba(225,175,83,0.4)",marginBottom:8}}>Choose your path (optional)</p>
-            <div style={{display:"flex",gap:7,justifyContent:"center",flexWrap:"wrap"}}>
+          <div style={{marginBottom:28,textAlign:"left"}}>
+            <p style={{fontFamily:"monospace",fontSize:"0.6rem",letterSpacing:"0.15em",
+              textTransform:"uppercase",color:"#94a3b8",marginBottom:12,textAlign:"center"}}>Select Architectural Path (Optional)</p>
+            <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap"}}>
               {["🌿 Nature","⚑ Ritual","〜 Movement","◆ Strategy"].map(p=>(
                 <button key={p} type="button" onClick={()=>setPath(p)}
-                  style={{background:path===p?"rgba(225,175,83,0.25)":"rgba(225,175,83,0.07)",
-                    border:`1.5px solid ${path===p?"rgba(225,175,83,0.6)":"rgba(225,175,83,0.2)"}`,
-                    color:amberMid,borderRadius:999,padding:"0.4rem 1rem",
-                    fontFamily:"monospace",fontSize:"0.67rem",cursor:"pointer"}}>
+                  style={{background:path===p?"rgba(225,175,83,0.15)":"#0b0f19",
+                    border:`1px solid ${path===p?amberMid:"rgba(255,255,255,0.1)"}`,
+                    color:path===p?"#ffffff":amberMid,borderRadius:6,padding:"0.5rem 1.2rem",
+                    fontFamily:"monospace",fontSize:"0.72rem",cursor:"pointer"}}>
                   {p}
                 </button>
               ))}
             </div>
           </div>
           <button type="submit"
-            style={{background:amberMid,color:maroon,border:"none",
-              padding:"0.9rem 2.5rem",borderRadius:999,fontFamily:"monospace",
-              fontWeight:900,fontSize:"0.75rem",letterSpacing:"0.08em",
-              textTransform:"uppercase",cursor:"pointer"}}>
-            Sow Your Seed →
+            style={{background:amberMid,color:"#0b0f19",border:"none",
+              padding:"1rem 3rem",borderRadius:8,fontFamily:"monospace",
+              fontWeight:700,fontSize:"0.8rem",letterSpacing:"0.1em",
+              textTransform:"uppercase",cursor:"pointer",boxShadow:"0 4px 14px rgba(225,175,83,0.2)"}}>
+            Initialize Node Registration →
           </button>
-          <p style={{color:"rgba(225,175,83,0.3)",fontSize:"0.75rem",marginTop:10}}>
-            No spam. Unsubscribe any time.
-          </p>
         </form>
       )}
     </div>
   );
 }
 
-/* ══ APP ════════════════════════════════════════════════════════════════════ */
+/* ══ APPLICATION ARCHITECTURE CORE ════════════════════════════════════════ */
 function App(){
-  const amber="#c8862e",amberMid="#e1af53",maroon="#2b1205";
-  const tag={fontFamily:"monospace",fontSize:"0.62rem",letterSpacing:"0.2em",
-    textTransform:"uppercase",opacity:0.52,marginBottom:8,display:"block"};
-  const H2={fontFamily:"Abril Fatface,serif",fontSize:"clamp(2rem,3.2vw,2.9rem)",
-    lineHeight:1.1,marginBottom:"1rem"};
-  const card={background:"rgba(255,255,255,0.42)",borderRadius:20,
-    padding:"1.4rem 1.7rem",border:"1.5px solid rgba(43,18,5,0.1)",
-    boxShadow:"0 4px 20px rgba(43,18,5,0.07)"};
+  const amberMid="#e1af53", maroon="#0b0f19";
+  const tag={fontFamily:"monospace",fontSize:"0.65rem",letterSpacing:"0.2em",
+    textTransform:"uppercase",color:amberMid,fontWeight:600,marginBottom:12,display:"block"};
+  const H2={fontSize:"clamp(2rem,3.5vw,3.2rem)",lineHeight:1.15,marginTop:0,marginBottom:"1.5rem",color:"#ffffff"};
+  const card={background:"#111827",borderRadius:16,
+    padding:"2.2rem",border:"1px solid rgba(255,255,255,0.06)",
+    boxShadow:"0 10px 30px rgba(0,0,0,0.25)"};
 
   React.useEffect(()=>{
     const io=new IntersectionObserver(en=>{
       en.forEach(e=>{if(e.isIntersecting){e.target.classList.add("vis");io.unobserve(e.target);}});
-    },{threshold:0.07});
+    },{threshold:0.05});
     document.querySelectorAll(".sr").forEach(el=>io.observe(el));
     return()=>io.disconnect();
   },[]);
 
-  /* Game card renderer */
-  const GameCard=({ch,title,si,type,region,period,source,desc,bg,live=true})=>(
-    <div style={{background:bg,borderRadius:22,padding:"1.8rem",
-      border:"3px solid rgba(43,18,5,0.1)",boxShadow:"0 8px 28px rgba(43,18,5,0.1)"}}>
-      <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:12,flexWrap:"wrap"}}>
-        <span style={{fontFamily:"monospace",fontSize:"0.57rem",letterSpacing:"0.14em",textTransform:"uppercase",opacity:0.55}}>{ch}</span>
-        {live&&<span style={{background:"#166534",color:"#fff",fontFamily:"monospace",fontSize:"0.54rem",fontWeight:900,letterSpacing:"0.14em",textTransform:"uppercase",padding:"0.17rem 0.6rem",borderRadius:999}}>● Live</span>}
-        <span style={{border:"1px solid rgba(43,18,5,0.2)",fontFamily:"monospace",fontSize:"0.54rem",fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",padding:"0.17rem 0.45rem",borderRadius:4}}>{type}</span>
+  const GameCard=({ch,title,si,type,region,period,source,desc,imgPath,playUrl,live=true})=>(
+    <div style={{background:"#111827",borderRadius:20,padding:"2.5rem 2.2rem",
+      border:"1px solid rgba(255,255,255,0.07)",boxShadow:"0 15px 40px rgba(0,0,0,0.3)",height:"100%",display:"flex",flexDirection:"column"}}>
+      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20,flexWrap:"wrap"}}>
+        <span style={{fontFamily:"monospace",fontSize:"0.65rem",letterSpacing:"0.15em",textTransform:"uppercase",color:amberMid}}>{ch}</span>
+        {live?<span style={{background:"rgba(34,197,94,0.15)",color:"#4ade80",fontFamily:"monospace",fontSize:"0.6rem",fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",padding:"0.2rem 0.7rem",borderRadius:4,border:"1px solid rgba(74,222,128,0.2)"}}>● Live System</span>:
+              <span style={{background:"rgba(148,163,184,0.1)",color:"#94a3b8",fontFamily:"monospace",fontSize:"0.6rem",fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",padding:"0.2rem 0.7rem",borderRadius:4,border:"1px solid rgba(148,163,184,0.2)"}}>Locked Matrix</span>}
+        <span style={{background:"rgba(255,255,255,0.03)",color:"#f3f4f6",border:"1px solid rgba(255,255,255,0.1)",fontFamily:"monospace",fontSize:"0.6rem",padding:"0.2rem 0.6rem",borderRadius:4}}>{type}</span>
       </div>
-      <h3 style={{fontFamily:"Abril Fatface,serif",fontSize:"1.9rem",margin:"0 0 3px"}}>{title}</h3>
-      <p style={{color:"#cf2b2b",fontSize:"0.9rem",margin:"0 0 12px",opacity:0.85}}>{si}</p>
-      <div style={{background:"#f4d8a8",borderRadius:12,padding:11,marginBottom:12,boxShadow:"inset 0 2px 8px rgba(43,18,5,0.1)"}}>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(6,1fr)",gap:6}}>
-          {Array.from({length:12}).map((_,j)=>(
-            <div key={j} style={{aspectRatio:"1",borderRadius:"50%",
-              background:j%4===0?"#cf2b2b":j%3===0?"#c8862e":"#fde8c0",
-              border:"1.5px solid rgba(43,18,5,0.14)"}}/>
-          ))}
+      
+      <div className="visual-frame" style={{width:"100%",height:190,marginBottom:20}}>
+        <img src={imgPath} alt={title} className="game-img-placeholder"
+          onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
+        <div style={{display:"none",width:"100%",height:"100%",alignItems:"center",justifyContent:"center",color:"#475569",fontSize:"0.8rem",fontFamily:"monospace",background:"#080c14"}}>
+          [ SYSTEM ENGINE RENDER // PLUG {title.toUpperCase()} IMAGE ]
         </div>
       </div>
-      <p style={{fontSize:"0.8rem",lineHeight:1.62,opacity:0.82,marginBottom:12}}>{desc}</p>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6,marginBottom:16,fontSize:"0.7rem",opacity:0.7}}>
-        <div><strong style={{textTransform:"uppercase",letterSpacing:"0.09em",display:"block",marginBottom:1}}>Region</strong>{region}</div>
-        <div><strong style={{textTransform:"uppercase",letterSpacing:"0.09em",display:"block",marginBottom:1}}>Period</strong>{period}</div>
-        <div style={{gridColumn:"1/-1"}}><strong style={{textTransform:"uppercase",letterSpacing:"0.09em",display:"block",marginBottom:1}}>Source</strong>{source}</div>
+
+      <h3 style={{fontSize:"2.2rem",margin:"0 0 4px",color:"#ffffff"}}>{title}</h3>
+      <p style={{color:amberMid,fontSize:"1.05rem",margin:"0 0 20px",fontWeight:400}}>{si}</p>
+      
+      <p style={{fontSize:"0.92rem",lineHeight:1.7,color:"#94a3b8",marginBottom:24,flexGrow:1}}>{desc}</p>
+      
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:28,fontSize:"0.8rem",borderTop:"1px solid rgba(255,255,255,0.06)",paddingTop:16,color:"#94a3b8"}}>
+        <div><strong style={{textTransform:"uppercase",letterSpacing:"0.05em",color:"#ffffff",display:"block",marginBottom:4,fontSize:"0.7rem"}}>Spatial Coordinates</strong>{region}</div>
+        <div><strong style={{textTransform:"uppercase",letterSpacing:"0.05em",color:"#ffffff",display:"block",marginBottom:4,fontSize:"0.7rem"}}>Epoch Matrix</strong>{period}</div>
+        <div style={{gridColumn:"1/-1"}}><strong style={{textTransform:"uppercase",letterSpacing:"0.05em",color:"#ffffff",display:"block",marginBottom:4,fontSize:"0.7rem"}}>Empirical Provenance</strong>{source}</div>
       </div>
-      {live&&(
-        <a href="./play/" style={{display:"inline-block",background:maroon,color:amberMid,borderRadius:999,
-          padding:"0.65rem 1.6rem",fontFamily:"monospace",fontWeight:900,fontSize:"0.7rem",
-          textDecoration:"none",boxShadow:"0 4px 14px rgba(43,18,5,0.2)"}}>
-          Play Now →
+      {live?(
+        <a href={playUrl} style={{display:"block",textAlign:"center",background:amberMid,color:maroon,borderRadius:8,
+          padding:"0.9rem 2rem",fontFamily:"monospace",fontWeight:700,fontSize:"0.8rem",letterSpacing:"0.05em",
+          textDecoration:"none",boxShadow:"0 4px 12px rgba(225,175,83,0.15)"}}>
+          INITIALIZE SIMULATION →
         </a>
+      ):(
+        <button disabled style={{display:"block",width:"100%",textAlign:"center",background:"#1f2937",color:"#4b5563",borderRadius:8,
+          padding:"0.9rem 2rem",fontFamily:"monospace",fontWeight:700,fontSize:"0.8rem",border:"1px solid rgba(255,255,255,0.02)",cursor:"not-allowed"}}>
+          INTEGRATION PENDING
+        </button>
       )}
     </div>
   );
 
-  return(
-    <div style={{minHeight:"100vh",
-      background:`linear-gradient(180deg,${amber} 0%,${amberMid} 30%,#e8be60 55%,${amberMid} 78%,${amber} 100%)`,
-      color:maroon,overflowX:"hidden"}}>
+  return (
+    <div style={{background:"#0b0f19"}}>
 
-      <style>{`@keyframes floatSeed{0%{transform:rotate(28deg) translateY(0);}50%{transform:rotate(24deg) translateY(-5px);}100%{transform:rotate(28deg) translateY(0);}}`}</style>
-
-      {/* ── NAV ────────────────────────────────────────────────────────── */}
+      {/* ── HEADER NAVIGATION ───────────────────────────────────────────── */}
       <nav id="nav" style={{position:"fixed",top:0,left:0,right:0,zIndex:300,
         display:"flex",alignItems:"center",justifyContent:"space-between",
-        padding:"0.7rem 2.5rem",
-        background:"rgba(200,134,46,0.94)",backdropFilter:"blur(16px)",
-        borderBottom:"1.5px solid rgba(43,18,5,0.12)"}}>
-        <a href="/" style={{display:"flex",alignItems:"center",gap:10,textDecoration:"none"}}>
+        padding:"1rem 3rem",background:"rgba(11,15,25,0.85)",backdropFilter:"blur(20px)",
+        borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
+        <a href="/" style={{display:"flex",alignItems:"center",gap:12,textDecoration:"none"}}>
           <img src="./assets/img/helixra-logo.png" alt="Helixra"
-            style={{height:33,width:"auto",objectFit:"contain"}}
+            style={{height:30,width:"auto",objectFit:"contain"}}
             onError={e=>{e.target.style.display="none";}}/>
-          <span style={{fontFamily:"Abril Fatface,serif",fontSize:"1.3rem",color:maroon}}>
-            Helixra<sup style={{fontFamily:"monospace",fontSize:"0.5rem",opacity:0.55}}>™</sup>
+          <span style={{fontFamily:"Abril Fatface,serif",fontSize:"1.4rem",color:"#ffffff",letterSpacing:"0.02em"}}>
+            Helixra<sup style={{fontFamily:"sans-serif",fontSize:"0.55rem",fontWeight:300,opacity:0.4,marginLeft:2}}>™</sup>
           </span>
         </a>
-        <div className="nav-links-d" style={{display:"flex",gap:"2rem"}}>
-          {[["Mission","#mission"],["Games","./play/"],["Values","#values"],["Impact","#impact"],["Studio","#studio"]].map(([l,h])=>(
+        <div className="nav-links-d" style={{display:"flex",gap:"2.5rem"}}>
+          {[["Mission Statement","#mission"],["Systems Dashboard","#games"],["Ethics Matrix","#values"],["Validation Analytics","#impact"],["Studio Arm","#studio"]].map(([l,h])=>(
             <a key={l} href={h}
-               style={{fontFamily:"monospace",fontSize:"0.65rem",letterSpacing:"0.13em",
-                 textTransform:"uppercase",color:"rgba(43,18,5,0.62)",textDecoration:"none"}}>
+               style={{fontFamily:"monospace",fontSize:"0.7rem",letterSpacing:"0.15em",
+                 textTransform:"uppercase",color:"#94a3b8",textDecoration:"none"}}>
               {l}
             </a>
           ))}
         </div>
-        <a href="./play/" style={{background:maroon,color:amberMid,fontFamily:"monospace",
-          fontSize:"0.68rem",fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",
-          padding:"0.6rem 1.4rem",borderRadius:999,textDecoration:"none"}}>
-          Play Now →
+        <a href="./play/" style={{background:"rgba(255,255,255,0.04)",color:"#ffffff",border:"1px solid rgba(255,255,255,0.15)",
+          fontFamily:"monospace",fontSize:"0.7rem",fontWeight:600,letterSpacing:"0.08em",textTransform:"uppercase",
+          padding:"0.6rem 1.4rem",borderRadius:6,textDecoration:"none"}}>
+          LAUNCH SYSTEMS
         </a>
       </nav>
 
-      {/* ── HERO ──────────────────────────────────────────────────────── */}
-      <section style={{position:"relative",paddingTop:64}}>
-        <div style={{height:"min(510px,52vw)",minHeight:280,
-          backgroundImage:"url('./assets/img/children.png')",
-          backgroundSize:"cover",backgroundPosition:"center top",
-          display:"flex",alignItems:"flex-end",justifyContent:"center",position:"relative"}}>
-          <div style={{position:"absolute",inset:0,
-            background:"linear-gradient(to top,rgba(200,134,46,0.88) 0%,transparent 52%)"}}/>
-          <div style={{position:"relative",zIndex:2,textAlign:"center",padding:"0 1.5rem 3rem"}}>
-            <h1 className="hero-h" style={{fontFamily:"Abril Fatface,serif",
-              fontSize:"clamp(2.4rem,5.5vw,4.8rem)",color:"#fef3c7",
-              lineHeight:1.05,margin:0,textShadow:"0 4px 24px rgba(0,0,0,0.4)"}}>
-              Ancient Worlds.
-            </h1>
-            <h1 className="hero-h" style={{fontFamily:"Abril Fatface,serif",
-              fontSize:"clamp(2.4rem,5.5vw,4.8rem)",lineHeight:1.05,margin:0}}>
-              <span style={{color:"#f9a8d4"}}>Playable </span>
-              <span style={{color:"#86efac"}}>Futures.</span>
-            </h1>
-            <p style={{marginTop:"0.7rem",color:"rgba(254,243,199,0.82)",
-              fontSize:"clamp(0.88rem,2vw,1rem)",fontStyle:"italic"}}>
-              ලෝකයට තෑගිකල — gifted to the world
-            </p>
-            <div style={{display:"flex",gap:10,justifyContent:"center",marginTop:"1.4rem",flexWrap:"wrap"}}>
-              <a href="./play/" style={{background:maroon,color:amberMid,fontFamily:"monospace",
-                fontSize:"0.72rem",fontWeight:700,letterSpacing:"0.08em",textTransform:"uppercase",
-                padding:"0.8rem 1.9rem",borderRadius:999,textDecoration:"none"}}>
-                Play Olinda Keliya →
-              </a>
-              <a href="#mission" style={{border:"2px solid rgba(43,18,5,0.28)",color:"#fef3c7",
-                fontFamily:"monospace",fontSize:"0.72rem",letterSpacing:"0.08em",textTransform:"uppercase",
-                padding:"0.8rem 1.9rem",borderRadius:999,textDecoration:"none"}}>
-                Read the Mission
-              </a>
+      {/* ── BALANCED INTERACTIVE SPLIT HERO ANCHOR ──────────────────────── */}
+      <section style={{position:"relative",paddingTop:110,background:"#06080e",paddingBottom:"4rem"}}>
+        <div className="fw" style={{paddingTop:0,paddingBottom:0}}>
+          <div className="g2" style={{alignItems:"center"}}>
+            
+            <div style={{textAlign:"left"}}>
+              <h1 className="hero-h" style={{fontSize:"clamp(2.8rem,5vw,4.8rem)",color:"#ffffff",
+                lineHeight:1.1,margin:"0 0 16px",letterSpacing:"0.01em"}}>
+                Ancient Worlds.<br/>
+                <span style={{color:amberMid}}>Playable Futures.</span>
+              </h1>
+              <p style={{color:"#94a3b8",fontSize:"1.05rem",maxWidth:540,margin:"0 0 32px",lineHeight:1.6,fontWeight:300}}>
+                A verified, scalable engine archive of Sri Lanka’s cultural logic architecture. Preserved through formal technological pipelines and strict international frameworks.
+              </p>
+              <div style={{display:"flex",gap:14,flexWrap:"wrap"}}>
+                <a href="./play/" style={{background:amberMid,color:maroon,fontFamily:"monospace",
+                  fontSize:"0.8rem",fontWeight:700,letterSpacing:"0.05em",textTransform:"uppercase",
+                  padding:"1rem 2.2rem",borderRadius:8,textDecoration:"none",boxShadow:"0 6px 20px rgba(225,175,83,0.2)"}}>
+                  Play Olinda Keliya
+                </a>
+                <a href="https://helixra.art/nerenchi/" style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.15)",color:"#ffffff",
+                  fontFamily:"monospace",fontSize:"0.8rem",letterSpacing:"0.05em",textTransform:"uppercase",
+                  padding:"1rem 2.2rem",borderRadius:8,textDecoration:"none"}}>
+                  Play Nerenchi
+                </a>
+              </div>
             </div>
+
+            <div className="visual-frame" style={{width:"100%",aspectRatio:"1.4/1",maxHeight:380}}>
+              <img src="./assets/img/children.png" alt="Traditional gameplay reference" className="game-img-placeholder"
+                onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
+              <div style={{display:"none",width:"100%",height:"100%",alignItems:"center",justifyContent:"center",color:"#475569",fontSize:"0.8rem",fontFamily:"monospace",background:"#080c14",padding:"2rem",textAlign:"center"}}>
+                [ ETHNOGRAPHIC RECORD MATRIX FRAME // PLUG './assets/img/children.png' ]
+              </div>
+              <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"0.8rem 1.2rem",background:"rgba(8,12,20,0.85)",backdropFilter:"blur(8px)",borderTop:"1px solid rgba(255,255,255,0.05)",display:"flex",justifyContent:"between",alignItems:"center"}}>
+                <span style={{fontFamily:"monospace",fontSize:"0.65rem",color:"#94a3b8"}}>ARCHIVAL INTERACTION: PRIMARY CONTEXT RECORD</span>
+              </div>
+            </div>
+
           </div>
         </div>
-        <div style={{position:"absolute",top:74,left:14,fontSize:"2.2rem",userSelect:"none"}}>🍃</div>
-        <div style={{position:"absolute",top:74,right:14,fontSize:"2.2rem",userSelect:"none"}}>🍃</div>
       </section>
 
-      {/* Legal badge strip */}
-      <div style={{display:"flex",flexWrap:"wrap",gap:6,justifyContent:"center",
-        padding:"0.65rem 1rem",background:"rgba(43,18,5,0.05)",
-        borderTop:"1px solid rgba(43,18,5,0.08)",borderBottom:"1px solid rgba(43,18,5,0.08)"}}>
-        {["WIPO IPMC","NIA Endorsed","SDG Aligned","Made in Sri Lanka 🇱🇰"].map(t=>(
-          <span key={t} style={{fontFamily:"monospace",fontSize:"0.58rem",letterSpacing:"0.12em",
-            textTransform:"uppercase",background:"rgba(43,18,5,0.09)",borderRadius:999,
-            padding:"0.22rem 0.7rem",color:"rgba(43,18,5,0.65)"}}>
+      {/* Institutional Badges Strip */}
+      <div style={{display:"flex",flexWrap:"wrap",gap:8,justifyContent:"center",
+        padding:"1rem 2rem",background:"#111827",borderBottom:"1px solid rgba(255,255,255,0.05)"}}>
+        {["WIPO TCE STANDARDS","NIA AUTHORIZED PIPELINE","SDG ALIGNED SYSTEM","ORIGIN REGISTER: SRI LANKA 🇱🇰"].map(t=>(
+          <span key={t} style={{fontFamily:"monospace",fontSize:"0.65rem",letterSpacing:"0.1em",
+            textTransform:"uppercase",background:"#0b0f19",borderRadius:4,border:"1px solid rgba(255,255,255,0.06)",
+            padding:"0.35rem 0.9rem",color:"#94a3b8"}}>
             {t}
           </span>
         ))}
       </div>
 
-      {/* Ticker */}
-      <div style={{overflow:"hidden",whiteSpace:"nowrap",borderBottom:"1px solid rgba(43,18,5,0.08)",
-        padding:"0.6rem 0",background:"rgba(43,18,5,0.03)"}}>
+      {/* Running Ledger / Ticker */}
+      <div style={{overflow:"hidden",whiteSpace:"nowrap",borderBottom:"1px solid rgba(255,255,255,0.04)",
+        padding:"0.8rem 0",background:"#080c14"}}>
         <div className="ticker-inner">
-          {["Helixra™","Olinda Keliya","ඔලින්ද කෙළිය","Nerenchi","නෙරෙංචි",
-            "UNESCO 2003","WIPO TCE","SDG 11.4","Yellow House Productions",
-            "Helixra™","Olinda Keliya","ඔලින්ද කෙළිය","Nerenchi","නෙරෙංචි",
-            "UNESCO 2003","WIPO TCE","SDG 11.4","Yellow House Productions",
+          {["Helixra™","Olinda Keliya","ඔළිඳ කෙළිය","Nerenchi","නෙරෙංචි",
+            "UNESCO 2003 COMPLIANT","WIPO TCE MATRICES","SDG 11.4 DIGITAL LAB","YHP Culture-Tech Studio",
+            "Helixra™","Olinda Keliya","ඔළිඳ කෙළිය","Nerenchi","නෙරෙංචි",
+            "UNESCO 2003 COMPLIANT","WIPO TCE MATRICES","SDG 11.4 DIGITAL LAB","YHP Culture-Tech Studio"
           ].map((t,i)=>(
-            <span key={i} style={{display:"inline-flex",alignItems:"center",gap:9,
-              padding:"0 2rem",fontFamily:"monospace",fontSize:"0.58rem",
-              letterSpacing:"0.15em",textTransform:"uppercase",color:"rgba(43,18,5,0.47)"}}>
-              {t}<span style={{width:4,height:4,borderRadius:"50%",background:"#cf2b2b",display:"inline-block"}}/>
+            <span key={i} style={{display:"inline-flex",alignItems:"center",gap:10,
+              padding:"0 2.5rem",fontFamily:"monospace",fontSize:"0.65rem",
+              letterSpacing:"0.15em",textTransform:"uppercase",color:"#475569"}}>
+              {t}<span style={{width:4,height:4,borderRadius:"50%",background:"#dc2626",display:"inline-block"}}/>
             </span>
           ))}
         </div>
       </div>
 
-      {/* ══ MISSION | SPINE (pod) | STATS ══════════════════════════════════ */}
-      <div id="mission" className="seed-pair sr" style={{paddingTop:"4rem",paddingBottom:0}}>
-        <div style={{padding:"0 1.5rem 3rem 0"}}>
-          <span style={tag}>§04 · The Mission</span>
-          <h2 style={H2}>Helixra™ exists because a game still being played is a culture still alive.</h2>
-          <p style={{fontSize:"0.93rem",lineHeight:1.75,opacity:0.78,marginBottom:"1rem"}}>
-            A playable archive of Sri Lanka's traditional games, safeguarded for humanity through verified research, community consultation, and responsible technology.
+      {/* ── SECTION: MISSION ────────────────────────────────────────────── */}
+      <div id="mission" className="seed-pair sr">
+        <div style={{paddingRight:"1rem"}}>
+          <span style={tag}>System Protocol 04 · Governance</span>
+          <h2 style={H2}>A system kept in active deployment is a culture safely preserved.</h2>
+          <p style={{fontSize:"1rem",lineHeight:1.7,color:"#94a3b8",marginBottom:24}}>
+            Helixra™ serves as an engineered preservation archive of Sri Lanka's structural gameplay layers, safeguarding traditional matrices through rigorous verification fields, non-extractive web stacks, and native elder consensus councils.
           </p>
-          <blockquote style={{borderLeft:"4px solid #cf2b2b",background:"rgba(255,255,255,0.32)",
-            borderRadius:"0 10px 10px 0",padding:"1rem 1.2rem",margin:"0 0 1rem"}}>
-            <p style={{fontStyle:"italic",fontSize:"0.9rem",lineHeight:1.75,opacity:0.82,margin:0}}>
-              "Safeguarding requires the participation of communities, groups and, in some cases, individuals who create, maintain and transmit such heritage."
+          <blockquote style={{borderLeft:`3px solid ${amberMid}`,background:"#111827",
+            borderRadius:8,padding:"1.5rem",margin:"0 0 24px",border:"1px solid rgba(255,255,255,0.05)",borderLeftWidth:4}}>
+            <p style={{fontStyle:"italic",fontSize:"0.95rem",lineHeight:1.6,color:"#d1d5db",margin:0}}>
+              "Safeguarding requires the absolute structural participation of source communities and networks who maintain, transfer, and iterate such living configurations."
             </p>
-            <cite style={{display:"block",marginTop:6,fontStyle:"normal",fontFamily:"monospace",
-              fontSize:"0.58rem",letterSpacing:"0.1em",textTransform:"uppercase",
-              opacity:0.52,color:"#cf2b2b"}}>— UNESCO, 2003 Convention on Intangible Cultural Heritage</cite>
+            <cite style={{display:"block",marginTop:10,fontStyle:"normal",fontFamily:"monospace",
+              fontSize:"0.65rem",letterSpacing:"0.05em",textTransform:"uppercase",color:amberMid}}>
+              - UNESCO, 2003 Intangible Cultural Heritage Matrix
+            </cite>
           </blockquote>
-          <p style={{fontFamily:"monospace",fontSize:"0.57rem",letterSpacing:"0.1em",
-            textTransform:"uppercase",opacity:0.4,lineHeight:1.6}}>
-            © 2026 Yellow House Productions Pvt Ltd · All designs are expressions of Yellow House Productions
-          </p>
         </div>
-        <SeedSpine count={14} showPod={true}/>
-        <div style={{padding:"0 0 3rem 1.5rem",display:"flex",flexDirection:"column",gap:"1rem",justifyContent:"center"}}>
-          {[["2000+","Years documented"],["100+","Games queued in the archive"],["Open","To all · forever · free & multilingual"]].map(([n,l])=>(
-            <div key={n} style={{...card}}>
-              <div style={{fontFamily:"Abril Fatface,serif",fontSize:"clamp(2.5rem,4vw,3.4rem)",lineHeight:1}}>{n}</div>
-              <div style={{fontSize:"0.85rem",opacity:0.67,marginTop:4}}>{l}</div>
+        
+        <SeedSpine count={8} showPod={true}/>
+        
+        <div style={{paddingLeft:"1rem",display:"flex",flexDirection:"column",gap:"1.5rem",justifyContent:"center"}}>
+          {[["2,500+ Years","Historical Games Dataset"],["100+","System Modules Queued"],["Open Access","Universal Architecture · Non-Commercial"]].map(([n,l]) => (
+            <div key={n} style={card}>
+              <div style={{fontSize:"clamp(2rem,3vw,2.8rem)",color:"#ffffff",fontFamily:"Abril Fatface, serif"}}>{n}</div>
+              <div style={{fontFamily:"monospace",fontSize:"0.75rem",letterSpacing:"0.05em",textTransform:"uppercase",color:"#94a3b8",marginTop:6}}>{l}</div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ══ RECOGNITION ════════════════════════════════════════════════════ */}
-      <MiniSpine count={4}/>
+      {/* ── SECTION: RECOGNITION (NIA EXECUTED WITH HIGHER PROMINENCE) ── */}
+      <MiniSpine count={3}/>
       <div className="fw sr">
-        <span style={tag}>Recognition & Partnerships</span>
-        <div className="g3">
-          {[
-            {isNia:true, title:"NIA — Support & Recognition",
-             desc:"Providing guidance, recognition and institutional support to Helixra™. Previously endorsed our studio."},
-            {badge:"W",bg:"linear-gradient(135deg,#c84a18,#e87030)",fg:"#fff",
-             title:"WIPO IPMC — Selected",
-             desc:"Our studio was selected for the WIPO IPMC training programme on Traditional Cultural Expressions."},
-            {badge:"U",bg:"linear-gradient(135deg,#1a8e7e,#20ae96)",fg:"#fff",
-             title:"UNESCO 2003 — Aligned",
-             desc:"Methodology aligned with the Convention for the Safeguarding of Intangible Cultural Heritage."},
-          ].map((r,i)=>(
-            <div key={i} style={{background:"rgba(255,255,255,0.46)",borderRadius:18,
-              padding:"1.3rem",border:"1.5px solid rgba(43,18,5,0.1)",
-              boxShadow:"0 4px 16px rgba(43,18,5,0.07)",display:"flex",gap:11,alignItems:"flex-start"}}>
-              {r.isNia?(
-                <div style={{flexShrink:0,height:34,display:"flex",alignItems:"center"}}>
-                  <img src="./assets/img/nia-logo.png" alt="NIA"
-                    style={{height:30,width:"auto",objectFit:"contain",maxWidth:72}}
-                    onError={e=>{e.target.outerHTML=`<div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#c8a020,#e8c040);color:#2b1205;display:flex;align-items:center;justify-content:center;font-family:monospace;font-weight:900;font-size:0.62rem">NIA</div>`;}}/>
-                </div>
-              ):(
-                <div style={{width:34,height:34,borderRadius:"50%",flexShrink:0,background:r.bg,
-                  color:r.fg,display:"flex",alignItems:"center",justifyContent:"center",
-                  fontFamily:"monospace",fontWeight:900,fontSize:"0.65rem",
-                  boxShadow:"0 2px 8px rgba(0,0,0,0.18)"}}>
+        <span style={{...tag,textAlign:"center"}}>Verification Frameworks</span>
+        <h2 style={{...H2,textAlign:"center"}}>Validated Structures</h2>
+        
+        <div style={{display:"flex",flexDirection:"column",gap:"1.8rem"}}>
+          <div style={{background:"linear-gradient(135deg, #111827 0%, #0d1527 100%)",borderRadius:20,padding:"2.5rem",border:`2px solid ${amberMid}`,boxShadow:"0 15px 40px rgba(0,0,0,0.4)",display:"flex",gap:24,alignItems:"center",flexWrap:"wrap"}}>
+            <div style={{flexShrink:0,width:80,height:80,borderRadius:12,background:"#0b0f19",border:"1px solid rgba(225,175,83,0.3)",display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",padding:8,boxShadow:"0 8px 20px rgba(0,0,0,0.3)"}}>
+              <img src="./assets/img/nia-logo.png" alt="National Innovation Agency Logo" style={{width:"100%",height:"100%",objectFit:"contain"}}
+                onError={e=>{e.target.outerHTML=`<div style="font-family:monospace;font-weight:700;font-size:1.1rem;color:#e1af53">NIA</div>`;}}/>
+            </div>
+            <div style={{flex:1,minWidth:260}}>
+              <span style={{fontFamily:"monospace",fontSize:"0.65rem",letterSpacing:"0.2em",color:amberMid,fontWeight:700,display:"block",marginBottom:6}}>PRIMARY GOVERNANCE COMPONENT</span>
+              <h3 style={{fontSize:"1.8rem",margin:"0 0 8px",color:"#ffffff"}}>National Innovation Agency (NIA) - Institutional Support</h3>
+              <p style={{fontSize:"0.95rem",color:"#94a3b8",lineHeight:1.6,margin:0}}>
+                Providing paramount strategic policy direction, executive governmental recognition, and key structural verification routes directly to the operational runtime of the Helixra™ pipeline.
+              </p>
+            </div>
+          </div>
+
+          <div className="g2">
+            {[
+              {badge:"W",border:"#c2410c", title:"WIPO TCE Standards Followed",
+               desc:"Studio research, deployment frameworks, and computational parameters rigorously follow the international WIPO Traditional Cultural Expressions preservation guidelines."},
+              {badge:"U",border:"#0f766e", title:"UNESCO 2003 Asset Core",
+               desc:"Digital storage parameters and mapping techniques are completely aligned with the global Convention for the Safeguarding of Intangible Assets."}
+            ].map((r,i)=>(
+              <div key={i} style={{background:"#111827",borderRadius:16,padding:"2rem",border:"1px solid rgba(255,255,255,0.06)",boxShadow:"0 10px 25px rgba(0,0,0,0.2)",display:"flex",gap:16,alignItems:"flex-start"}}>
+                <div style={{width:36,height:36,borderRadius:6,flexShrink:0,background:"#0b0f19",color:amberMid,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"monospace",fontWeight:700,fontSize:"0.8rem",border:`1px solid ${r.border}`}}>
                   {r.badge}
                 </div>
-              )}
-              <div>
-                <div style={{fontFamily:"monospace",fontWeight:900,fontSize:"0.6rem",
-                  letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:5}}>{r.title}</div>
-                <p style={{fontSize:"0.77rem",opacity:0.72,lineHeight:1.55,fontStyle:"italic",margin:0}}>{r.desc}</p>
+                <div>
+                  <div style={{fontFamily:"monospace",fontWeight:700,fontSize:"0.75rem",letterSpacing:"0.05em",textTransform:"uppercase",marginBottom:6,color:"#ffffff"}}>{r.title}</div>
+                  <p style={{fontSize:"0.85rem",color:"#94a3b8",lineHeight:1.5,margin:"0"}}>{r.desc}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* ══ GAMES: Olinda | SPINE | Nerenchi ═══════════════════════════════ */}
-      <MiniSpine count={4}/>
-      <div id="games" className="seed-pair sr" style={{paddingTop:"3rem",paddingBottom:"2rem"}}>
-        <div style={{padding:"0 1.5rem 0 0"}}>
-          <GameCard ch="Chapter I" title="Olinda Keliya" si="ඔලින්ද කෙළිය" type="Board"
-            region="Island-wide" period="Pre-1600"
-            source="Field interviews · British Museum holdings"
-            desc="A mancala-family seed game played across Sri Lankan households since at least the Kandyan period; the seeds (Adenanthera pavonina) carry their own ritual weight."
-            bg="linear-gradient(135deg,#fcd34d,#fde68a)" live={true}/>
+      {/* ── SECTION: GAME ENGINES ────────────────────────────────────────── */}
+      <MiniSpine count={3}/>
+      <div id="games" className="seed-pair sr" style={{paddingTop:"2rem",paddingBottom:"2rem"}}>
+        <div style={{paddingRight:"1rem"}}>
+          <GameCard ch="System Layer I" title="Olinda Keliya" si="ඔළිඳ කෙළිය" type="Mathematical Engine"
+            region="Island-wide Matrix" period="Pre-1600 Antiquity" imgPath="./assets/img/olinda-engine.png" playUrl="./play/"
+            source="field research and historical references"
+            desc="A highly strategic Mancala-variant mathematical array utilized across local networks since the Kandyan era. Adaptive seed tokens serve as independent tactical units holding traditional ritual weight."
+            live={true}/>
         </div>
-        <SeedSpine count={16}/>
-        <div style={{padding:"0 0 0 1.5rem"}}>
-          <GameCard ch="Chapter II" title="Nerenchi" si="නෙරෙංචි" type="Board"
-            region="Central · Southern provinces" period="~1000 CE"
-            source="Temple frescoes · oral testimony"
-            desc="A territorial board game in the alquerque lineage, traced through trade routes connecting South Asia with the Mediterranean a millennium before chess."
-            bg="linear-gradient(135deg,#6ee7b7,#a7f3d0)" live={false}/>
+        <SeedSpine count={10}/>
+        <div style={{paddingLeft:"1rem"}}>
+          <GameCard ch="System Layer II" title="Nerenchi" si="නෙරෙංචි" type="Topological System"
+            region="Central & Southern provinces" period="Circa 1000 CE" imgPath="./assets/img/nerenchi-engine.png" playUrl="https://helixra.art/nerenchi/"
+            source="field research and historical references"
+            desc="An alignment territorial strategy belonging to the ancient Alquerque lineage, traced along Indian Ocean commercial routes that connected South Asia with Mediterranean systems a millennium ago."
+            live={true}/>
         </div>
       </div>
 
-      {/* Locked chapters */}
-      <div className="fw" style={{paddingTop:"1rem",paddingBottom:"3rem"}}>
+      {/* Future Locked Registers */}
+      <div className="fw" style={{paddingTop:"0"}}>
         <div className="g3">
           {[
-            {ch:"Chapter III",type:"War",      desc:"A war game played on cloth at village gatherings. Sources under specialist review."},
-            {ch:"Chapter IV", type:"Children", desc:"Children's pebble-toss, recorded in 19th-century travelogues. Community review pending."},
-            {ch:"Chapter V",  type:"Ritual",   desc:"A monsoon-season dice variant tied to harvest ritual. Primary sources being cross-referenced."},
+            {ch:"Register III",type:"Tactical Alignment",desc:"Strategic confrontation configuration recorded on traditional canvas mediums. Currently processing field verification validation logs."},
+            {ch:"Register IV", type:"Spatial Logic",     desc:"Dynamic stone-placement matrix cross-referenced via 19th-century regional documentation. Local community index pending review."},
+            {ch:"Register V",  type:"Stochastic Ritual",desc:"Cyclical harvest sequence incorporating calculated randomized parameters. Field source data compiling."}
           ].map((lc,i)=>(
-            <div key={i} style={{background:"rgba(255,255,255,0.28)",borderRadius:16,
-              padding:"1.3rem",border:"2px dashed rgba(43,18,5,0.17)",opacity:0.7}}>
-              <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:9,flexWrap:"wrap"}}>
-                <span style={{fontFamily:"monospace",fontSize:"0.56rem",letterSpacing:"0.14em",textTransform:"uppercase",opacity:0.48}}>{lc.ch}</span>
-                <span style={{background:"rgba(43,18,5,0.1)",fontFamily:"monospace",fontSize:"0.53rem",fontWeight:700,letterSpacing:"0.12em",textTransform:"uppercase",padding:"0.15rem 0.52rem",borderRadius:999}}>Locked</span>
-                <span style={{border:"1px solid rgba(43,18,5,0.14)",fontFamily:"monospace",fontSize:"0.53rem",fontWeight:700,letterSpacing:"0.09em",textTransform:"uppercase",padding:"0.15rem 0.42rem",borderRadius:4}}>{lc.type}</span>
+            <div key={i} style={{background:"rgba(17,24,39,0.4)",borderRadius:12,padding:"1.5rem",border:"1px dashed rgba(255,255,255,0.12)",opacity:0.65}}>
+              <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12,flexWrap:"wrap"}}>
+                <span style={{fontFamily:"monospace",fontSize:"0.6rem",letterSpacing:"0.05em",textTransform:"uppercase",color:"#94a3b8"}}>{lc.ch}</span>
+                <span style={{background:"rgba(255,255,255,0.03)",color:"#64748b",border:"1px solid rgba(255,255,255,0.06)",fontFamily:"monospace",fontSize:"0.55rem",padding:"0.15rem 0.5rem",borderRadius:4,textTransform:"uppercase"}}>Encrypted</span>
               </div>
-              <h4 style={{fontFamily:"Abril Fatface,serif",fontSize:"1.3rem",margin:"0 0 6px"}}>Untitled</h4>
-              <p style={{fontSize:"0.77rem",opacity:0.65,lineHeight:1.58,margin:0}}>{lc.desc}</p>
+              <h4 style={{fontSize:"1.3rem",margin:"0 0 6px",color:"#ffffff"}}>Module Pipeline</h4>
+              <p style={{fontSize:"0.85rem",color:"#94a3b8",lineHeight:1.5,margin:"0"}}>{lc.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ══ VALUES ══════════════════════════════════════════════════════════ */}
-      <MiniSpine count={4}/>
+      {/* ── SECTION: ETHICS MATRIX VALUES (ARRA INTEGRATION) ────────────── */}
+      <MiniSpine count={3}/>
       <div id="values" className="fw sr">
-        <span style={{...tag,textAlign:"center",display:"block"}}>§06 · Values · 9 Bilingual</span>
-        <h2 style={{...H2,textAlign:"center"}}>What We Stand For</h2>
-        <div className="g3">
+        <span style={{...tag,textAlign:"center"}}>System Framework 06 · Ethical Constraints</span>
+        <h2 style={{...H2,textAlign:"center"}}>The Ethics Matrix</h2>
+        <div className="g3" style={{marginBottom:"2.5rem"}}>
           {VALUES.map((v,i)=>(
-            <div key={i} style={{background:v.c,borderRadius:17,padding:"1.3rem",
-              border:"1px solid rgba(43,18,5,0.09)",boxShadow:"0 4px 16px rgba(43,18,5,0.08)"}}>
-              <div style={{fontFamily:"monospace",fontSize:"0.55rem",letterSpacing:"0.15em",textTransform:"uppercase",opacity:0.52,marginBottom:5}}>{v.num}</div>
-              <h4 style={{fontFamily:"Abril Fatface,serif",fontSize:"1.4rem",margin:"0 0 2px"}}>{v.title}</h4>
-              <p style={{color:"#cf2b2b",fontSize:"0.85rem",margin:"0 0 8px",opacity:0.85}}>{v.si}</p>
-              <p style={{fontSize:"0.79rem",opacity:0.85,lineHeight:1.52,margin:0}}>{v.desc}</p>
+            <div key={i} style={{background:"#111827",borderRadius:16,padding:"2rem 1.8rem",
+              border:"1px solid rgba(255,255,255,0.05)",boxShadow:"0 10px 25px rgba(0,0,0,0.2)",position:"relative",overflow:"hidden"}}>
+              <div style={{position:"absolute",top:0,left:0,right:0,height:"2px",background:v.c.replace("0.04","0.2")}}/>
+              <div style={{fontFamily:"monospace",fontSize:"0.65rem",color:amberMid,letterSpacing:"0.1em",marginBottom:8}}>{v.num} // CORE</div>
+              <h4 style={{fontSize:"1.4rem",margin:"0 0 4px",color:"#ffffff"}}>{v.title}</h4>
+              <p style={{color:"#ef4444",fontFamily:"sans-serif",fontSize:"0.9rem",margin:"0 0 14px",fontWeight:500}}>{v.si}</p>
+              <p style={{fontSize:"0.88rem",color:"#94a3b8",lineHeight:1.5,margin:"0"}}>{v.desc}</p>
             </div>
           ))}
         </div>
+
+        <div style={{background:"rgba(225,175,83,0.03)",border:"1px solid rgba(225,175,83,0.15)",borderRadius:12,padding:"1.5rem 2rem",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:16}}>
+          <div style={{textAlign:"left",flex:1,minWidth:280}}>
+            <span style={{fontFamily:"monospace",fontSize:"0.6rem",letterSpacing:"0.15em",color:amberMid,fontWeight:700,display:"block",marginBottom:4}}>SYSTEM ARCHITECTURE FOUNDATION</span>
+            <p style={{margin:0,fontSize:"0.92rem",color:"#e2e8f0",lineHeight:1.5}}>
+              All nine parameters of the Helixra Ethics Matrix are fundamentally derived from, and explicitly customized using, the global **ARRA Ethics Framework** protocols.
+            </p>
+          </div>
+          <a href="https://arraframework.org/" target="_blank" rel="noopener" style={{background:"rgba(225,175,83,0.1)",color:amberMid,border:`1px solid ${amberMid}`,fontFamily:"monospace",fontSize:"0.72rem",fontWeight:700,letterSpacing:"0.05em",textTransform:"uppercase",padding:"0.75rem 1.5rem",borderRadius:6,textDecoration:"none",whiteSpace:"nowrap"}}>
+            Review ARRA Protocol ↗
+          </a>
+        </div>
       </div>
 
-      {/* ══ SDG ══════════════════════════════════════════════════════════== */}
-      <MiniSpine count={4}/>
+      {/* ── SECTION: SUSTAINABLE SYSTEMS CONSTELLATION ────────────────────── */}
+      <MiniSpine count={3}/>
       <div className="fw sr" style={{textAlign:"center"}}>
-        <span style={{...tag,display:"block"}}>§08 · SDG Constellation</span>
-        <h2 style={H2}>8 Goals. One Archive.</h2>
-        <p style={{fontSize:"0.88rem",opacity:0.6,fontStyle:"italic",marginBottom:36}}>
-          One playable archive, aligned with humanity's most urgent commitments.
+        <span style={tag}>System Integration 08 · Alignment Vector</span>
+        <h2 style={H2}>Global Matrix Integration</h2>
+        <p style={{fontSize:"0.95rem",color:"#94a3b8",maxWidth:540,margin:"0 auto 48px",lineHeight:1.6}}>
+          Preservation metrics run parallel to global socio-ecological metrics for strategic accountability.
         </p>
-        {/* Desktop orbit */}
-        <div className="sdg-orbit" style={{position:"relative",width:"100%",height:660,
-          display:"flex",alignItems:"center",justifyContent:"center",overflow:"visible"}}>
-          <div style={{position:"absolute",width:540,height:540,border:"1.5px dashed rgba(207,43,43,0.2)",borderRadius:"50%",pointerEvents:"none"}}/>
-          <div style={{position:"absolute",width:350,height:350,border:"1px dashed rgba(207,43,43,0.1)",borderRadius:"50%",pointerEvents:"none"}}/>
-          <div style={{position:"absolute",zIndex:10,background:"white",borderRadius:20,
-            padding:"16px 18px",boxShadow:"0 8px 30px rgba(43,18,5,0.18)",
-            border:"3px solid rgba(207,43,43,0.1)",
-            display:"flex",flexDirection:"column",alignItems:"center",gap:4}}>
-            <img src="./assets/img/helixra-logo.png" alt="Helixra" style={{width:44,height:44,objectFit:"contain"}}
-              onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="block";}}/>
-            <HelixraLogo size={44} dark style={{display:"none"}}/>
-            <div style={{fontFamily:"Abril Fatface,serif",fontSize:"0.82rem",color:maroon,opacity:0.62}}>Helixra™</div>
+        
+        <div className="sdg-orbit" style={{position:"relative",width:"100%",height:620,
+          alignItems:"center",justifyContent:"center",overflow:"visible"}}>
+          <div style={{position:"absolute",width:500,height:500,border:"1px dashed rgba(225,175,83,0.15)",borderRadius:"50%",pointerEvents:"none"}}/>
+          <div style={{position:"absolute",width:320,height:320,border:"1px dashed rgba(255,255,255,0.03)",borderRadius:"50%",pointerEvents:"none"}}/>
+          <div style={{position:"absolute",zIndex:10,background:"#111827",borderRadius:16,
+            padding:"20px 24px",boxShadow:"0 15px 35px rgba(0,0,0,0.5)",
+            border:"1px solid rgba(225,175,83,0.3)",
+            display:"flex",flexDirection:"column",alignItems:"center",gap:6}}>
+            <HelixraLogo size={40}/>
+            <div style={{fontFamily:"monospace",fontSize:"0.65rem",letterSpacing:"0.1em",color:"#ffffff"}}>HELIXRA CORE</div>
           </div>
           {SDG_GOALS.map((g,idx)=>{
             const angle=(idx/SDG_GOALS.length)*Math.PI*2-Math.PI/2;
-            const r=258,x=Math.cos(angle)*r,y=Math.sin(angle)*r;
+            const r=240,x=Math.cos(angle)*r,y=Math.sin(angle)*r;
             return(
-              <div key={idx} style={{position:"absolute",width:148,
+              <div key={idx} style={{position:"absolute",width:150,
                 transform:`translate(${x}px,${y}px)`,
-                background:g.bg,color:g.fg,borderRadius:13,padding:"0.82rem 0.95rem",
-                boxShadow:"0 6px 20px rgba(43,18,5,0.17)",
-                border:"2px solid rgba(255,255,255,0.17)",textAlign:"left"}}>
-                <div style={{fontFamily:"monospace",fontSize:"0.54rem",letterSpacing:"0.12em",textTransform:"uppercase",opacity:0.75,marginBottom:3,fontWeight:900}}>{g.num}</div>
-                <div style={{fontFamily:"Abril Fatface,serif",fontSize:"0.8rem",lineHeight:1.22}}>{g.label}</div>
+                background:g.bg,color:"#ffffff",borderRadius:8,padding:"1rem",
+                boxShadow:"0 8px 20px rgba(0,0,0,0.4)",
+                border:`1px solid ${g.border}`,textAlign:"left"}}>
+                <div style={{fontFamily:"monospace",fontSize:"0.6rem",color:g.border,letterSpacing:"0.05em",marginBottom:4,fontWeight:700}}>{g.num}</div>
+                <div style={{fontSize:"0.82rem",lineHeight:1.3,fontWeight:500}}>{g.label}</div>
               </div>
             );
           })}
         </div>
-        {/* Mobile SDG grid */}
-        <div className="sdg-mob" style={{display:"none",flexWrap:"wrap",gap:9,justifyContent:"center"}}>
-          <div style={{width:"100%",display:"flex",justifyContent:"center",marginBottom:10}}>
-            <div style={{background:"white",borderRadius:16,padding:"12px 14px",boxShadow:"0 4px 16px rgba(43,18,5,0.13)",display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
-              <HelixraLogo size={38} dark/>
-              <div style={{fontFamily:"Abril Fatface,serif",fontSize:"0.8rem",color:maroon,opacity:0.62}}>Helixra™</div>
-            </div>
-          </div>
+        
+        <div className="sdg-mob" style={{flexWrap:"wrap",gap:10,justifyContent:"center"}}>
           {SDG_GOALS.map((g,i)=>(
-            <div key={i} style={{width:"calc(50% - 5px)",background:g.bg,color:g.fg,borderRadius:11,padding:"0.75rem",boxShadow:"0 3px 12px rgba(43,18,5,0.13)"}}>
-              <div style={{fontFamily:"monospace",fontSize:"0.52rem",letterSpacing:"0.12em",textTransform:"uppercase",opacity:0.74,marginBottom:2,fontWeight:900}}>{g.num}</div>
-              <div style={{fontFamily:"Abril Fatface,serif",fontSize:"0.78rem",lineHeight:1.22}}>{g.label}</div>
+            <div key={i} style={{width:"calc(50% - 5px)",background:"#111827",color:"#ffffff",borderRadius:8,padding:"1rem",textAlign:"left",border:`1px solid ${g.border}`}}>
+              <div style={{fontFamily:"monospace",fontSize:"0.6rem",color:g.border,fontWeight:700,marginBottom:2}}>{g.num}</div>
+              <div style={{fontSize:"0.8rem",lineHeight:1.3}}>{g.label}</div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ══ IMPACT | SPINE | METHODOLOGY ═══════════════════════════════════ */}
-      <MiniSpine count={4}/>
-      <div id="impact" className="seed-pair sr" style={{paddingTop:"3rem",paddingBottom:"3rem"}}>
-        <div style={{padding:"0 1.5rem 0 0"}}>
-          <span style={tag}>§09 · Early Impact</span>
-          <h2 style={H2}>Early Impact</h2>
-          <p style={{fontSize:"0.9rem",lineHeight:1.75,opacity:0.75,marginBottom:16}}>Honest numbers. The archive grows one chapter at a time.</p>
-          <div style={{display:"flex",flexDirection:"column",gap:9}}>
+      {/* ── SECTION: STRATEGIC LOGISTICS & PROCEDURES ────────────────────── */}
+      <MiniSpine count={3}/>
+      <div id="impact" className="seed-pair sr">
+        <div style={{paddingRight:"1rem"}}>
+          <span style={tag}>Protocol 09 · Analytical Data</span>
+          <h2 style={H2}>Logistical Verification</h2>
+          <p style={{fontSize:"0.95rem",color:"#94a3b8",lineHeight:1.6,marginBottom:28}}>Verified operational metrics updated in sync with localized deployment validation cycles.</p>
+          <div style={{display:"flex",flexDirection:"column",gap:12}}>
             {IMPACT.map((item,i)=>(
-              <div key={i} style={{background:item.c,borderRadius:999,padding:"0.82rem 1.6rem",
-                border:"1px solid rgba(43,18,5,0.09)",boxShadow:"0 3px 12px rgba(43,18,5,0.08)",
-                display:"flex",alignItems:"center",gap:12}}>
-                <div style={{width:30,height:30,borderRadius:"50%",background:"rgba(255,255,255,0.6)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"0.9rem",flexShrink:0}}>✦</div>
-                <span style={{fontWeight:700,fontSize:"0.9rem"}}>{item.label}</span>
+              <div key={i} style={{background:"#111827",borderRadius:8,padding:"1rem 1.5rem",
+                border:"1px solid rgba(255,255,255,0.05)",boxShadow:"0 4px 12px rgba(0,0,0,0.15)",
+                display:"flex",alignItems:"center",gap:16}}>
+                <div style={{width:24,height:24,borderRadius:"50%",background:"rgba(225,175,83,0.1)",color:amberMid,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"0.75rem",fontFamily:"monospace"}}>✓</div>
+                <span style={{fontWeight:500,fontSize:"0.92rem",color:"#f3f4f6"}}>{item.label}</span>
               </div>
             ))}
           </div>
-          <blockquote style={{borderLeft:"4px solid #cf2b2b",background:"rgba(255,255,255,0.3)",borderRadius:"0 10px 10px 0",padding:"0.9rem 1.1rem",margin:"1.2rem 0 0"}}>
-            <p style={{fontStyle:"italic",fontSize:"0.85rem",lineHeight:1.7,opacity:0.8,margin:0}}>
-              "Intangible cultural heritage is constantly recreated by communities and groups in response to their environment, their interaction with nature and their history."
-            </p>
-            <cite style={{display:"block",marginTop:6,fontStyle:"normal",fontFamily:"monospace",fontSize:"0.57rem",letterSpacing:"0.1em",textTransform:"uppercase",opacity:0.5,color:"#cf2b2b"}}>— UNESCO</cite>
-          </blockquote>
         </div>
-        <SeedSpine count={14}/>
-        <div style={{padding:"0 0 0 1.5rem"}}>
-          <span style={tag}>§10 · Methodology</span>
-          <h2 style={H2}>How We Work</h2>
-          <div style={{display:"flex",flexDirection:"column",gap:12}}>
+        
+        <SeedSpine count={8}/>
+        
+        <div style={{paddingLeft:"1rem"}}>
+          <span style={tag}>Protocol 10 · Pipeline Logic</span>
+          <h2 style={H2}>Preservation Pipeline</h2>
+          <div style={{display:"flex",flexDirection:"column",gap:16}}>
             {[
-              {p:"Pillar 01",t:"Research",    bg:"#fbbf24",txt:"Primary-source documentation — temple records, colonial archives, oral histories — cross-checked with academic specialists."},
-              {p:"Pillar 02",t:"Consultation",bg:"#f87171",txt:"Communities of practice review rules, naming, and representation before any chapter ships. Their authority supersedes ours."},
-              {p:"Pillar 03",t:"Technology",  bg:"#60a5fa",txt:"AI-assisted documentation under specialist oversight — trained on authenticated historical records. Non-extractive throughout."},
+              {p:"Phase 01",t:"Empirical Research",border:"#e1af53",txt:"Direct primary source processing - field logs, ethnographic survey entries, historical drawings - authenticated alongside external specialists."},
+              {p:"Phase 02",t:"Peer Consultation",border:"#ef4444",txt:"Regional traditional networks retain oversight over naming syntax, systemic parameters, and game logic prior to release cycles."},
+              {p:"Phase 03",t:"Non-Extractive Tech",border:"#3b82f6",txt:"Browser-native engine architecture engineered for low asset footprints and computational longevity. No platform dependencies."}
             ].map((c,i)=>(
-              <div key={i} style={{background:c.bg,borderRadius:18,padding:"1.5rem",boxShadow:"0 5px 20px rgba(43,18,5,0.09)"}}>
-                <div style={{fontFamily:"monospace",fontSize:"0.57rem",letterSpacing:"0.18em",textTransform:"uppercase",color:"rgba(255,255,255,0.7)",marginBottom:7,fontWeight:900}}>{c.p}</div>
-                <h3 style={{fontFamily:"Abril Fatface,serif",fontSize:"1.5rem",color:"white",margin:"0 0 8px"}}>{c.t}</h3>
-                <p style={{fontSize:"0.83rem",lineHeight:1.62,color:"rgba(255,255,255,0.9)",margin:0}}>{c.txt}</p>
+              <div key={i} style={{background:"#111827",borderRadius:12,padding:"1.6rem",border:"1px solid rgba(255,255,255,0.06)",borderLeft:`4px solid ${c.border}`}}>
+                <div style={{fontFamily:"monospace",fontSize:"0.65rem",letterSpacing:"0.1em",textTransform:"uppercase",color:c.border,marginBottom:4,fontWeight:700}}>{c.p}</div>
+                <h3 style={{fontSize:"1.4rem",color:"#ffffff",margin:"0 0 8px"}}>{c.t}</h3>
+                <p style={{fontSize:"0.88rem",lineHeight:1.5,color:"#94a3b8",margin:"0"}}>{c.txt}</p>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* ══ BELIEVE ════════════════════════════════════════════════════════ */}
-      <MiniSpine count={3}/>
-      <div className="fw sr" style={{maxWidth:800,textAlign:"center"}}>
-        <span style={{...tag,display:"block"}}>What We Believe</span>
-        <h2 style={H2}>A workshop, not a vitrine.</h2>
-        <div style={{background:"rgba(255,255,255,0.48)",borderRadius:24,padding:"2.2rem 2.8rem",border:"1.5px solid rgba(43,18,5,0.09)",boxShadow:"0 5px 24px rgba(43,18,5,0.07)"}}>
-          <p style={{fontSize:"0.98rem",lineHeight:1.8,fontStyle:"italic",opacity:0.82,margin:0}}>
-            "A tradition kept under glass is a tradition slowly losing temperature. The most reliable way to safeguard a living practice is to keep it in motion — taught, played, contested, refined. Helixra™ is a workshop, not a vitrine."
+      {/* ── SECTION: PHILOSOPHICAL MANIFESTO CONTAINER ──────────────────── */}
+      <MiniSpine count={2}/>
+      <div className="fw sr" style={{maxWidth:840,textAlign:"center"}}>
+        <span style={tag}>Preservation Architecture Creed</span>
+        <h2 style={H2}>A working interface, not an artifact under glass.</h2>
+        <div style={{background:"#111827",borderRadius:16,padding:"2.5rem 3rem",border:"1px solid rgba(255,255,255,0.06)",boxShadow:"0 15px 35px rgba(0,0,0,0.2)"}}>
+          <p style={{fontSize:"1.05rem",lineHeight:1.75,fontStyle: "italic",color:"#d1d5db",margin:"0",fontWeight:300}}>
+            "A structural tradition kept sealed under glass is a system systematically losing kinetic temperature. The unique execution path to preserve a complex living framework is to keep it functional - tested, iterated, confronted, and used. Helixra™ operates as an open preservational deployment, not a sterile display case."
           </p>
         </div>
-        <p style={{marginTop:12,fontFamily:"monospace",fontSize:"0.57rem",letterSpacing:"0.1em",textTransform:"uppercase",opacity:0.4}}>
-          All designs are expressions © 2026 Yellow House Productions Pvt Ltd
-        </p>
       </div>
 
-      {/* ══ SUBSCRIBE ═══════════════════════════════════════════════════════ */}
-      <MiniSpine count={3}/>
-      <div style={{maxWidth:860,margin:"0 auto",padding:"0 2rem 3.5rem"}}>
+      {/* ── SECTION: DISPATCH REGISTRATION ANCHOR ───────────────────────── */}
+      <MiniSpine count={2}/>
+      <div style={{maxWidth:900,margin:"0 auto",padding:"0 2rem 5rem"}}>
         <Subscribe/>
       </div>
 
-      {/* ══ STUDIO / FOOTER ════════════════════════════════════════════════ */}
-      <MiniSpine count={3}/>
-      <footer id="studio" style={{maxWidth:1100,margin:"0 auto",padding:"0 2rem 4.5rem"}}>
-        <div style={{background:"#fecdd3",borderRadius:36,padding:"2.8rem 2.8rem 2rem",
-          boxShadow:"0 12px 44px rgba(43,18,5,0.11)",border:"1px solid rgba(43,18,5,0.07)"}}>
-          <div className="g2" style={{alignItems:"center",marginBottom:"2rem"}}>
-            <div>
-              <span style={tag}>§12 · Studio</span>
-              <h2 style={{fontFamily:"Abril Fatface,serif",fontSize:"clamp(2.3rem,4vw,3.8rem)",marginBottom:12}}>YHP Studio</h2>
-              <p style={{fontSize:"0.92rem",lineHeight:1.75,opacity:0.78,marginBottom:10}}>
-                Helixra™ is built and maintained by YHP Studio — the studio arm of <strong>Yellow House Productions Pvt Ltd</strong>, a Sri Lankan-led cultural-technology practice working at the intersection of heritage, research, and responsible engineering.
+      {/* ── SECTION: STUDIO CONTROL & FOOTER MATRIX (PREMIUM REDESIGN) ── */}
+      <MiniSpine count={2}/>
+      <footer id="studio" style={{maxWidth:1200,margin:"0 auto",padding:"0 2rem 5rem"}}>
+        <div style={{background:"#111827",borderRadius:24,padding:"4rem 3.5rem 3rem",
+          boxShadow:"0 25px 60px rgba(0,0,0,0.45)",border:"1px solid rgba(255,255,255,0.06)"}}>
+          
+          <div className="g2" style={{alignItems:"start",marginBottom:"4rem"}}>
+            
+            {/* Left Column: Studio Meta & Narrative Ledger */}
+            <div style={{paddingRight:"1rem"}}>
+              <span style={tag}>System Module 12 · Engineering Lab</span>
+              <h2 style={{fontSize:"3.2rem",margin:"0 0 20px",color:"#ffffff",lineHeight:1.1}}>YHP Studio</h2>
+              <p style={{fontSize:"1rem",lineHeight:1.65,color:"#94a3b8",marginBottom:24,fontWeight:300}}>
+                Helixra™ is built and evaluated by YHP Studio - the direct engineering arm of <strong>Yellow House Productions Pvt Ltd</strong>, operating as Sri Lanka's premier culture-tech studio at the strict intersection of heritage asset preservation, advanced research, and responsible software engineering.
               </p>
-              <p style={{fontSize:"0.85rem",lineHeight:1.7,opacity:0.6,fontStyle:"italic",marginBottom:20}}>
-                We believe the most radical thing technology can do for culture is to render itself invisible — leaving only the game, the community, and the story.
+              <p style={{fontSize:"0.9rem",lineHeight:1.6,color:"#475569",fontStyle:"italic",margin:0,borderLeft:"2px solid rgba(255,255,255,0.05)",paddingLeft:16}}>
+                We hold that the most effective operation a design stack can perform for cultural heritage is to integrate itself seamlessly - leaving only the logic framework, the community, and the human record.
               </p>
-              {/* Founders */}
-              <p style={{fontFamily:"monospace",fontSize:"0.59rem",letterSpacing:"0.15em",textTransform:"uppercase",opacity:0.47,margin:"0 0 9px"}}>Meet the Founders</p>
-              <div style={{display:"flex",gap:9,flexWrap:"wrap",marginBottom:16}}>
-                <a href="https://hasithajayathilaka.com/" target="_blank" rel="noopener"
-                   style={{background:maroon,color:amberMid,fontFamily:"monospace",fontSize:"0.67rem",fontWeight:700,letterSpacing:"0.08em",textTransform:"uppercase",padding:"0.65rem 1.4rem",borderRadius:999,textDecoration:"none"}}>
-                  Hasitha Jayathilaka →
-                </a>
-                <a href="https://prabhahewage.art/" target="_blank" rel="noopener"
-                   style={{background:maroon,color:amberMid,fontFamily:"monospace",fontSize:"0.67rem",fontWeight:700,letterSpacing:"0.08em",textTransform:"uppercase",padding:"0.65rem 1.4rem",borderRadius:999,textDecoration:"none"}}>
-                  Prabha Hewage →
+            </div>
+            
+            {/* Right Column: Architectural Profiles & Action Matrix */}
+            <div style={{width:"100%",display:"flex",flexDirection:"column",gap:20}}>
+              
+              {/* Studio Badge Frame Container */}
+              <div style={{background:"#0b0f19",borderRadius:16,width:"100%",minHeight:180,
+                border:"1px solid rgba(255,255,255,0.04)",display:"flex",alignItems:"center",justifyContent:"center",padding:"2rem",boxShadow:"inset 0 4px 12px rgba(0,0,0,0.3)"}}>
+                <img src="./assets/img/yellow-house-logo.png" alt="Yellow House Productions Studio Badge"
+                  style={{maxWidth:180,maxHeight:130,objectFit:"contain",opacity:0.9}}
+                  onError={e=>{e.target.parentNode.innerHTML=`<div style="font-family:Abril Fatface,serif;font-size:2.2rem;opacity:0.15;text-align:center;color:#ffffff;line-height:1.2">Yellow<br/>House</div>`;}}/>
+              </div>
+
+              {/* Master Credentials Registry */}
+              <div style={{background:"#080c14",borderRadius:16,padding:"2rem 1.8rem",border:"1px solid rgba(255,255,255,0.05)",boxShadow:"0 10px 30px rgba(0,0,0,0.2)"}}>
+                <p style={{fontFamily:"monospace",fontSize:"0.65rem",letterSpacing:"0.15em",color:amberMid,margin:"0 0 20px",fontWeight:700,textTransform:"uppercase"}}>STUDIO PRINCIPAL ARCHITECTS</p>
+                
+                {/* Founder Hasitha Card */}
+                <div style={{display:"flex",gap:20,alignItems:"start",marginBottom:24,borderBottom:"1px solid rgba(255,255,255,0.05)",paddingBottom:20}}>
+                  <div className="founder-img-frame" style={{boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
+                    <img src="./images/hasitha.png" alt="Hasitha Jayathilaka" style={{width:"100%",height:"100%",objectFit:"cover"}}
+                      onError={e=>{e.target.outerHTML=`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:#475569;font-family:monospace;background:#0b0f19">[PHOTO]</div>`;}}/>
+                  </div>
+                  <div style={{flex:1}}>
+                    <strong style={{color:"#ffffff",fontSize:"1.1rem",display:"block",fontWeight:600}}>Hasitha Jayathilaka</strong>
+                    <span style={{fontSize:"0.85rem",color:"#94a3b8",display:"block",marginTop:4,lineHeight:1.4,fontWeight:300}}>
+                      BA Hons Motion Graphics and Animation (AOD - Northumbria University) - Currently Reading<br/>
+                      Diploma in Translation & Interpretation (UOK)
+                    </span>
+                    <span style={{fontFamily:"monospace",fontSize:"0.68rem",color:amberMid,display:"block",marginTop:8,lineHeight:1.4,opacity:0.85}}>
+                      WIPO Credentials: IPMC for Advertising // "Scale Up Your IP" Portfolio // IP Panorama 2.0 (AICC Step 1)
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Founder Prabha Card */}
+                <div style={{display:"flex",gap:20,alignItems:"start",marginBottom:12}}>
+                  <div className="founder-img-frame" style={{boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
+                    <img src="./images/prabha.png" alt="Prabha Hewage" style={{width:"100%",height:"100%",objectFit:"cover"}}
+                      onError={e=>{e.target.outerHTML=`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:#475569;font-family:monospace;background:#0b0f19">[PHOTO]</div>`;}}/>
+                  </div>
+                  <div style={{flex:1}}>
+                    <strong style={{color:"#ffffff",fontSize:"1.1rem",display:"block",fontWeight:600}}>Prabha Hewage</strong>
+                    <span style={{fontSize:"0.85rem",color:"#94a3b8",display:"block",marginTop:4,lineHeight:1.4,fontWeight:300}}>
+                      BA Hons Visual Communication Design (AOD - Northumbria University) - Currently Reading<br/>
+                      Lead Visual Designer & Heritage Systems Anthropologist
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Operations Matrix Links */}
+              <div style={{display:"flex",flexDirection:"column",gap:10,marginTop:6}}>
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+                  <a href="https://hasithajayathilaka.com/" target="_blank" rel="noopener" style={{background:"rgba(255,255,255,0.03)",color:"#ffffff",border:"1px solid rgba(255,255,255,0.12)",fontFamily:"monospace",fontSize:"0.72rem",fontWeight:600,letterSpacing:"0.05em",textTransform:"uppercase",padding:"0.9rem 1rem",borderRadius:8,textDecoration:"none",textAlign:"center"}}>
+                    Hasitha Profile →
+                  </a>
+                  <a href="https://prabhahewage.art/" target="_blank" rel="noopener" style={{background:"rgba(255,255,255,0.03)",color:"#ffffff",border:"1px solid rgba(255,255,255,0.12)",fontFamily:"monospace",fontSize:"0.72rem",fontWeight:600,letterSpacing:"0.05em",textTransform:"uppercase",padding:"0.9rem 1rem",borderRadius:8,textDecoration:"none",textAlign:"center"}}>
+                    Prabha Profile →
+                  </a>
+                </div>
+                <a href="https://www.thearchivistgame.art/" target="_blank" rel="noopener" style={{background:"#0b0f19",border:"1px solid rgba(225,175,83,0.25)",color:amberMid,fontFamily:"monospace",fontSize:"0.75rem",fontWeight:700,letterSpacing:"0.05em",textTransform:"uppercase",padding:"1rem 1.4rem",borderRadius:8,textDecoration:"none",display:"flex",alignItems:"center",justifyContent:"center",gap:10,boxShadow:"0 4px 15px rgba(0,0,0,0.2)"}}>
+                  🌿 The Archivist Game Interface →
                 </a>
               </div>
-              {/* Flagship */}
-              <p style={{fontFamily:"monospace",fontSize:"0.59rem",letterSpacing:"0.15em",textTransform:"uppercase",opacity:0.47,margin:"0 0 9px"}}>Our Flagship Product</p>
-              <a href="https://www.thearchivistgame.art/" target="_blank" rel="noopener"
-                 style={{background:"rgba(43,18,5,0.08)",border:"1.5px solid rgba(43,18,5,0.18)",
-                   color:maroon,fontFamily:"monospace",fontSize:"0.67rem",fontWeight:700,
-                   letterSpacing:"0.08em",textTransform:"uppercase",padding:"0.65rem 1.4rem",
-                   borderRadius:999,textDecoration:"none",display:"inline-flex",alignItems:"center",gap:7}}>
-                🌿 The Archivist Game →
-              </a>
-            </div>
-            <div style={{background:"rgba(255,255,255,0.52)",borderRadius:20,minHeight:200,
-              border:"2px dashed rgba(43,18,5,0.13)",display:"flex",alignItems:"center",justifyContent:"center",padding:"2rem"}}>
-              <img src="./assets/img/yellow-house-logo.png" alt="Yellow House Productions"
-                style={{maxWidth:190,maxHeight:150,objectFit:"contain"}}
-                onError={e=>{e.target.parentNode.innerHTML=`<div style="font-family:Abril Fatface,serif;font-size:2.5rem;opacity:0.1;text-align:center;line-height:1.2">Yellow<br/>House</div>`;}}/>
+
             </div>
           </div>
 
-          {/* Footer nav */}
+          {/* Relational Link Framework Directories */}
           <div className="footer-g" style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",
-            gap:"1.8rem",borderTop:"1px solid rgba(43,18,5,0.09)",paddingTop:"1.8rem",marginBottom:"1.5rem"}}>
+            gap:"2rem",borderTop:"1px solid rgba(255,255,255,0.06)",paddingTop:"2.5rem",marginBottom:"2rem"}}>
             <div>
-              <p style={{fontFamily:"monospace",fontSize:"0.58rem",letterSpacing:"0.18em",textTransform:"uppercase",opacity:0.42,marginBottom:10,fontWeight:900}}>Play</p>
-              {[["Chapter I — Olinda Keliya","./play/"],["Coming Chapters","#games"],["Download (PWA)","#"]].map(([l,h])=>(
-                <a key={l} href={h} style={{display:"block",fontSize:"0.78rem",opacity:0.57,textDecoration:"none",marginBottom:7,color:maroon}}>{l}</a>
+              <p style={{fontFamily:"monospace",fontSize:"0.65rem",letterSpacing:"0.15em",textTransform:"uppercase",color:"#ffffff",marginBottom:14,fontWeight:700}}>Preservation Layers</p>
+              {[["Layer I - Olinda Keliya","./play/"],["Layer II - Nerenchi Matrix","https://helixra.art/nerenchi/"],["Pipeline Architecture","#games"]].map(([l,h])=>(
+                <a key={l} href={h} style={{display:"block",fontSize:"0.85rem",color:"#94a3b8",textDecoration:"none",marginBottom:10}}>{l}</a>
               ))}
             </div>
             <div>
-              <p style={{fontFamily:"monospace",fontSize:"0.58rem",letterSpacing:"0.18em",textTransform:"uppercase",opacity:0.42,marginBottom:10,fontWeight:900}}>Studio</p>
-              {[["The Archivist Game","https://www.thearchivistgame.art/"],["The ROI Firm","https://theroifirm.com"],["ARRA Framework","https://arraframework.org"],["Yellow House Productions","#studio"]].map(([l,h])=>(
+              <p style={{fontFamily:"monospace",fontSize:"0.65rem",letterSpacing:"0.15em",textTransform:"uppercase",color:"#ffffff",marginBottom:14,fontWeight:700}}>Studio Directives</p>
+              {[["The Archivist Game","https://www.thearchivistgame.art/"],["The ROI Firm","https://theroifirm.com"],["ARRA Framework","https://arraframework.org"],["Yellow House Studio Operations","#studio"]].map(([l,h])=>(
                 <a key={l} href={h} target={h.startsWith("http")?"_blank":undefined} rel="noopener"
-                   style={{display:"block",fontSize:"0.78rem",opacity:0.57,textDecoration:"none",marginBottom:7,color:maroon}}>{l}</a>
+                   style={{display:"block",fontSize:"0.85rem",color:"#94a3b8",textDecoration:"none",marginBottom:10}}>{l}</a>
               ))}
             </div>
             <div>
-              <p style={{fontFamily:"monospace",fontSize:"0.58rem",letterSpacing:"0.18em",textTransform:"uppercase",opacity:0.42,marginBottom:10,fontWeight:900}}>Mission</p>
-              {[["Values","#values"],["SDGs","#"],["Partners","#"],["Methodology","#"]].map(([l,h])=>(
-                <a key={l} href={h} style={{display:"block",fontSize:"0.78rem",opacity:0.57,textDecoration:"none",marginBottom:7,color:maroon}}>{l}</a>
+              <p style={{fontFamily:"monospace",fontSize:"0.65rem",letterSpacing:"0.15em",textTransform:"uppercase",color:"#ffffff",marginBottom:14,fontWeight:700}}>Validation Metrics</p>
+              {[["Ethics Matrix","#values"],["SDG Mapping Registry","#"],["Partner Indexes","#"],["Methodology Metrics","#"]].map(([l,h])=>(
+                <a key={l} href={h} style={{display:"block",fontSize:"0.85rem",color:"#94a3b8",textDecoration:"none",marginBottom:10}}>{l}</a>
               ))}
             </div>
             <div>
-              <p style={{fontFamily:"monospace",fontSize:"0.58rem",letterSpacing:"0.18em",textTransform:"uppercase",opacity:0.42,marginBottom:10,fontWeight:900}}>Contact</p>
-              {[["✉ admin@theroifirm.com","mailto:admin@theroifirm.com"],["💬 WhatsApp","https://wa.me/94716236981"],["Privacy Policy","#"],["Terms of Use","#"],["IP & Licensing","#"]].map(([l,h])=>(
+              <p style={{fontFamily:"monospace",fontSize:"0.65rem",letterSpacing:"0.15em",textTransform:"uppercase",color:"#ffffff",marginBottom:14,fontWeight:700}}>Data Interface</p>
+              {[["✉ System Dispatch Contact","mailto:admin@theroifirm.com"],["💬 Secure WhatsApp Relay","https://wa.me/94716236981"],["Privacy Encryption Protocol","#"],["Terms of Use Matrix","#"],["IP Licensing Schema","#"]].map(([l,h])=>(
                 <a key={l} href={h} target={h.startsWith("http")||h.startsWith("mailto")?"_blank":undefined} rel="noopener"
-                   style={{display:"block",fontSize:"0.78rem",opacity:0.57,textDecoration:"none",marginBottom:7,color:maroon}}>{l}</a>
+                   style={{display:"block",fontSize:"0.85rem",color:"#94a3b8",textDecoration:"none",marginBottom:10}}>{l}</a>
               ))}
             </div>
           </div>
 
-          {/* Legal */}
-          <div style={{borderTop:"1px solid rgba(43,18,5,0.09)",paddingTop:"1.3rem",display:"flex",flexDirection:"column",gap:6}}>
-            <p style={{fontFamily:"monospace",fontSize:"0.6rem",letterSpacing:"0.07em",opacity:0.52,margin:0,lineHeight:1.65}}>
+          <div style={{borderTop:"1px solid rgba(255,255,255,0.06)",paddingTop:"1.8rem",display:"flex",flexDirection:"column",gap:8}}>
+            <p style={{fontFamily:"monospace",fontSize:"0.65rem",color:"#64748b",margin:"0",lineHeight:1.6}}>
               © 2026 Yellow House Productions Pvt Ltd. All rights reserved. Helixra™ is a trademark of Yellow House Productions Pvt Ltd. Colombo, Sri Lanka.
             </p>
-            <p style={{fontFamily:"monospace",fontSize:"0.6rem",letterSpacing:"0.07em",opacity:0.42,margin:0,lineHeight:1.65}}>
-              Traditional Cultural Expressions safeguarded under WIPO TCE frameworks. Aligned with UNESCO 2003 Convention. All designs are expressions of Yellow House Productions.
+            <p style={{fontFamily:"monospace",fontSize:"0.65rem",color:"#475569",margin:"0",lineHeight:1.6}}>
+              Traditional Cultural Expressions integrated safely under global WIPO TCE guidelines. Calibrated with the international UNESCO 2003 preservation mandate.
             </p>
-            <div style={{display:"flex",gap:6,flexWrap:"wrap",marginTop:5}}>
-              {["WIPO IPMC","NIA Endorsed","SDG Aligned","Made in Sri Lanka 🇱🇰"].map(t=>(
-                <span key={t} style={{fontFamily:"monospace",fontSize:"0.56rem",letterSpacing:"0.1em",textTransform:"uppercase",background:"rgba(43,18,5,0.08)",borderRadius:999,padding:"0.19rem 0.65rem",color:"rgba(43,18,5,0.57)"}}>
-                  {t}
-                </span>
-              ))}
-            </div>
           </div>
         </div>
       </footer>
@@ -843,8 +922,7 @@ function App(){
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 
-<!-- WhatsApp float -->
-<a href="https://wa.me/94716236981" target="_blank" rel="noopener" class="wa-float" title="Chat on WhatsApp" aria-label="WhatsApp">
+<a href="https://wa.me/94716236981" target="_blank" rel="noopener" class="wa-float" title="Secure Communication Link" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 </body>
